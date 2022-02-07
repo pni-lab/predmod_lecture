@@ -1,0 +1,13 @@
+# Table of 2_linear_models.md
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: intro
+chapters:
+- file: 1_python_basics/python_basics
+- file: 2_linear_models/linear_models
+  sections:
+    - file: 2_linear_models/theory_linear_models
+    - file: 2_linear_models/practice_linear_models
+- file: references
+
