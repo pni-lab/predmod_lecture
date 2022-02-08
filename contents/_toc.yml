@@ -4,13 +4,22 @@
 format: jb-book
 root: intro
 chapters:
-- file: 1_python_basics/python_basics
+- file: 1_python_basics/index
   sections:
     - file: 1_python_basics/python_intro
     - file: 1_python_basics/data_frames
-- file: 2_linear_models/linear_models
+- file: 2_linear_models/index
   sections:
     - file: 2_linear_models/theory_linear_models
     - file: 2_linear_models/practice_linear_models
+- file: 3_cross_validation/index
+- file: 4_reducing_complexity/index
+- file: 5_hyperparameter_optimization/index
+- file: 6_validity/index
+- file: 7_model_explanation/index
+- file: 8_complex_models/index
+- file: 9_examples/index
+
+
 - file: references
 
