@@ -2,8 +2,9 @@
 # Learn more at https://jupyterbook.org/customize/toc.html
 
 format: jb-book
-root: intro
+root: index
 chapters:
+- file: introduction
 - file: 1_python_basics/index
   sections:
     - file: 1_python_basics/python_intro
@@ -19,7 +20,5 @@ chapters:
 - file: 7_model_explanation/index
 - file: 8_complex_models/index
 - file: 9_examples/index
-
-
 - file: references
 
