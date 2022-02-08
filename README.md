@@ -1,5 +1,5 @@
 
-#"Gentle Introduction to predictive modelling"
+# Gentle Introduction to predictive modelling
 ### A Jupyter Book
 
 [![GitHub license](https://img.shields.io/github/license/pni-lab/predmod_lecture.svg)](https://github.com/pni-lab/predmod_lecture/blob/master/LICENSE)
