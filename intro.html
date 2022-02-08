@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>A Gentle Introduction to Predictive Modelling &#8212; A Gentle Introduction to Predictive Modelling</title>
+    <title>Introduction &#8212; A Gentle Introduction to Predictive Modelling</title>
     
   <link href="_static/css/theme.css" rel="stylesheet">
   <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -55,7 +55,7 @@
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="1. Python Basics" href="1_python_basics/python_basics.html" />
+    <link rel="next" title="1. Python Basics" href="1_python_basics/index.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -95,13 +95,13 @@
         <ul class="nav bd-sidenav">
  <li class="toctree-l1 current">
   <a class="reference internal" href="#">
-   A Gentle Introduction to Predictive Modelling
+   Introduction
   </a>
  </li>
 </ul>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1 has-children">
-  <a class="reference internal" href="1_python_basics/python_basics.html">
+  <a class="reference internal" href="1_python_basics/index.html">
    1. Python Basics
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
@@ -123,7 +123,7 @@
   </ul>
  </li>
  <li class="toctree-l1 has-children">
-  <a class="reference internal" href="2_linear_models/linear_models.html">
+  <a class="reference internal" href="2_linear_models/index.html">
    2. Linear Models
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
@@ -143,6 +143,41 @@
     </a>
    </li>
   </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="3_cross_validation/index.html">
+   3. Cross-Validation and Overfitting
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="4_reducing_complexity/index.html">
+   4. Fighting Overfitting - Machine Learning Models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="5_hyperparameter_optimization/index.html">
+   5. Hyperparameter Optimization and Nested Cross-Validation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="6_validity/index.html">
+   6. Validity, Generalizability, Fairness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="7_model_explanation/index.html">
+   7. Model Explanation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="8_complex_models/index.html">
+   8. Complex Models, Deep Learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="9_examples/index.html">
+   9. Scientific Examples
+  </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="references.html">
@@ -231,6 +266,19 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#a-gentle-introduction-to-predictive-modelling">
+   A Gentle Introduction to Predictive Modelling
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -238,38 +286,64 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>A Gentle Introduction to Predictive Modelling</h1>
+                <h1>Introduction</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#a-gentle-introduction-to-predictive-modelling">
+   A Gentle Introduction to Predictive Modelling
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
             
               <div>
                 
-  <section class="tex2jax_ignore mathjax_ignore" id="a-gentle-introduction-to-predictive-modelling">
-<h1>A Gentle Introduction to Predictive Modelling<a class="headerlink" href="#a-gentle-introduction-to-predictive-modelling" title="Permalink to this headline">¶</a></h1>
-<p>Predictive modelling has recently become increasingly important in biomedical
+  <section class="tex2jax_ignore mathjax_ignore" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<section id="a-gentle-introduction-to-predictive-modelling">
+<h2>A Gentle Introduction to Predictive Modelling<a class="headerlink" href="#a-gentle-introduction-to-predictive-modelling" title="Permalink to this headline">¶</a></h2>
+<p>Predictive modelling and machine learning has recently become increasingly important in biomedical
 research and holds promise for delivering biomarkers that substantially impact
 clinical practice and public health
-<span id="id1">[<a class="reference internal" href="references.html#id76">1</a>, <a class="reference internal" href="references.html#id3">2</a>, <a class="reference internal" href="references.html#id41">3</a>, <a class="reference internal" href="references.html#id73">4</a>]</span>.
-When evaluating the usefulness and applicability of such markers, predictive performance
-is far from being the only important consideration. Biomedical validity
-(i.e. whether the model is driven by biomedically relevant signal) as well as
-generalizability and fairness across contexts and populations are also fundamental
-requirements for candidate biomarkers
-<span id="id2">[<a class="reference internal" href="references.html#id2">5</a>, <a class="reference internal" href="references.html#id71">6</a>, <a class="reference internal" href="references.html#id72">7</a>]</span>.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Here is a note!</p>
-</div>
-<p>And here is a code block:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">e</span> <span class="o">=</span> <span class="n">mc</span><span class="o">^</span><span class="mi">2</span>
-</pre></div>
-</div>
-<p>Check out the content pages bundled with this sample book to see more.</p>
+<span id="id1">[<a class="reference internal" href="references.html#id76">1</a>, <a class="reference internal" href="references.html#id3">2</a>, <a class="reference internal" href="references.html#id41">3</a>, <a class="reference internal" href="references.html#id73">4</a>]</span>.</p>
+<p>For many researchers, “machine learning” belongs to those mysterious analysis techniques,
+that are more familiar from science-fiction than their actual research activity.
+At the same time many of these researchers routinely apply rather complex statistical techniques
+like mixed-effect models and find their way in highly complex analysis workflows of analysis software environments,
+dedicated to their fields.</p>
+<p>This lecture book is meant for these type of researchers,
+to demystify predictive modelling and machine learning and to show
+that the simplest - but yet very powerful - forms of these analysis techniques are as much accessible
+as “classical” tools for statistical inference, they routinely use.</p>
+<p>For many of these simple machine learning techniques,
+their novelty might be the only reason they are not yet as widespread as classical descriptive statistical inference.</p>
+<p>This book aims to provide a practical hands-on experience and illustrates all the basic concepts
+by analyzing and example dataset with python code. These pages of the book (called notebooks) are interactive:
+they can be run either on a local workstation or - with just one click - on the cloud.
+The book contains exercises which require the reader to modify the code.</p>
+<p>It is encouraged to go through the book with an own dataset, instead of the example dataset.
+This way, although more challenging, will make the reader deeply <em>internalize</em> the core concepts
+and - hopefully - push her over the entry limit for applying predictive modelling in her own research.</p>
+<p>While this lecture book focuses on simple and easily explainable machine learning models,
+it also highlights, how the paradigm of predictive modelling makes it possible to use “black box” model,
+without having to sacrifice confidence in the reliability of the predictions.</p>
+<p>This is not a conventional lecture book, it is constantly developed.
+Please contribute to making it better by leaving feedback or opening an <a class="reference external" href="https://github.com/pni-lab/predmod_lecture/issues/new">issue</a> at the github repository of the book.</p>
+<p><a class="reference external" href="https://GitHub.com/pni-lab/predmod_lecture/issues/"><img alt="GitHub issues" src="https://img.shields.io/github/issues/pni-lab/mlconfound.svg" /></a></p>
+<p>Have a lot of fun while discovering a new way of dealing with your data.</p>
+</section>
 <div class="toctree-wrapper compound">
 </div>
 </section>
@@ -299,7 +373,7 @@ requirements for candidate biomarkers
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='right-next' id="next-link" href="1_python_basics/python_basics.html" title="next page">
+    <a class='right-next' id="next-link" href="1_python_basics/index.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
         <p class="prev-next-title">1. Python Basics</p>

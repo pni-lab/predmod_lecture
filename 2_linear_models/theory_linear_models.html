@@ -58,7 +58,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Linear models - practice session" href="practice_linear_models.html" />
-    <link rel="prev" title="2. Linear Models" href="linear_models.html" />
+    <link rel="prev" title="2. Linear Models" href="index.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -98,13 +98,13 @@
         <ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../intro.html">
-   A Gentle Introduction to Predictive Modelling
+   Introduction
   </a>
  </li>
 </ul>
 <ul class="current nav bd-sidenav">
  <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../1_python_basics/python_basics.html">
+  <a class="reference internal" href="../1_python_basics/index.html">
    1. Python Basics
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
@@ -126,7 +126,7 @@
   </ul>
  </li>
  <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="linear_models.html">
+  <a class="reference internal" href="index.html">
    2. Linear Models
   </a>
   <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
@@ -146,6 +146,41 @@
     </a>
    </li>
   </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3_cross_validation/index.html">
+   3. Cross-Validation and Overfitting
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../4_reducing_complexity/index.html">
+   4. Fighting Overfitting - Machine Learning Models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5_hyperparameter_optimization/index.html">
+   5. Hyperparameter Optimization and Nested Cross-Validation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../6_validity/index.html">
+   6. Validity, Generalizability, Fairness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../7_model_explanation/index.html">
+   7. Model Explanation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../8_complex_models/index.html">
+   8. Complex Models, Deep Learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../9_examples/index.html">
+   9. Scientific Examples
+  </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../references.html">
@@ -254,18 +289,60 @@
                 
   <section class="tex2jax_ignore mathjax_ignore" id="linear-models-brief-theory">
 <h1>Linear Models - Brief Theory<a class="headerlink" href="#linear-models-brief-theory" title="Permalink to this headline">¶</a></h1>
-<p>Linear models and alikes (e.g. ANOVA) are rudimental statistical tools in scientific analyses.
+<p>Linear models and alikes (e.g. ANOVA) are rudimentary statistical tools in scientific analyses.
 Probably you have also used them.</p>
-<p>Besides their widespread applications, they provide a great starting point for
+<p>Beside their widespread applications, they provide a great starting point for
 understanding the predictive modelling, too.</p>
 <p>Here we will briefly refresh your memories about the basics of linear models,
 so that in the next section we can get them working in python and arrive at one of their limitations,
 which provides a straightforward motivation for doing predictive modelling.</p>
-<p><a class="reference external" href="https://en.wikipedia.org/wiki/Linear_model">Linear models</a> can be formalized as follows:</p>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Linear_model">Linear models</a> aim to deconstruct the dependent variable
+(or target variable) <span class="math notranslate nohighlight">\(y = (y_1, \cdots, y_n)\)</span> (consisting of n observations) into a sum of a constant <span class="math notranslate nohighlight">\(\beta _0\)</span> (called the intercept)
+and the multiple of the predictor variable x, so that the difference between this sum and
+the target variable is minimal.</p>
 <div class="math notranslate nohighlight">
 \[
-Y_{i}=\beta _{0}+\beta _{1}\phi _{1}(X_{{i1}})+\cdots +\beta _{p}\phi _{p}(X_{{ip}})+\varepsilon _{i}\qquad i=1,\ldots ,n
+y_{i}=\beta _{0}+\beta _{1}x_{{i}}+\varepsilon _{i}
 \]</div>
+<p>The difference is usually denotes as <span class="math notranslate nohighlight">\(\varepsilon\)</span> and
+is subject to be minimized by dedicated algorithms
+(e.g. <a class="reference external" href="https://en.wikipedia.org/wiki/Least_squares">the method of least squares</a>).</p>
+<div class="math notranslate nohighlight">
+\[
+argmin_\beta \sum [ y_i - (\beta _{0}+\beta _{1}x_{{i}}) ]^2
+\]</div>
+<p>Todo: nice figure comes here</p>
+<p>Linear regression models can trivially be extended
+to handle multiple predictor variables (multiple linear regression):</p>
+<div class="math notranslate nohighlight">
+\[
+y_{i}=\beta _{0}+\beta _{1}(x_{{i1}})+\cdots +\beta _{p}x_{{ip}}+\varepsilon _{i}\qquad i=1,\ldots ,n
+\]</div>
+<p>Both the aim and the methods remain the same: we deconstruct
+the target variable into a <em>weighted some</em> (i.e a <a class="reference external" href="https://en.wikipedia.org/wiki/Linear_combination">linear combination</a>)
+of the predictors so that the result is as similar to the target variable as possible.</p>
+<p>If we denote the matrix containing all predictors \boldsymbol{<span class="math notranslate nohighlight">\((x_1}, \cdots, \boldsymbol{x_n})\)</span> as <span class="math notranslate nohighlight">\(X\)</span> and the vector
+(b_1, \cdots, b_n) containing all beta coefficients then the quantity to be minimized is:</p>
+<div class="math notranslate nohighlight">
+\[
+argmin_b \sum [ y - bX) ]^2
+\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We will get back to this equation in section 4, when discussing the theoretical basis of regularized models,
+the basics of machine learning.</p>
+</div>
+<p>Note that the higher the association between y and X is, the closer the linear model will
+be able to match them and the smaller the error <span class="math notranslate nohighlight">\(\epsilon\)</span> will be.
+Therefore, fitting a linear model can be (and very commonly is) used to determine the strength of the
+association (correlation) between the target variable and the predictors.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Linear regression models can be easly extended to deal with factor variables,
+to reproduce ANOVA and related tests. Linear models can be also extended to handle
+a binary or factorial target variable (logistic or multinomial regression).</p>
+</div>
+<p>In the next page, we will see how one can perform linear regression in python.</p>
 </section>
 
     <script type="text/x-thebe-config">
@@ -293,7 +370,7 @@ Y_{i}=\beta _{0}+\beta _{1}\phi _{1}(X_{{i1}})+\cdots +\beta _{p}\phi _{p}(X_{{i
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="linear_models.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="index.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
