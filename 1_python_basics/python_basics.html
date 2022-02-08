@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>1. Python basics &#8212; A Gentle Introduction to Predictive Modelling</title>
+    <title>1. Python Basics &#8212; A Gentle Introduction to Predictive Modelling</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -55,7 +55,7 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="2. Linear Models" href="../2_linear_models/linear_models.html" />
+    <link rel="next" title="Introduction to python" href="python_intro.html" />
     <link rel="prev" title="A Gentle Introduction to Predictive Modelling" href="../intro.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -101,29 +101,46 @@
  </li>
 </ul>
 <ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active">
+ <li class="toctree-l1 current active has-children">
   <a class="current reference internal" href="#">
-   1. Python basics
+   1. Python Basics
   </a>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../2_linear_models/linear_models.html">
-   2. Linear Models
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
   <label for="toctree-checkbox-1">
    <i class="fas fa-chevron-down">
    </i>
   </label>
   <ul>
    <li class="toctree-l2">
+    <a class="reference internal" href="python_intro.html">
+     Introduction to python
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="data_frames.html">
+     Working with DataFrames
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../2_linear_models/linear_models.html">
+   2. Linear Models
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
     <a class="reference internal" href="../2_linear_models/theory_linear_models.html">
-     Theory 2.1: Linear Models
+     Linear Models - Brief Theory
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../2_linear_models/practice_linear_models.html">
-     Practice 2.1: linear models
+     Linear models - practice session
     </a>
    </li>
   </ul>
@@ -174,9 +191,9 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/1_python_basics/python_basics.ipynb"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/1_python_basics/python_basics.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.ipynb</button></a>
+                data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
         <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
                 onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
@@ -210,49 +227,11 @@
 
             <!-- Launch buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/pni-lab/predmod_lecture/gh-pages?urlpath=lab/tree/_sources/1_python_basics/python_basics.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="../_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        <a class="colab-button" href="https://colab.research.google.com/github/pni-lab/predmod_lecture/blob/gh-pages/_sources/1_python_basics/python_basics.ipynb"><button type="button" class="btn btn-secondary topbarbtn"
-                title="Launch Colab" data-toggle="tooltip" data-placement="left"><img class="colab-button-logo"
-                    src="../_static/images/logo_colab.png"
-                    alt="Interact on Colab">Colab</button></a>
-        
-        <button type="button" class="btn btn-secondary topbarbtn"
-            onclick="initThebeSBT()" title="Launch Thebe" data-toggle="tooltip" data-placement="left"><i
-                class="fas fa-play"></i><span style="margin-left: .4em;">Live Code</span></button>
-        
-    </div>
-</div>
-
         </div>
 
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
-            </div>
-            <nav id="bd-toc-nav" aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#todo">
-   Todo:
-  </a>
- </li>
-</ul>
-
-            </nav>
         </div>
     </div>
 </div>
@@ -260,24 +239,11 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>1. Python basics</h1>
+                <h1>1. Python Basics</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#todo">
-   Todo:
-  </a>
- </li>
-</ul>
-
-                        </nav>
                     </div>
                 </div>
             </div>
@@ -285,43 +251,14 @@
               <div>
                 
   <section class="tex2jax_ignore mathjax_ignore" id="python-basics">
-<h1>1. Python basics<a class="headerlink" href="#python-basics" title="Permalink to this headline">¶</a></h1>
-<p>The practical part of the book builds on python examples.</p>
-<p>Yes, python is a programming language and, yes, we will have to write code.
-But don’t be scared, python is friendly (mostly) and you don’t have to become a full stack software developer to do predictive modelling or any other scientific work in python.</p>
-<p>People who have some experience with Matlab or R, usually find it rather easy to get started with python (and the transition is often happens to be persistent.)</p>
-<p>Here we will have a quick python crash course and also see how python excercises in this jupyter book can be run interactively.</p>
-<p>This below is a ‘code cell’, a place in the book where pythin code can be inserted.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Hello Python Word!&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Hello Python Word!
-</pre></div>
-</div>
-</div>
-</div>
-<p>You can run this cell yourself, by clicking at the rocket at the top of the page and the “Live Code”.</p>
-<a class="bg-primary mb-1 reference internal image-reference" href="../_images/live-code.png"><img alt="live-code" class="bg-primary mb-1 align-left" src="../_images/live-code.png" style="width: 150px;" /></a>
-<aside class="margin sidebar">
-<p class="sidebar-title">Excercises</p>
-<p>You will find excercises like troughout the book, which usually require modifying the code, either as live code or by opening the code in Binder or Google Colab (see below).</p>
-</aside>
-<div class="tip dropdown admonition">
-<p class="admonition-title">Excercise 1.1</p>
-<p>Modify the message from “Hello Python Word!” to “Hi there little snake!” and run your modified code with as ‘live code’.</p>
-</div>
-<section id="todo">
-<h2>Todo:<a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h2>
+<h1>1. Python Basics<a class="headerlink" href="#python-basics" title="Permalink to this headline">¶</a></h1>
+<p><strong>In this chapter:</strong></p>
 <ul class="simple">
-<li><p>import packages</p></li>
-<li><p>load data frame with pandas</p></li>
-<li><p>basic data frame operations</p></li>
+<li><p><strong><a class="reference internal" href="python_intro.html"><span class="doc std std-doc">Introduction to Python</span></a></strong></p></li>
+<li><p><strong><a class="reference internal" href="data_frames.html"><span class="doc std std-doc">Working with Data Frames</span></a></strong></p></li>
 </ul>
-</section>
+<div class="toctree-wrapper compound">
+</div>
 </section>
 
     <script type="text/x-thebe-config">
@@ -329,7 +266,7 @@ But don’t be scared, python is friendly (mostly) and you don’t have to becom
         requestKernel: true,
         binderOptions: {
             repo: "pni-lab/predmod_lecture",
-            ref: "gh-pages",
+            ref: "master",
         },
         codeMirrorConfig: {
             theme: "abcdef",
@@ -356,10 +293,10 @@ But don’t be scared, python is friendly (mostly) and you don’t have to becom
             <p class="prev-next-title">A Gentle Introduction to Predictive Modelling</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../2_linear_models/linear_models.html" title="next page">
+    <a class='right-next' id="next-link" href="python_intro.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">2. Linear Models</p>
+        <p class="prev-next-title">Introduction to python</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

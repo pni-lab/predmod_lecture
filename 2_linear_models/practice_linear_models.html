@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Practice 2.1: linear models &#8212; A Gentle Introduction to Predictive Modelling</title>
+    <title>Linear models - practice session &#8212; A Gentle Introduction to Predictive Modelling</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -56,7 +56,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="References" href="../references.html" />
-    <link rel="prev" title="Theory 2.1: Linear Models" href="theory_linear_models.html" />
+    <link rel="prev" title="Linear Models - Brief Theory" href="theory_linear_models.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -101,29 +101,46 @@
  </li>
 </ul>
 <ul class="current nav bd-sidenav">
- <li class="toctree-l1">
+ <li class="toctree-l1 has-children">
   <a class="reference internal" href="../1_python_basics/python_basics.html">
-   1. Python basics
+   1. Python Basics
   </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../1_python_basics/python_intro.html">
+     Introduction to python
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../1_python_basics/data_frames.html">
+     Working with DataFrames
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toctree-l1 current active has-children">
   <a class="reference internal" href="linear_models.html">
    2. Linear Models
   </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
    <i class="fas fa-chevron-down">
    </i>
   </label>
   <ul class="current">
    <li class="toctree-l2">
     <a class="reference internal" href="theory_linear_models.html">
-     Theory 2.1: Linear Models
+     Linear Models - Brief Theory
     </a>
    </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     Practice 2.1: linear models
+     Linear models - practice session
     </a>
    </li>
   </ul>
@@ -215,7 +232,7 @@
         aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
     <div class="dropdown-buttons">
         
-        <a class="binder-button" href="https://mybinder.org/v2/gh/pni-lab/predmod_lecture/gh-pages?urlpath=lab/tree/_sources/2_linear_models/practice_linear_models.ipynb"><button type="button"
+        <a class="binder-button" href="https://mybinder.org/v2/gh/pni-lab/predmod_lecture/master?urlpath=lab/tree/2_linear_models/practice_linear_models.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
                 data-placement="left"><img class="binder-button-logo"
                     src="../_static/images/logo_binder.svg"
@@ -223,7 +240,7 @@
         
         
         
-        <a class="colab-button" href="https://colab.research.google.com/github/pni-lab/predmod_lecture/blob/gh-pages/_sources/2_linear_models/practice_linear_models.ipynb"><button type="button" class="btn btn-secondary topbarbtn"
+        <a class="colab-button" href="https://colab.research.google.com/github/pni-lab/predmod_lecture/blob/master/2_linear_models/practice_linear_models.ipynb"><button type="button" class="btn btn-secondary topbarbtn"
                 title="Launch Colab" data-toggle="tooltip" data-placement="left"><img class="colab-button-logo"
                     src="../_static/images/logo_colab.png"
                     alt="Interact on Colab">Colab</button></a>
@@ -247,7 +264,7 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Practice 2.1: linear models</h1>
+                <h1>Linear models - practice session</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -258,8 +275,115 @@
             
               <div>
                 
-  <section class="tex2jax_ignore mathjax_ignore" id="practice-2-1-linear-models">
-<h1>Practice 2.1: linear models<a class="headerlink" href="#practice-2-1-linear-models" title="Permalink to this headline">¶</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="linear-models-practice-session">
+<h1>Linear models - practice session<a class="headerlink" href="#linear-models-practice-session" title="Permalink to this headline">¶</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scipy</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip freeze
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>argon2-cffi==21.3.0
+argon2-cffi-bindings==21.2.0
+asttokens==2.0.5
+attrs==21.4.0
+backcall==0.2.0
+black==22.1.0
+bleach==4.1.0
+certifi==2021.10.8
+cffi==1.15.0
+charset-normalizer==2.0.11
+click==8.0.3
+cycler==0.11.0
+debugpy==1.5.1
+decorator==5.1.1
+defusedxml==0.7.1
+entrypoints==0.4
+executing==0.8.2
+fonttools==4.29.1
+ghp-import==2.0.2
+idna==3.3
+importlib-resources==5.4.0
+ipykernel==6.9.0
+ipython==8.0.1
+ipython-genutils==0.2.0
+ipywidgets==7.6.5
+jedi==0.18.1
+Jinja2==3.0.3
+joblib==1.1.0
+jsonschema==4.4.0
+jupyter==1.0.0
+jupyter-client==7.1.2
+jupyter-console==6.4.0
+jupyter-core==4.9.1
+jupyterlab-pygments==0.1.2
+jupyterlab-widgets==1.0.2
+kiwisolver==1.3.2
+MarkupSafe==2.0.1
+matplotlib==3.5.1
+matplotlib-inline==0.1.3
+mistune==0.8.4
+mypy-extensions==0.4.3
+nbclient==0.5.10
+nbconvert==6.4.1
+nbformat==5.1.3
+nest-asyncio==1.5.4
+nibabel==3.2.2
+nilearn==0.9.0
+notebook==6.4.8
+numpy==1.22.2
+packaging==21.3
+pandas==1.4.0
+pandocfilters==1.5.0
+parso==0.8.3
+pathspec==0.9.0
+pexpect==4.8.0
+pickleshare==0.7.5
+Pillow==9.0.1
+platformdirs==2.4.1
+prometheus-client==0.13.1
+prompt-toolkit==3.0.27
+ptyprocess==0.7.0
+pure-eval==0.2.2
+pycparser==2.21
+Pygments==2.11.2
+pyparsing==3.0.7
+pyrsistent==0.18.1
+python-dateutil==2.8.2
+pytz==2021.3
+pyzmq==22.3.0
+qtconsole==5.2.2
+QtPy==2.0.1
+requests==2.27.1
+scikit-learn==1.0.2
+scipy==1.8.0
+Send2Trash==1.8.0
+six==1.16.0
+stack-data==0.1.4
+terminado==0.13.1
+testpath==0.5.0
+threadpoolctl==3.1.0
+tomli==2.0.0
+tornado==6.1
+traitlets==5.1.1
+typing_extensions==4.0.1
+urllib3==1.26.8
+wcwidth==0.2.5
+webencodings==0.5.1
+widgetsnbextension==3.5.2
+zipp==3.7.0
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 
     <script type="text/x-thebe-config">
@@ -267,7 +391,7 @@
         requestKernel: true,
         binderOptions: {
             repo: "pni-lab/predmod_lecture",
-            ref: "gh-pages",
+            ref: "master",
         },
         codeMirrorConfig: {
             theme: "abcdef",
@@ -291,7 +415,7 @@
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Theory 2.1: Linear Models</p>
+            <p class="prev-next-title">Linear Models - Brief Theory</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="../references.html" title="next page">
