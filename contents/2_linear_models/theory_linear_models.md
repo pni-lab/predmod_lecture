@@ -1,4 +1,4 @@
-# Theory 2.1: Linear Models
+# Linear Models - Brief Theory
 
 Linear models and alikes (e.g. ANOVA) are rudimental statistical tools in scientific analyses.
 Probably you have also used them.

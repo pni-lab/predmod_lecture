@@ -5,6 +5,9 @@ format: jb-book
 root: intro
 chapters:
 - file: 1_python_basics/python_basics
+  sections:
+    - file: 1_python_basics/python_intro
+    - file: 1_python_basics/data_frames
 - file: 2_linear_models/linear_models
   sections:
     - file: 2_linear_models/theory_linear_models
