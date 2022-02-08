@@ -338,9 +338,46 @@
 <h2>Importing packages<a class="headerlink" href="#importing-packages" title="Permalink to this headline">¶</a></h2>
 <p>One of the great things about python that very often you don ‘t have to implement something yourself. It may be already implemented in the many freely accessible python packages, often referred to as the python ecosystem.</p>
 <p>If you are working on your local computer, you can install python packages e.g. with the tools<a class="reference external" href="https://pip.pypa.io/en/stable/getting-started/">pip</a> or <a class="reference external" href="https://docs.conda.io/en/latest/">conda</a>.</p>
-<p>In case you execute this python notebook via Binder or Colab (see Exercise 1.2), the cloud environment already has all the required packages installed.
-So the only thing you must do is to import the packages, in order to tell python that you intend to use them in your code.</p>
-<p>Now, we will import a package called <a class="reference external" href="https://pandas.pydata.org/">pandas</a>, a package that provides powerful R-like dataframes to store and manipulate your data.
+<p>Inside a notebook, hosted on the cloud (e.g. Google Colab), you can install packages via the following code.</p>
+<div class="cell tag_hide-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip install pandas nilearn
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: pandas in /home/tspisak/src/predmod_lecture/venv/lib/python3.8/site-packages (1.4.0)
+Requirement already satisfied: nilearn in /home/tspisak/src/predmod_lecture/venv/lib/python3.8/site-packages (0.9.0)
+Requirement already satisfied: pytz&gt;=2020.1 in /home/tspisak/src/predmod_lecture/venv/lib/python3.8/site-packages (from pandas) (2021.3)
+Requirement already satisfied: numpy&gt;=1.18.5 in /home/tspisak/src/predmod_lecture/venv/lib/python3.8/site-packages (from pandas) (1.22.2)
+Requirement already satisfied: python-dateutil&gt;=2.8.1 in /home/tspisak/src/predmod_lecture/venv/lib/python3.8/site-packages (from pandas) (2.8.2)
+Requirement already satisfied: scikit-learn&gt;=0.21 in /home/tspisak/src/predmod_lecture/venv/lib/python3.8/site-packages (from nilearn) (1.0.2)
+Requirement already satisfied: requests&gt;=2 in /home/tspisak/src/predmod_lecture/venv/lib/python3.8/site-packages (from nilearn) (2.27.1)
+Requirement already satisfied: joblib&gt;=0.12 in /home/tspisak/src/predmod_lecture/venv/lib/python3.8/site-packages (from nilearn) (1.1.0)
+Requirement already satisfied: nibabel&gt;=2.5 in /home/tspisak/src/predmod_lecture/venv/lib/python3.8/site-packages (from nilearn) (3.2.2)
+Requirement already satisfied: scipy&gt;=1.2 in /home/tspisak/src/predmod_lecture/venv/lib/python3.8/site-packages (from nilearn) (1.8.0)
+Requirement already satisfied: packaging&gt;=14.3 in /home/tspisak/src/predmod_lecture/venv/lib/python3.8/site-packages (from nibabel&gt;=2.5-&gt;nilearn) (21.3)
+Requirement already satisfied: setuptools in /home/tspisak/src/predmod_lecture/venv/lib/python3.8/site-packages (from nibabel&gt;=2.5-&gt;nilearn) (57.0.0)
+Requirement already satisfied: pyparsing!=3.0.5,&gt;=2.0.2 in /home/tspisak/src/predmod_lecture/venv/lib/python3.8/site-packages (from packaging&gt;=14.3-&gt;nibabel&gt;=2.5-&gt;nilearn) (3.0.7)
+Requirement already satisfied: six&gt;=1.5 in /home/tspisak/src/predmod_lecture/venv/lib/python3.8/site-packages (from python-dateutil&gt;=2.8.1-&gt;pandas) (1.16.0)
+Requirement already satisfied: charset-normalizer~=2.0.0 in /home/tspisak/src/predmod_lecture/venv/lib/python3.8/site-packages (from requests&gt;=2-&gt;nilearn) (2.0.11)
+Requirement already satisfied: urllib3&lt;1.27,&gt;=1.21.1 in /home/tspisak/src/predmod_lecture/venv/lib/python3.8/site-packages (from requests&gt;=2-&gt;nilearn) (1.26.8)
+Requirement already satisfied: idna&lt;4,&gt;=2.5 in /home/tspisak/src/predmod_lecture/venv/lib/python3.8/site-packages (from requests&gt;=2-&gt;nilearn) (3.3)
+Requirement already satisfied: certifi&gt;=2017.4.17 in /home/tspisak/src/predmod_lecture/venv/lib/python3.8/site-packages (from requests&gt;=2-&gt;nilearn) (2021.10.8)
+Requirement already satisfied: threadpoolctl&gt;=2.0.0 in /home/tspisak/src/predmod_lecture/venv/lib/python3.8/site-packages (from scikit-learn&gt;=0.21-&gt;nilearn) (3.1.0)
+<span class=" -Color -Color-Yellow">WARNING: You are using pip version 21.2.3; however, version 22.0.3 is available.</span>
+<span class=" -Color -Color-Yellow">You should consider upgrading via the &#39;/home/tspisak/src/predmod_lecture/venv/bin/python -m pip install --upgrade pip&#39; command.</span>
+</pre></div>
+</div>
+</div>
+</div>
+<aside class="margin sidebar">
+<p class="sidebar-title">Dependencies in Binder</p>
+<p>When launching this notebook interactively via Binder, all dependnecies will already be installed, so this command will have no actual effect. On Google Coleb, there are no costum packages installed, so the rest of this notebook will not function without running this command.</p>
+</aside>
+<p>This command installed two packages needed for the rest of this notebook: <a class="reference external" href="https://pandas.pydata.org/">pandas</a> and <a class="reference external" href="https://nilearn.github.io/stable/index.html">nilearn</a>.</p>
+<p>Once a package is installed on the system, the only thing we must do is to import the packages, in order to tell python that we intend to use it in your code.</p>
+<p>Now, we will import the package called <a class="reference external" href="https://pandas.pydata.org/">pandas</a>, a package that provides powerful R-like dataframes to store and manipulate your data.
 For convenience, we also specify that from now on, we would like to refer to pandas as pd, for short.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -354,7 +391,7 @@ For convenience, we also specify that from now on, we would like to refer to pan
 <h2>Loading some data<a class="headerlink" href="#loading-some-data" title="Permalink to this headline">¶</a></h2>
 <p>Now let’s load some example data. Throughout the book, we will use brain cortical volume and thickness data obtained from the publicly available <a class="reference external" href="https://brain-development.org/ixi-dataset/">“Information eXtraction from Images” (IXI) dataset</a></p>
 <aside class="margin sidebar">
-<p class="sidebar-title">License infromation</p>
+<p class="sidebar-title">License info</p>
 <p>The IXI dataset is made available under the Creative Commons <a class="reference external" href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a> license. If you use the IXI data please acknowledge the source of the IXI data.</p>
 </aside>
 <div class="admonition seealso">
@@ -698,18 +735,26 @@ The brain regions were delineated by the as based on the Destrieux brain atlas <
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/data_frames_6_0.png" src="../_images/data_frames_6_0.png" />
+<img alt="../_images/data_frames_9_0.png" src="../_images/data_frames_9_0.png" />
 </div>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>Click on “Click to show” to reveal the python code used for visualizing the atlas. Visualization was done with the python package ‘<a class="reference external" href="https://nilearn.github.io/stable/index.html">nilearn</a>’.</p>
 </div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Nilearn is a very powerful package for machin elearning with neuroimaging. Check out the nilearn <a class="reference external" href="https://nilearn.github.io/stable/auto_examples/index.html">example gallery</a> to have a better impression.</p>
+</div>
 </section>
 <section id="dataframe-slicing">
 <h2>Dataframe slicing<a class="headerlink" href="#dataframe-slicing" title="Permalink to this headline">¶</a></h2>
-<p>You can get one or multiple columns from a dataframe by slicing it. Let’s get the</p>
-<div class="cell docutils container">
+<p>You can get one or multiple columns from a dataframe by slicing it. Let’s extract the age of the participants.</p>
+<aside class="margin sidebar">
+<p class="sidebar-title">Tip</p>
+<p>The output of these commands are hidden by default, click to reveal.</p>
+</aside>
+<div class="cell tag_hide-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Age&#39;</span><span class="p">]</span>
 </pre></div>
@@ -722,19 +767,19 @@ The brain regions were delineated by the as based on the Destrieux brain atlas <
 3      34.236824
 4      24.284736
          ...    
-195    63.247091
-196    36.919918
-197    47.014374
-198    41.902806
-199    67.055441
-Name: Age, Length: 200, dtype: float64
+633    47.723477
+634    50.395619
+635    42.989733
+636    46.220397
+637    41.741273
+Name: Age, Length: 638, dtype: float64
 </pre></div>
 </div>
 </div>
 </div>
 <p>Now let’s slice the data frame to obtain ID, Age and the volume of the brain region called right superior frontal cortex and obtain the first 5 participants only.
 To do so you must slice with a list of column names, that’s whz we have double square brackets (outer: slicing, inner: list). Then we call head, to get the ‘head’ of the table.</p>
-<div class="cell docutils container">
+<div class="cell tag_hide-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_superiorfrontal</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;ID&#39;</span><span class="p">,</span> <span class="s1">&#39;Age&#39;</span><span class="p">,</span> <span class="s1">&#39;rh_superiorfrontal_volume&#39;</span><span class="p">]]</span>
 <span class="n">df_superiorfrontal</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
@@ -801,7 +846,7 @@ To do so you must slice with a list of column names, that’s whz we have double
 </div></div></div>
 </div>
 <p>It is very easy to filter you data frame by the values of one of the columns.</p>
-<div class="cell docutils container">
+<div class="cell tag_hide-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_superiorfrontal</span><span class="p">[</span><span class="n">df_superiorfrontal</span><span class="p">[</span><span class="s1">&#39;Age&#39;</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">30</span><span class="p">]</span>
 </pre></div>
@@ -869,38 +914,38 @@ To do so you must slice with a list of column names, that’s whz we have double
       <td>...</td>
     </tr>
     <tr>
-      <th>195</th>
-      <td>223</td>
-      <td>63.247091</td>
-      <td>19527</td>
+      <th>633</th>
+      <td>648</td>
+      <td>47.723477</td>
+      <td>21427</td>
     </tr>
     <tr>
-      <th>196</th>
-      <td>224</td>
-      <td>36.919918</td>
-      <td>21764</td>
+      <th>634</th>
+      <td>651</td>
+      <td>50.395619</td>
+      <td>18137</td>
     </tr>
     <tr>
-      <th>197</th>
-      <td>225</td>
-      <td>47.014374</td>
-      <td>18717</td>
+      <th>635</th>
+      <td>652</td>
+      <td>42.989733</td>
+      <td>25113</td>
     </tr>
     <tr>
-      <th>198</th>
-      <td>226</td>
-      <td>41.902806</td>
-      <td>18759</td>
+      <th>636</th>
+      <td>653</td>
+      <td>46.220397</td>
+      <td>19449</td>
     </tr>
     <tr>
-      <th>199</th>
-      <td>227</td>
-      <td>67.055441</td>
-      <td>17334</td>
+      <th>637</th>
+      <td>662</td>
+      <td>41.741273</td>
+      <td>20968</td>
     </tr>
   </tbody>
 </table>
-<p>143 rows × 3 columns</p>
+<p>534 rows × 3 columns</p>
 </div></div></div>
 </div>
 </section>
@@ -918,7 +963,7 @@ Let’s see how the age of the participants is distributed.</p>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[&lt;AxesSubplot:title={&#39;center&#39;:&#39;Age&#39;}&gt;]], dtype=object)
 </pre></div>
 </div>
-<img alt="../_images/data_frames_15_1.png" src="../_images/data_frames_15_1.png" />
+<img alt="../_images/data_frames_18_1.png" src="../_images/data_frames_18_1.png" />
 </div>
 </div>
 <p>Now, let’s plot the volume of our previously selected brain region against age.</p>
@@ -932,18 +977,24 @@ Let’s see how the age of the participants is distributed.</p>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;Age&#39;, ylabel=&#39;rh_superiorfrontal_volume&#39;&gt;
 </pre></div>
 </div>
-<img alt="../_images/data_frames_17_1.png" src="../_images/data_frames_17_1.png" />
+<img alt="../_images/data_frames_20_1.png" src="../_images/data_frames_20_1.png" />
 </div>
 </div>
 <p>Looks like an inverse association…
 In the next section, we will see how we can take advantage of this single association in order to predict the age of a participant. And also how we can get into trouble when we want to improve the prediction by adding more regions.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Pandas has an excellent leighweight <a class="reference external" href="https://pandas.pydata.org/docs/getting_started/index.html">“Getting Started”</a> tutorial.</p>
+</div>
 <div class="tip dropdown admonition">
 <p class="admonition-title">Excercise 1.2</p>
 <p>Launch this notebook interactively in Google Colab (by clicking the rocket) and modify the code to plot out other variables.</p>
 </div>
 <div class="tip dropdown admonition">
 <p class="admonition-title">Excercise 1.3</p>
-<p>Launch this notebook interactively in Google Colab (by clicking the rocket) and modify to load in your own dataframe.</p>
+<p>Launch this notebook interactively in Google Colab (by clicking the rocket) and modify it to load in your own dataset.
+You can directly upload your dataset file in colab (Select “Files” on the left) or you can also mount your google drive account.</p>
+<p>Is you dataframe as Excel spreadsheet? No problem! Check out the function <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_excel.html">read_excel</a> in pandas.</p>
 </div>
 </section>
 </section>
