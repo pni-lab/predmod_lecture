@@ -17,20 +17,46 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-!which pip
-!pip show sklearn
-!which python
-!pip freeze
-import sklearn
+from nilearn import datasets, plotting
+
+destrieux_atlas = datasets.fetch_atlas_surf_destrieux(verbose=0)
+fsaverage = datasets.fetch_surf_fsaverage()
+plotting.plot_surf_roi(fsaverage['pial_left'], roi_map=destrieux_atlas['map_left'],
+                       hemi='left', view='lateral',
+                       bg_map=fsaverage['sulc_left'], bg_on_data=True)
+plotting.show()
 ------------------
 
 [0;31m---------------------------------------------------------------------------[0m
 [0;31mModuleNotFoundError[0m                       Traceback (most recent call last)
-[0;32m/tmp/ipykernel_70374/1694663400.py[0m in [0;36m<module>[0;34m[0m
-[1;32m      3[0m [0mget_ipython[0m[0;34m([0m[0;34m)[0m[0;34m.[0m[0msystem[0m[0;34m([0m[0;34m'which python'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
-[1;32m      4[0m [0mget_ipython[0m[0;34m([0m[0;34m)[0m[0;34m.[0m[0msystem[0m[0;34m([0m[0;34m'pip freeze'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
-[0;32m----> 5[0;31m [0;32mimport[0m [0msklearn[0m[0;34m[0m[0;34m[0m[0m
-[0m
-[0;31mModuleNotFoundError[0m: No module named 'sklearn'
-ModuleNotFoundError: No module named 'sklearn'
+[0;32m/tmp/ipykernel_72272/1114157959.py[0m in [0;36m<module>[0;34m[0m
+[0;32m----> 1[0;31m [0;32mfrom[0m [0mnilearn[0m [0;32mimport[0m [0mdatasets[0m[0;34m,[0m [0mplotting[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m      2[0m [0;34m[0m[0m
+[1;32m      3[0m [0mdestrieux_atlas[0m [0;34m=[0m [0mdatasets[0m[0;34m.[0m[0mfetch_atlas_surf_destrieux[0m[0;34m([0m[0mverbose[0m[0;34m=[0m[0;36m0[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m      4[0m [0mfsaverage[0m [0;34m=[0m [0mdatasets[0m[0;34m.[0m[0mfetch_surf_fsaverage[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m      5[0m plotting.plot_surf_roi(fsaverage['pial_left'], roi_map=destrieux_atlas['map_left'],
+
+[0;32m~/.local/lib/python3.8/site-packages/nilearn/__init__.py[0m in [0;36m<module>[0;34m[0m
+[1;32m     65[0m [0;34m[0m[0m
+[1;32m     66[0m [0;34m[0m[0m
+[0;32m---> 67[0;31m [0m_check_module_dependencies[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     68[0m [0m_python_deprecation_warnings[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     69[0m [0;34m[0m[0m
+
+[0;32m~/.local/lib/python3.8/site-packages/nilearn/version.py[0m in [0;36m_check_module_dependencies[0;34m(is_nilearn_installing)[0m
+[1;32m    122[0m             [0;31m# Skip check only when installing and it's a module that[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    123[0m             [0;31m# will be auto-installed.[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 124[0;31m             _import_module_with_version_check(
+[0m[1;32m    125[0m                 [0mmodule_name[0m[0;34m=[0m[0mmodule_name[0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    126[0m                 [0mminimum_version[0m[0;34m=[0m[0mmodule_metadata[0m[0;34m[[0m[0;34m'min_version'[0m[0;34m][0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m~/.local/lib/python3.8/site-packages/nilearn/version.py[0m in [0;36m_import_module_with_version_check[0;34m(module_name, minimum_version, install_info)[0m
+[1;32m     71[0m [0;34m[0m[0m
+[1;32m     72[0m     [0;32mtry[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 73[0;31m         [0mmodule[0m [0;34m=[0m [0m__import__[0m[0;34m([0m[0mmodule_name[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     74[0m     [0;32mexcept[0m [0mImportError[0m [0;32mas[0m [0mexc[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     75[0m         user_friendly_info = ('Module "{0}" could not be found. {1}').format(
+
+[0;31mModuleNotFoundError[0m: No module named 'sklearn'. Module "sklearn" could not be found. See http://nilearn.github.io/introduction.html#installation for installation information.
+ModuleNotFoundError: No module named 'sklearn'. Module "sklearn" could not be found. See http://nilearn.github.io/introduction.html#installation for installation information.
 
