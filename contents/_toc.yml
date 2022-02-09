@@ -14,6 +14,10 @@ chapters:
     - file: 2_linear_models/theory_linear_models
     - file: 2_linear_models/practice_linear_models
 - file: 3_cross_validation/index
+  sections:
+    - file: 3_cross_validation/overfitting_ex
+    - file: 3_cross_validation/train_test
+    - file: 3_cross_validation/cv
 - file: 4_reducing_complexity/index
 - file: 5_hyperparameter_optimization/index
 - file: 6_validity/index

@@ -1,4 +1,4 @@
-# 2. Linear Models
+# 2. Linear Models and Overfitting
 
 **In this chapter:**
 - **[Linear Models: Theory](theory_linear_models.md)**

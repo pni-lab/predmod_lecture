@@ -1,4 +1,6 @@
-# Linear Models - Brief Theory
+# Theory in Brief
+
+## Linear Regression
 
 Linear models and alikes (e.g. ANOVA) are rudimentary statistical tools in scientific analyses.
 Probably you have also used them.
@@ -41,11 +43,11 @@ Both the aim and the methods remain the same: we deconstruct
 the target variable into a *weighted some* (i.e a [linear combination](https://en.wikipedia.org/wiki/Linear_combination))
 of the predictors so that the result is as similar to the target variable as possible.
 
-If we denote the matrix containing all predictors \boldsymbol{$(x_1}, \cdots, \boldsymbol{x_n})$ as $X$ and the vector
-(b_1, \cdots, b_n) containing all beta coefficients then the quantity to be minimized is:
+If we denote the matrix containing all predictors $\boldsymbol{$(x_1}, \cdots, \boldsymbol{x_n})$ as $X$ and the vector
+$(b_0, \cdots, b_n)$ as $\boldsymbol{b}$ containing all beta coefficients then the quantity to be minimized is:
 
 $$
-argmin_b \sum [ y - bX) ]^2
+argmin_\boldsymbol{b} \sum [ \boldsymbol{y} - \boldsymbol{b}X) ]^2
 $$
 
 ```{note}
@@ -55,14 +57,22 @@ the basics of machine learning.
 
 Note that the higher the association between y and X is, the closer the linear model will
 be able to match them and the smaller the error $\epsilon$ will be.
-Therefore, fitting a linear model can be (and very commonly is) used to determine the strength of the
-association (correlation) between the target variable and the predictors.
+Therefore, fitting a linear model can be (and very commonly is) used to quantify the strength of the
+association (correlation) between the target variable and the predictors with $R$, $R^2$, T- and p-values.
 
 ```{note}
 Linear regression models can be easly extended to deal with factor variables,
 to reproduce ANOVA and related tests. Linear models can be also extended to handle
 a binary or factorial target variable (logistic or multinomial regression).
 ```
+
+## Predictions
+
+After fitting a linear model, we can obtain "predictions" $\hat{y}$ for an arbitrary values of X:
+
+$$
+\hat{y} = \boldsymbol{b}X
+$$
 
 In the next page, we will see how one can perform linear regression in python.
 
