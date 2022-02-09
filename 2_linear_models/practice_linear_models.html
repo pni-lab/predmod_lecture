@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Linear models - practice session &#8212; A Gentle Introduction to Predictive Modelling</title>
+    <title>Practice Session &#8212; A Gentle Introduction to Predictive Modelling</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -57,8 +57,8 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="3. Cross-Validation and Overfitting" href="../3_cross_validation/index.html" />
-    <link rel="prev" title="Linear Models - Brief Theory" href="theory_linear_models.html" />
+    <link rel="next" title="3. Unbiased predictive performance estimates" href="../3_cross_validation/index.html" />
+    <link rel="prev" title="Theory in Brief" href="theory_linear_models.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -98,7 +98,6 @@
         <ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../index.html">
-   A Gentle Introduction to Predictive Modelling
   </a>
  </li>
 </ul>
@@ -132,7 +131,7 @@
  </li>
  <li class="toctree-l1 current active has-children">
   <a class="reference internal" href="index.html">
-   2. Linear Models
+   2. Linear Models and Overfitting
   </a>
   <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
   <label for="toctree-checkbox-2">
@@ -142,20 +141,42 @@
   <ul class="current">
    <li class="toctree-l2">
     <a class="reference internal" href="theory_linear_models.html">
-     Linear Models - Brief Theory
+     Theory in Brief
     </a>
    </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     Linear models - practice session
+     Practice Session
     </a>
    </li>
   </ul>
  </li>
- <li class="toctree-l1">
+ <li class="toctree-l1 has-children">
   <a class="reference internal" href="../3_cross_validation/index.html">
-   3. Cross-Validation and Overfitting
+   3. Unbiased predictive performance estimates
   </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../3_cross_validation/overfitting_ex.html">
+     Examples to Overfitting
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../3_cross_validation/train_test.html">
+     Training and Test sets
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../3_cross_validation/cv.html">
+     Cross-validation
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../4_reducing_complexity/index.html">
@@ -299,6 +320,41 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Practice Session
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id1">
+   Practice Session
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fitting-a-simple-linear-model">
+   Fitting a simple linear model
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#adding-more-predictors">
+   Adding more predictors
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#overfitting">
+     Overfitting
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -306,87 +362,397 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Linear models - practice session</h1>
+                <h1>Practice Session</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Practice Session
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id1">
+   Practice Session
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fitting-a-simple-linear-model">
+   Fitting a simple linear model
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#adding-more-predictors">
+   Adding more predictors
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#overfitting">
+     Overfitting
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
             
               <div>
                 
-  <section class="tex2jax_ignore mathjax_ignore" id="linear-models-practice-session">
-<h1>Linear models - practice session<a class="headerlink" href="#linear-models-practice-session" title="Permalink to this headline">¶</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="practice-session">
+<h1>Practice Session<a class="headerlink" href="#practice-session" title="Permalink to this headline">¶</a></h1>
 <p>Let’s begin with quickly importing the packages we will need here.</p>
-<div class="cell docutils container">
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>Practice Session<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>Let’s begin with quickly importing the packages we will need here.</p>
+<div class="cell tag_hide-output docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip install scikit-learn
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
-<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: scikit-learn in /home/tspisak/src/RPN-signature/venv/lib/python3.8/site-packages (0.24.2)
-Requirement already satisfied: threadpoolctl&gt;=2.0.0 in /home/tspisak/src/RPN-signature/venv/lib/python3.8/site-packages (from scikit-learn) (2.2.0)
-Requirement already satisfied: scipy&gt;=0.19.1 in /home/tspisak/src/RPN-signature/venv/lib/python3.8/site-packages (from scikit-learn) (1.7.1)
-Requirement already satisfied: numpy&gt;=1.13.3 in /home/tspisak/src/RPN-signature/venv/lib/python3.8/site-packages (from scikit-learn) (1.19.5)
-Requirement already satisfied: joblib&gt;=0.11 in /home/tspisak/src/RPN-signature/venv/lib/python3.8/site-packages (from scikit-learn) (1.0.1)
-<span class=" -Color -Color-Yellow">WARNING: You are using pip version 21.2.4; however, version 22.0.3 is available.</span>
-<span class=" -Color -Color-Yellow">You should consider upgrading via the &#39;/home/tspisak/src/RPN-signature/venv/bin/python -m pip install --upgrade pip&#39; command.</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">statsmodels.formula.api</span> <span class="k">as</span> <span class="nn">smf</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>Next, we continue with our example dataset and plot the association between age and the volume of the right superior frontal cortex again.</p>
+<p>Next, we continue with our example dataset, but let’s only fetch 70 subjects this time, for simplicity.
+Then we recreate the plot of the association between age and the volume of the right superior frontal cortex again.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/pni-lab/predmod_lecture/master/ex_data/IXI/ixi.csv&quot;</span><span class="p">)</span>
-<span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;Age&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;rh_superiorfrontal_volume&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/pni-lab/predmod_lecture/master/ex_data/IXI/ixi.csv&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">70</span><span class="p">,</span> <span class="p">:]</span>
+<span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;rh_superiorfrontal_volume&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Age&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;Age&#39;, ylabel=&#39;rh_superiorfrontal_volume&#39;&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;rh_superiorfrontal_volume&#39;, ylabel=&#39;Age&#39;&gt;
 </pre></div>
 </div>
 <img alt="../_images/practice_linear_models_4_1.png" src="../_images/practice_linear_models_4_1.png" />
 </div>
 </div>
-<p>Let’s fit a linear model with the python package ‘<a class="reference external" href="https://scipy.org/">scipy</a>’ to assess the strength of the correlation.</p>
+<p>Let’s fit a linear model with the ols (ordinary least squares) function from the python package ‘<a class="reference external" href="https://scipy.org/">statsmodels</a>’ to assess the strength of the correlation.
+The syntax is similar to R’s linear models, we provide the formula, the data frame and fit the model.</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="fitting-a-simple-linear-model">
+<h1>Fitting a simple linear model<a class="headerlink" href="#fitting-a-simple-linear-model" title="Permalink to this headline">¶</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">beta1</span><span class="p">,</span> <span class="n">beta0</span><span class="p">,</span> <span class="n">r_value</span><span class="p">,</span> <span class="n">p_value</span><span class="p">,</span> <span class="n">std_err</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">linregress</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Age&#39;</span><span class="p">],</span><span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;rh_superiorfrontal_volume&#39;</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;R =&#39;</span><span class="p">,</span> <span class="n">r_value</span><span class="p">,</span> <span class="s1">&#39; p = &#39;</span><span class="p">,</span> <span class="n">p_value</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fitted_model</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span><span class="s1">&#39;Age ~ rh_superiorfrontal_volume&#39;</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="n">fitted_model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>R = -0.5855297900642413  p =  5.617381835888532e-60
-</pre></div>
+<div class="output text_html"><table class="simpletable">
+<caption>OLS Regression Results</caption>
+<tr>
+  <th>Dep. Variable:</th>           <td>Age</td>       <th>  R-squared:         </th> <td>   0.230</td>
+</tr>
+<tr>
+  <th>Model:</th>                   <td>OLS</td>       <th>  Adj. R-squared:    </th> <td>   0.219</td>
+</tr>
+<tr>
+  <th>Method:</th>             <td>Least Squares</td>  <th>  F-statistic:       </th> <td>   20.33</td>
+</tr>
+<tr>
+  <th>Date:</th>             <td>Wed, 09 Feb 2022</td> <th>  Prob (F-statistic):</th> <td>2.64e-05</td>
+</tr>
+<tr>
+  <th>Time:</th>                 <td>15:30:42</td>     <th>  Log-Likelihood:    </th> <td> -266.04</td>
+</tr>
+<tr>
+  <th>No. Observations:</th>      <td>    70</td>      <th>  AIC:               </th> <td>   536.1</td>
+</tr>
+<tr>
+  <th>Df Residuals:</th>          <td>    68</td>      <th>  BIC:               </th> <td>   540.6</td>
+</tr>
+<tr>
+  <th>Df Model:</th>              <td>     1</td>      <th>                     </th>     <td> </td>   
+</tr>
+<tr>
+  <th>Covariance Type:</th>      <td>nonrobust</td>    <th>                     </th>     <td> </td>   
+</tr>
+</table>
+<table class="simpletable">
+<tr>
+              <td></td>                 <th>coef</th>     <th>std err</th>      <th>t</th>      <th>P>|t|</th>  <th>[0.025</th>    <th>0.975]</th>  
+</tr>
+<tr>
+  <th>Intercept</th>                 <td>   82.4338</td> <td>   10.323</td> <td>    7.985</td> <td> 0.000</td> <td>   61.834</td> <td>  103.034</td>
+</tr>
+<tr>
+  <th>rh_superiorfrontal_volume</th> <td>   -0.0020</td> <td>    0.000</td> <td>   -4.509</td> <td> 0.000</td> <td>   -0.003</td> <td>   -0.001</td>
+</tr>
+</table>
+<table class="simpletable">
+<tr>
+  <th>Omnibus:</th>       <td> 5.368</td> <th>  Durbin-Watson:     </th> <td>   1.780</td>
+</tr>
+<tr>
+  <th>Prob(Omnibus):</th> <td> 0.068</td> <th>  Jarque-Bera (JB):  </th> <td>   4.600</td>
+</tr>
+<tr>
+  <th>Skew:</th>          <td> 0.602</td> <th>  Prob(JB):          </th> <td>   0.100</td>
+</tr>
+<tr>
+  <th>Kurtosis:</th>      <td> 3.354</td> <th>  Cond. No.          </th> <td>1.84e+05</td>
+</tr>
+</table><br/><br/>Notes:<br/>[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.<br/>[2] The condition number is large, 1.84e+05. This might indicate that there are<br/>strong multicollinearity or other numerical problems.</div></div>
 </div>
-</div>
-</div>
-<p>Note that <code class="docutils literal notranslate"><span class="pre">linregress</span></code> also obtained the beta coefficients from the equation:</p>
+<p>We can also obtain the beta coefficients from the equation:</p>
 <div class="math notranslate nohighlight">
 \[
 y_{i}=\beta _{0}+\beta _{1}x_{{i}}+\varepsilon _{i}
 \]</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">beta0</span><span class="p">,</span> <span class="n">beta1</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">beta</span><span class="o">=</span><span class="n">fitted_model</span><span class="o">.</span><span class="n">params</span>
+<span class="n">beta</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(26628.385095049118, -109.14655975487544)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Intercept                    82.433762
+rh_superiorfrontal_volume    -0.001994
+dtype: float64
 </pre></div>
 </div>
 </div>
 </div>
+<p>And use them to calculate predictions with based on the equation.
+Let’s predict the age of a hypotetical new participant who’s right superior frontal cortex has a volume of <span class="math notranslate nohighlight">\(25000 mm^3\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_new</span> <span class="o">=</span> <span class="mi">25000</span>
+<span class="n">yhat</span> <span class="o">=</span> <span class="n">beta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">beta</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">x_new</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Predicted age:&#39;</span><span class="p">,</span> <span class="n">yhat</span><span class="p">,</span> <span class="s1">&#39;years&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Predicted age: 32.57850401691034 years
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;rh_superiorfrontal_volume&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Age&#39;</span><span class="p">,)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_new</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">yhat</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.PathCollection at 0x7f1838db87c0&gt;
+</pre></div>
+</div>
+<img alt="../_images/practice_linear_models_11_1.png" src="../_images/practice_linear_models_11_1.png" />
+</div>
+</div>
+<p>Another one.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">25000</span><span class="p">,</span> <span class="mi">18000</span><span class="p">])</span>
+<span class="n">yhat</span> <span class="o">=</span> <span class="n">beta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">beta</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">x_new</span>
+<span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;rh_superiorfrontal_volume&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Age&#39;</span><span class="p">,)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_new</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">yhat</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.PathCollection at 0x7f1838ccb220&gt;
+</pre></div>
+</div>
+<img alt="../_images/practice_linear_models_13_1.png" src="../_images/practice_linear_models_13_1.png" />
+</div>
+</div>
+<p>Now let’s plot many different values.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">16000</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">32000</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<span class="n">yhat</span> <span class="o">=</span> <span class="n">beta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">beta</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">x_new</span>
+<span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;rh_superiorfrontal_volume&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Age&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_new</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">yhat</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.PathCollection at 0x7f1838f71070&gt;
+</pre></div>
+</div>
+<img alt="../_images/practice_linear_models_15_1.png" src="../_images/practice_linear_models_15_1.png" />
+</div>
+</div>
+<p>Yes, this is the regression line.
+The seaborn package from pythin has some more handy ways of plotting it (with 95% confidence intervals):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;rh_superiorfrontal_volume&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Age&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">line_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;rh_superiorfrontal_volume&#39;, ylabel=&#39;Age&#39;&gt;
+</pre></div>
+</div>
+<img alt="../_images/practice_linear_models_17_1.png" src="../_images/practice_linear_models_17_1.png" />
+</div>
+</div>
+<p>Now, let’s calculate how much the prediction is off on average, by doing a prediction for all original predictor values:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_new</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;rh_superiorfrontal_volume&#39;</span><span class="p">]</span>
+<span class="n">yhat</span> <span class="o">=</span> <span class="n">fitted_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_new</span><span class="p">)</span>
+<span class="c1"># Now we predict with the dedicated function from the `statsmodel` package, but is is equivalent with this:</span>
+<span class="c1"># yhat = beta[0] + beta[1]*x_new</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;root mean squared error (MSE):  &#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Age&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">yhat</span><span class="p">))),</span> <span class="s1">&#39;years&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;    mean absolute error (MAE):  &#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Age&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">yhat</span><span class="p">)),</span> <span class="s1">&#39;years&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>root mean squared error (MSE):   10.823141363809432 years
+    mean absolute error (MAE):   8.159445133839563 years
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="adding-more-predictors">
+<h1>Adding more predictors<a class="headerlink" href="#adding-more-predictors" title="Permalink to this headline">¶</a></h1>
+<p>So far so good, but of course the question arises, if we can improve on this prediction by adding more predictors?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fitted_model</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span><span class="s1">&#39;Age ~ rh_superiorfrontal_volume + lh_bankssts_volume + lh_caudalanteriorcingulate_volume + lh_caudalmiddlefrontal_volume + lh_cuneus_volume&#39;</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="n">yhat</span> <span class="o">=</span> <span class="n">fitted_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;rh_superiorfrontal_volume&#39;</span><span class="p">,</span> <span class="s1">&#39;lh_bankssts_volume&#39;</span><span class="p">,</span> <span class="s1">&#39;lh_caudalanteriorcingulate_volume&#39;</span><span class="p">,</span> <span class="s1">&#39;lh_caudalmiddlefrontal_volume&#39;</span><span class="p">,</span> <span class="s1">&#39;lh_cuneus_volume&#39;</span><span class="p">]])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;root mean squared error (MSE):  &#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Age&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">yhat</span><span class="p">))),</span> <span class="s1">&#39;years&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;    mean absolute error (MAE):  &#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Age&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">yhat</span><span class="p">)),</span> <span class="s1">&#39;years&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>root mean squared error (MSE):   10.487993856395724 years
+    mean absolute error (MAE):   7.96744497323358 years
+</pre></div>
+</div>
+</div>
+</div>
+<p>Error decreased… So let’s see what happens when we add more and more regions!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mae</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">reg_numbers</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">68</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">num_reg</span> <span class="ow">in</span> <span class="n">reg_numbers</span><span class="p">:</span>
+    <span class="n">df_sub</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;Age&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;columns&#39;</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">num_reg</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+    <span class="n">df_sub</span><span class="p">[</span><span class="s1">&#39;rh_superiorfrontal_volume&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;rh_superiorfrontal_volume&#39;</span><span class="p">]</span>
+    <span class="n">all_predictors</span> <span class="o">=</span> <span class="n">df_sub</span><span class="o">.</span><span class="n">columns</span>
+    <span class="n">df_sub</span><span class="p">[</span><span class="s1">&#39;Age&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Age&#39;</span><span class="p">]</span>
+    <span class="n">fitted_model</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span><span class="s1">&#39;Age ~ df_sub[all_predictors]&#39;</span><span class="p">,</span> <span class="n">df_sub</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+    <span class="n">yhat</span> <span class="o">=</span> <span class="n">fitted_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">df_sub</span><span class="p">)</span>
+    <span class="n">mae</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Age&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">yhat</span><span class="p">)))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">reg_numbers</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">mae</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:&gt;
+</pre></div>
+</div>
+<img alt="../_images/practice_linear_models_23_1.png" src="../_images/practice_linear_models_23_1.png" />
+</div>
+</div>
+<p>When adding all regions, the mean absolute error decreases to:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">min</span><span class="p">(</span><span class="n">mae</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.4261128153319675
+</pre></div>
+</div>
+</div>
+</div>
+<p>Too good to be true! Latest predictive models in the literature usually report a mean absolute error around 3-5 years, with MAE=2.71 ± 2.10 being one of the top-performnig examples, achieved by a deep learning model trained on many thousands of subjects <span id="id2">[<a class="reference internal" href="../references.html#id79">6</a>]</span>.</p>
+<p>To illustrate what’s wrong, let’s add randomly generated predictors, that can be garanteed to be independent of the target variable (age).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mae</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">reg_numbers</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">68</span><span class="p">)</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span> <span class="o">=</span> <span class="mi">42</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">num_reg</span> <span class="ow">in</span> <span class="n">reg_numbers</span><span class="p">:</span>
+    <span class="n">df_random</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="n">num_reg</span><span class="o">+</span><span class="mi">1</span><span class="p">)))</span>
+    <span class="n">all_predictors</span> <span class="o">=</span> <span class="n">df_random</span><span class="o">.</span><span class="n">columns</span>
+    <span class="n">fitted_model</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span><span class="s1">&#39;df.Age ~ df_random&#39;</span><span class="p">,</span> <span class="n">df_random</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+    <span class="n">yhat</span> <span class="o">=</span> <span class="n">fitted_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">df_random</span><span class="p">)</span>
+    <span class="n">mae</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Age&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">yhat</span><span class="p">)))</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">reg_numbers</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">mae</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Min MAE:&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">mae</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Min MAE: 1.3992282965463547
+</pre></div>
+</div>
+<img alt="../_images/practice_linear_models_27_1.png" src="../_images/practice_linear_models_27_1.png" />
+</div>
+</div>
+<p>What the heck? Mean absolute error is even lower, even though the model is based on totally random predictors?
+What we see here is called:</p>
+<section id="overfitting">
+<h2>Overfitting<a class="headerlink" href="#overfitting" title="Permalink to this headline">¶</a></h2>
+<p>Overfitting happens when the model utilizes random variance in the predictors to fit specific characteristics of dataset at hand.
+The more predictors you have - i.e. the more complex your model is - the more prone it gets to overfit that data it is trained on.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A helpful (but somewhat limiting) methaphore for overfitting is to think about it as the model learning the data at hand, instead of the underlying relationships.</p>
+</div>
+<p>In the next page we will see some real world examples of overfitting.</p>
+<p>In the next section (<a class="reference internal" href="../3_cross_validation/index.html"><span class="doc std std-doc">section 3</span></a>) we will see how we can evaluate predictive performance in an unbiased way, i.e. by ruling out overfitting.
+In <a class="reference internal" href="../4_reducing_complexity/index.html"><span class="doc std std-doc">section 4</span></a> and <a class="reference internal" href="../5_hyperparameter_optimization/index.html"><span class="doc std std-doc">5</span></a> we will see how we can fine tune model complexity to find the sweet spot between oversimplification and overfitting, which is the bread and butter of predictive modelling and machine learning.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A possible solution to handle many predictors is to fit a separate model for each predictor, so that the target and the predictor variable are swapped.
+This approach is referred to as mass univariate analysis and is very widespread e.g. in analysis of task-based functional MRI analysis.
+A drawback of this approach is that the researcher has to correct for the <a class="reference external" href="https://en.wikipedia.org/wiki/Multiple_comparisons_problem">multiple comparisons</a>, often making the analysis overly conservative.</p>
+<p>Consider looking up ‘<a class="reference external" href="https://andysbrainbook.readthedocs.io/en/latest/fMRI_Short_Course/fMRI_05_1stLevelAnalysis.html">Andy’s Brain Book</a>’ for more details.</p>
+</div>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Excercise 2.1</p>
+<p>What could be the reason of higher overfitting with random noise than with the true cortical volume data?</p>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Help</p>
+<p>Plot out the correlation structure of the real and the randomly simulated data with this commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">df_random</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">df_sub</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Excercise 2.2</p>
+<p>Launch this notebook interactively in Google Colab, upload and open your own dataset and fit some interesting models of your own choice.
+Try adding many predictors. Is your model suspicious of overfitting?</p>
+</div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -418,13 +784,13 @@ y_{i}=\beta _{0}+\beta _{1}x_{{i}}+\varepsilon _{i}
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Linear Models - Brief Theory</p>
+            <p class="prev-next-title">Theory in Brief</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="../3_cross_validation/index.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">3. Cross-Validation and Overfitting</p>
+        <p class="prev-next-title">3. Unbiased predictive performance estimates</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

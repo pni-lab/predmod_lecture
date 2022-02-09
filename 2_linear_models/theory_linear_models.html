@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Linear Models - Brief Theory &#8212; A Gentle Introduction to Predictive Modelling</title>
+    <title>Theory in Brief &#8212; A Gentle Introduction to Predictive Modelling</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -57,8 +57,8 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Linear models - practice session" href="practice_linear_models.html" />
-    <link rel="prev" title="2. Linear Models" href="index.html" />
+    <link rel="next" title="Practice Session" href="practice_linear_models.html" />
+    <link rel="prev" title="2. Linear Models and Overfitting" href="index.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -98,7 +98,6 @@
         <ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../index.html">
-   A Gentle Introduction to Predictive Modelling
   </a>
  </li>
 </ul>
@@ -132,7 +131,7 @@
  </li>
  <li class="toctree-l1 current active has-children">
   <a class="reference internal" href="index.html">
-   2. Linear Models
+   2. Linear Models and Overfitting
   </a>
   <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
   <label for="toctree-checkbox-2">
@@ -142,20 +141,42 @@
   <ul class="current">
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     Linear Models - Brief Theory
+     Theory in Brief
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="practice_linear_models.html">
-     Linear models - practice session
+     Practice Session
     </a>
    </li>
   </ul>
  </li>
- <li class="toctree-l1">
+ <li class="toctree-l1 has-children">
   <a class="reference internal" href="../3_cross_validation/index.html">
-   3. Cross-Validation and Overfitting
+   3. Unbiased predictive performance estimates
   </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../3_cross_validation/overfitting_ex.html">
+     Examples to Overfitting
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../3_cross_validation/train_test.html">
+     Training and Test sets
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../3_cross_validation/cv.html">
+     Cross-validation
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../4_reducing_complexity/index.html">
@@ -274,6 +295,24 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#linear-regression">
+   Linear Regression
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#predictions">
+   Predictions
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -281,19 +320,39 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Linear Models - Brief Theory</h1>
+                <h1>Theory in Brief</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#linear-regression">
+   Linear Regression
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#predictions">
+   Predictions
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
             
               <div>
                 
-  <section class="tex2jax_ignore mathjax_ignore" id="linear-models-brief-theory">
-<h1>Linear Models - Brief Theory<a class="headerlink" href="#linear-models-brief-theory" title="Permalink to this headline">¶</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="theory-in-brief">
+<h1>Theory in Brief<a class="headerlink" href="#theory-in-brief" title="Permalink to this headline">¶</a></h1>
+<section id="linear-regression">
+<h2>Linear Regression<a class="headerlink" href="#linear-regression" title="Permalink to this headline">¶</a></h2>
 <p>Linear models and alikes (e.g. ANOVA) are rudimentary statistical tools in scientific analyses.
 Probably you have also used them.</p>
 <p>Beside their widespread applications, they provide a great starting point for
@@ -326,11 +385,11 @@ y_{i}=\beta _{0}+\beta _{1}(x_{{i1}})+\cdots +\beta _{p}x_{{ip}}+\varepsilon _{i
 <p>Both the aim and the methods remain the same: we deconstruct
 the target variable into a <em>weighted some</em> (i.e a <a class="reference external" href="https://en.wikipedia.org/wiki/Linear_combination">linear combination</a>)
 of the predictors so that the result is as similar to the target variable as possible.</p>
-<p>If we denote the matrix containing all predictors \boldsymbol{<span class="math notranslate nohighlight">\((x_1}, \cdots, \boldsymbol{x_n})\)</span> as <span class="math notranslate nohighlight">\(X\)</span> and the vector
-(b_1, \cdots, b_n) containing all beta coefficients then the quantity to be minimized is:</p>
+<p>If we denote the matrix containing all predictors <span class="math notranslate nohighlight">\(\boldsymbol{\)</span>(x_1}, \cdots, \boldsymbol{x_n})<span class="math notranslate nohighlight">\( as \)</span>X<span class="math notranslate nohighlight">\( and the vector
+\)</span>(b_0, \cdots, b_n)<span class="math notranslate nohighlight">\( as \)</span>\boldsymbol{b}$ containing all beta coefficients then the quantity to be minimized is:</p>
 <div class="math notranslate nohighlight">
 \[
-argmin_b \sum [ y - bX) ]^2
+argmin_\boldsymbol{b} \sum [ \boldsymbol{y} - \boldsymbol{b}X) ]^2
 \]</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -339,15 +398,24 @@ the basics of machine learning.</p>
 </div>
 <p>Note that the higher the association between y and X is, the closer the linear model will
 be able to match them and the smaller the error <span class="math notranslate nohighlight">\(\epsilon\)</span> will be.
-Therefore, fitting a linear model can be (and very commonly is) used to determine the strength of the
-association (correlation) between the target variable and the predictors.</p>
+Therefore, fitting a linear model can be (and very commonly is) used to quantify the strength of the
+association (correlation) between the target variable and the predictors with <span class="math notranslate nohighlight">\(R\)</span>, <span class="math notranslate nohighlight">\(R^2\)</span>, T- and p-values.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Linear regression models can be easly extended to deal with factor variables,
 to reproduce ANOVA and related tests. Linear models can be also extended to handle
 a binary or factorial target variable (logistic or multinomial regression).</p>
 </div>
+</section>
+<section id="predictions">
+<h2>Predictions<a class="headerlink" href="#predictions" title="Permalink to this headline">¶</a></h2>
+<p>After fitting a linear model, we can obtain “predictions” <span class="math notranslate nohighlight">\(\hat{y}\)</span> for an arbitrary values of X:</p>
+<div class="math notranslate nohighlight">
+\[
+\hat{y} = \boldsymbol{b}X
+\]</div>
 <p>In the next page, we will see how one can perform linear regression in python.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -379,13 +447,13 @@ a binary or factorial target variable (logistic or multinomial regression).</p>
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">2. Linear Models</p>
+            <p class="prev-next-title">2. Linear Models and Overfitting</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="practice_linear_models.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Linear models - practice session</p>
+        <p class="prev-next-title">Practice Session</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
