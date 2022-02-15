@@ -180,7 +180,7 @@
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../4_reducing_complexity/index.html">
-   4. Fighting Overfitting - Machine Learning Models
+   4. Fighting Overfitting - The Advent of Machine Learning
   </a>
  </li>
  <li class="toctree-l1">
@@ -469,7 +469,7 @@ The syntax is similar to R’s linear models, we provide the formula, the data f
   <th>Date:</th>             <td>Wed, 09 Feb 2022</td> <th>  Prob (F-statistic):</th> <td>2.64e-05</td>
 </tr>
 <tr>
-  <th>Time:</th>                 <td>15:30:42</td>     <th>  Log-Likelihood:    </th> <td> -266.04</td>
+  <th>Time:</th>                 <td>21:44:20</td>     <th>  Log-Likelihood:    </th> <td> -266.04</td>
 </tr>
 <tr>
   <th>No. Observations:</th>      <td>    70</td>      <th>  AIC:               </th> <td>   536.1</td>
@@ -549,12 +549,12 @@ Let’s predict the age of a hypotetical new participant who’s right superior 
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;rh_superiorfrontal_volume&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Age&#39;</span><span class="p">,)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_new</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">yhat</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="n">x_new</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="n">yhat</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.PathCollection at 0x7f1838db87c0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;rh_superiorfrontal_volume&#39;, ylabel=&#39;Age&#39;&gt;
 </pre></div>
 </div>
 <img alt="../_images/practice_linear_models_11_1.png" src="../_images/practice_linear_models_11_1.png" />
@@ -566,12 +566,12 @@ Let’s predict the age of a hypotetical new participant who’s right superior 
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">25000</span><span class="p">,</span> <span class="mi">18000</span><span class="p">])</span>
 <span class="n">yhat</span> <span class="o">=</span> <span class="n">beta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">beta</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">x_new</span>
 <span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;rh_superiorfrontal_volume&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Age&#39;</span><span class="p">,)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_new</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">yhat</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_new</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">yhat</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.PathCollection at 0x7f1838ccb220&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;rh_superiorfrontal_volume&#39;, ylabel=&#39;Age&#39;&gt;
 </pre></div>
 </div>
 <img alt="../_images/practice_linear_models_13_1.png" src="../_images/practice_linear_models_13_1.png" />
@@ -583,18 +583,18 @@ Let’s predict the age of a hypotetical new participant who’s right superior 
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">16000</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">32000</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
 <span class="n">yhat</span> <span class="o">=</span> <span class="n">beta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">beta</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">x_new</span>
 <span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;rh_superiorfrontal_volume&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Age&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_new</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">yhat</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_new</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">yhat</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.PathCollection at 0x7f1838f71070&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;rh_superiorfrontal_volume&#39;, ylabel=&#39;Age&#39;&gt;
 </pre></div>
 </div>
 <img alt="../_images/practice_linear_models_15_1.png" src="../_images/practice_linear_models_15_1.png" />
 </div>
 </div>
-<p>Yes, this is the regression line.
+<p>Yes, this is what we call the regression line.
 The seaborn package from pythin has some more handy ways of plotting it (with 95% confidence intervals):</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -612,7 +612,7 @@ The seaborn package from pythin has some more handy ways of plotting it (with 95
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>You might have noticed that the distribution of the plotted variables is not Normal.
-Normality assumption and other requirements are of course extremely important, if you want to obtain p-values.
+Normality assumption and other requirements are of course extremely important for “traditional” statistical inference, i.e. if you want to obtain p-values.
 In this book we will see how the predictive modelling frees up itself from these assumptions.
 Normality and other assumptions never harm, but they are not required anymore in case of a properly validated predictive model.</p>
 </div>
