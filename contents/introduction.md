@@ -18,7 +18,7 @@ like mixed-effect models and find their way in highly complex analysis workflows
 .
 
 These type of researchers are the primary target readership of this lecture book.
-It aims to demystify predictive modelling and machine learning and to show
+The aim of this book is to demystify predictive modelling and machine learning and to show
 that the simplest - but yet very powerful - forms of these analysis techniques can as much accessible and straightforward
 as "classical" tools for statistical inference, they routinely use.
 
