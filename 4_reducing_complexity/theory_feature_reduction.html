@@ -213,24 +213,17 @@
      Regularized Models in Action
     </a>
    </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../5_hyperparameter_optimization/index.html">
-   5. Hyperparameter Optimization and Nested Cross-Validation
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
-  <label for="toctree-checkbox-5">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../5_hyperparameter_optimization/leakage.html">
+    <a class="reference internal" href="leakage.html">
      The Second Villain: Feature Leakage
     </a>
    </li>
   </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5_hyperparameter_optimization/index.html">
+   5. Hyperparameter Optimization and Nested Cross-Validation
+  </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../6_validity/index.html">
@@ -344,14 +337,26 @@
             </div>
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#selecting-best-features-based-on-their-association-with-the-target">
-   Selecting best features based on their association with the target
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Feature Reduction: brief theory
   </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#selecting-best-features-based-on-their-association-with-the-target">
+     Selecting best features based on their association with the target
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#principal-component-analysis">
+     Principal Component Analysis
+    </a>
+   </li>
+  </ul>
  </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#principal-component-analysis">
-   Principal Component Analysis
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#partial-least-squares">
+   Partial Least Squares
   </a>
  </li>
 </ul>
@@ -374,14 +379,26 @@
                         </div>
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#selecting-best-features-based-on-their-association-with-the-target">
-   Selecting best features based on their association with the target
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Feature Reduction: brief theory
   </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#selecting-best-features-based-on-their-association-with-the-target">
+     Selecting best features based on their association with the target
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#principal-component-analysis">
+     Principal Component Analysis
+    </a>
+   </li>
+  </ul>
  </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#principal-component-analysis">
-   Principal Component Analysis
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#partial-least-squares">
+   Partial Least Squares
   </a>
  </li>
 </ul>
@@ -431,7 +448,26 @@ the second-greatest variance on the second coordinate, and so on.</p>
 <p>Loosely speaking, in case of correlated (collinear) features, PCA decomposes
 the common component of the features into one single variable. PCA components will, therefore,
 be orthogonal to each other.</p>
+<p>Retaining the first k principal component will therefore ensure that as much
+total variance is reatined from all features as possible and allows for low-complexity
+models even in case of highly collinear features.</p>
 </section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="partial-least-squares">
+<h1>Partial Least Squares<a class="headerlink" href="#partial-least-squares" title="Permalink to this headline">¶</a></h1>
+<p>As compared to selecting the K best features and PCA,
+<a class="reference external" href="https://en.wikipedia.org/wiki/Partial_least_squares_regression">Partial Least Squares</a> (PLS) brings the best of both words.</p>
+<p>Instead of finding hyperplanes of maximum variance between the response
+and independent variables (as PCA does),
+PLS finds a linear regression model by projecting the predicted
+variables and the observable variables to a new space.</p>
+<p>The order of PLS components does not simply reflect how much total variance they explain.
+It reflects, how much variance they explain in the target variable.</p>
+<p>PLS often achieves a comparable performance to PCA, but with fewer components included.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Importantly, PLS can be applied to predict multiple variables at the same time.</p>
+</div>
 </section>
 
     <script type="text/x-thebe-config">

@@ -1,10 +1,6 @@
 # 4. Fighting Overfitting - The Advent of Machine Learning
 
 *In this chapter:*
-- [Overview](overview.md)
-
-- [Theory: reducing the feature space](theory_feature_reduction.md)
-- [Practice: reducing the feature space](practice_feature_reduction.ipynb)
-
-- [Theory: regularization](theory_regularization.md)
-- [Practice: regularization](practice_regularization.ipynb)
+- [Feature Reduction and Regularization: a Brief Theory](theory_regularization.ipynb)
+- [The Second Villain: Feature Leakage](leakage.ipynb)
+- [Feature Reduction and Regularization in Action](practice_regularization.ipynb)

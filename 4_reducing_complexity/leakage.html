@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Feature Reduction in Action &#8212; A Gentle Introduction to Predictive Modelling</title>
+    <title>The Second Villain: Feature Leakage &#8212; A Gentle Introduction to Predictive Modelling</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -46,6 +46,8 @@
     <script src="../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
     <script>
         const thebe_selector = ".thebe,.cell"
@@ -55,8 +57,8 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Regularization: brief theory" href="theory_regularization.html" />
-    <link rel="prev" title="Feature Reduction: brief theory" href="theory_feature_reduction.html" />
+    <link rel="next" title="5. Hyperparameter Optimization and Nested Cross-Validation" href="../5_hyperparameter_optimization/index.html" />
+    <link rel="prev" title="Regularized Models in Action" href="practice_regularization.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -187,23 +189,8 @@
   </label>
   <ul class="current">
    <li class="toctree-l2">
-    <a class="reference internal" href="overview.html">
-     Overview
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="theory_feature_reduction.html">
-     Feature Reduction: brief theory
-    </a>
-   </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     Feature Reduction in Action
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="theory_regularization.html">
-     Regularization: brief theory
+     Feature Reduction and Regularization: a brief theory
     </a>
    </li>
    <li class="toctree-l2">
@@ -211,8 +198,8 @@
      Regularized Models in Action
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="leakage.html">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
      The Second Villain: Feature Leakage
     </a>
    </li>
@@ -289,7 +276,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/4_reducing_complexity/practice_feature_reduction.ipynb"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/4_reducing_complexity/leakage.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.ipynb</button></a>
         <!-- Download PDF via print -->
@@ -309,7 +296,7 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/pni-lab/predmod_lecture/issues/new?title=Issue%20on%20page%20%2F4_reducing_complexity/practice_feature_reduction.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/pni-lab/predmod_lecture/issues/new?title=Issue%20on%20page%20%2F4_reducing_complexity/leakage.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
         
@@ -330,7 +317,7 @@
         aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
     <div class="dropdown-buttons">
         
-        <a class="binder-button" href="https://mybinder.org/v2/gh/pni-lab/predmod_lecture/master?urlpath=tree/contents/4_reducing_complexity/practice_feature_reduction.ipynb"><button type="button"
+        <a class="binder-button" href="https://mybinder.org/v2/gh/pni-lab/predmod_lecture/master?urlpath=tree/contents/4_reducing_complexity/leakage.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
                 data-placement="left"><img class="binder-button-logo"
                     src="../_static/images/logo_binder.svg"
@@ -338,7 +325,7 @@
         
         
         
-        <a class="colab-button" href="https://colab.research.google.com/github/pni-lab/predmod_lecture/blob/master/contents/4_reducing_complexity/practice_feature_reduction.ipynb"><button type="button" class="btn btn-secondary topbarbtn"
+        <a class="colab-button" href="https://colab.research.google.com/github/pni-lab/predmod_lecture/blob/master/contents/4_reducing_complexity/leakage.ipynb"><button type="button" class="btn btn-secondary topbarbtn"
                 title="Launch Colab" data-toggle="tooltip" data-placement="left"><img class="colab-button-logo"
                     src="../_static/images/logo_colab.png"
                     alt="Interact on Colab">Colab</button></a>
@@ -362,7 +349,7 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Feature Reduction in Action</h1>
+                <h1>The Second Villain: Feature Leakage</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -373,8 +360,67 @@
             
               <div>
                 
-  <section class="tex2jax_ignore mathjax_ignore" id="feature-reduction-in-action">
-<h1>Feature Reduction in Action<a class="headerlink" href="#feature-reduction-in-action" title="Permalink to this headline">¶</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="the-second-villain-feature-leakage">
+<h1>The Second Villain: Feature Leakage<a class="headerlink" href="#the-second-villain-feature-leakage" title="Permalink to this headline">¶</a></h1>
+<p>The aim of train-test split and cross-validation is to make sure that the model is tested on data about which it has absolutely no information during training.
+Absolutely no information.</p>
+<p>But, unfortunately, information can easily leak, especially if we already have access to the testing data at the time of training, as in the case of cross-validation.</p>
+<p>The most typical form of information leakage is employing a common preprocessing step on all features that utilizes information from all subjects (both train and test).</p>
+<p>A simplistic example is feature standardization, i.e. converting the features to zero mean and unique variance. As several <a class="reference internal" href="index.html"><span class="doc std std-doc">machin learning models</span></a> are sensitive to the magnitude of the features, this is a common step in many predictive modelling pipelines.</p>
+<div class="math notranslate nohighlight">
+\[
+f_{std} = \frac{f-\mu_f}{\sigma_f}
+\]</div>
+<p>In case features are standardized all together, i.e before the train-test split or outside of the cross-validation loop, we end up with feature leakage.
+Namely, features values of subjects from the training set will be standardized with the <span class="math notranslate nohighlight">\(\mu\)</span> and <span class="math notranslate nohighlight">\(\sigma\)</span> values computed on all subjects, <strong>including subjects from the training set</strong></p>
+<p>Let’s quickly illustrate the problem with some code:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">cross_val_predict</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_absolute_error</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">LeaveOneOut</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/pni-lab/predmod_lecture/master/ex_data/IXI/ixi.csv&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">loc</span><span class="p">[:</span><span class="mi">10</span><span class="p">,</span> <span class="p">:]</span>
+
+<span class="c1"># here we simulate random features - guaranteed to be independent of the target</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span> <span class="o">=</span> <span class="mi">42</span><span class="p">)</span>
+<span class="n">df_random</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="mi">5</span><span class="p">)))</span>
+<span class="n">features</span> <span class="o">=</span> <span class="n">df_random</span><span class="o">.</span><span class="n">columns</span>
+<span class="n">target</span> <span class="o">=</span> <span class="s1">&#39;Age&#39;</span>
+<span class="n">df_random</span><span class="p">[</span><span class="n">target</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">]</span>
+
+<span class="c1">#######################################################################################################</span>
+<span class="c1">## here we standardize the features *globally*, before the train test split, to demonstrate leakage</span>
+<span class="c1"># DO NOT TRY THIS AT HOME</span>
+<span class="n">df_random</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">features</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_random</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">features</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_random</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">features</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">/</span> <span class="n">df_random</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">features</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+<span class="c1">########################################################################################################</span>
+
+<span class="n">cv_predictions</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">LinearRegression</span><span class="p">(),</span> <span class="n">y</span><span class="o">=</span><span class="n">df_random</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">X</span><span class="o">=</span><span class="n">df_random</span><span class="p">[</span><span class="n">features</span><span class="p">],</span> <span class="n">cv</span><span class="o">=</span><span class="n">LeaveOneOut</span><span class="p">())</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df_random</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;MAE = &#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_true</span><span class="o">=</span><span class="n">df_random</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y_pred</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">),</span> <span class="s1">&#39;years&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MAE =  28.424867768992854 years
+</pre></div>
+</div>
+<img alt="../_images/leakage_2_1.png" src="../_images/leakage_2_1.png" />
+</div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://scikit-learn.org/stable/modules/preprocessing.html">https://scikit-learn.org/stable/modules/preprocessing.html</a></p>
+</div>
 </section>
 
     <script type="text/x-thebe-config">
@@ -402,17 +448,17 @@
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="theory_feature_reduction.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="practice_regularization.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Feature Reduction: brief theory</p>
+            <p class="prev-next-title">Regularized Models in Action</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="theory_regularization.html" title="next page">
+    <a class='right-next' id="next-link" href="../5_hyperparameter_optimization/index.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Regularization: brief theory</p>
+        <p class="prev-next-title">5. Hyperparameter Optimization and Nested Cross-Validation</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

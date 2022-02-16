@@ -45,12 +45,35 @@ Loosely speaking, in case of correlated (collinear) features, PCA decomposes
 the common component of the features into one single variable. PCA components will, therefore,
 be orthogonal to each other.
 
+Retaining the first k principal component will therefore ensure that as much
+total variance is reatined from all features as possible and allows for low-complexity
+models even in case of highly collinear features.
+
 :::{figure-md} pca
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/GaussianScatterPCA.svg/1024px-GaussianScatterPCA.svg.png" alt="fishy" width="400px">
 
 Principal Component Analysis in two dimensions (Source: [Wikipedia](https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/GaussianScatterPCA.svg/1024px-GaussianScatterPCA.svg.png
 
 ), author: Nicoguaro, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/))*.
+:::
+
+# Partial Least Squares
+
+As compared to selecting the K best features and PCA,
+[Partial Least Squares](https://en.wikipedia.org/wiki/Partial_least_squares_regression) (PLS) brings the best of both words.
+
+Instead of finding hyperplanes of maximum variance between the response
+and independent variables (as PCA does),
+PLS finds a linear regression model by projecting the predicted
+variables and the observable variables to a new space. 
+
+The order of PLS components does not simply reflect how much total variance they explain.
+It reflects, how much variance they explain in the target variable.
+
+PLS often achieves a comparable performance to PCA, but with fewer components included. 
+
+:::{note}
+Importantly, PLS can be applied to predict multiple variables at the same time.
 :::
 
 
