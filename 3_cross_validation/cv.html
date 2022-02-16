@@ -139,12 +139,17 @@
   <ul>
    <li class="toctree-l2">
     <a class="reference internal" href="../2_linear_models/theory_linear_models.html">
-     Theory in Brief
+     Linear Models: a Brief Theory
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../2_linear_models/practice_linear_models.html">
-     Practice Session
+     Linear Model in action
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../2_linear_models/overfitting_ex.html">
+     The first Villain: overfitting
     </a>
    </li>
   </ul>
@@ -160,11 +165,6 @@
   </label>
   <ul class="current">
    <li class="toctree-l2">
-    <a class="reference internal" href="overfitting_ex.html">
-     Examples to Overfitting
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="train_test.html">
      Training and Test sets
     </a>
@@ -176,15 +176,59 @@
    </li>
   </ul>
  </li>
- <li class="toctree-l1">
+ <li class="toctree-l1 has-children">
   <a class="reference internal" href="../4_reducing_complexity/index.html">
    4. Fighting Overfitting - The Advent of Machine Learning
   </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../4_reducing_complexity/overview.html">
+     Overview
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../4_reducing_complexity/theory_feature_reduction.html">
+     Feature Reduction: brief theory
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../4_reducing_complexity/practice_feature_reduction.html">
+     Feature Reduction in Action
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../4_reducing_complexity/theory_regularization.html">
+     Regularization: brief theory
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../4_reducing_complexity/practice_regularization.html">
+     Regularized Models in Action
+    </a>
+   </li>
+  </ul>
  </li>
- <li class="toctree-l1">
+ <li class="toctree-l1 has-children">
   <a class="reference internal" href="../5_hyperparameter_optimization/index.html">
    5. Hyperparameter Optimization and Nested Cross-Validation
   </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5_hyperparameter_optimization/leakage.html">
+     The Second Villain: Feature Leakage
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../6_validity/index.html">
@@ -318,6 +362,44 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-cross-validation-scheme">
+   The cross-validation scheme
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#leave-one-out-cross-validation">
+   Leave-one-out cross-validation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#k-fold-cross-validation">
+   K-fold cross-validation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#other-approaches">
+   Other approaches
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#cross-validated-predictions">
+   Cross-validated predictions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#model-finalization">
+   Model Finalization
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -330,6 +412,44 @@
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-cross-validation-scheme">
+   The cross-validation scheme
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#leave-one-out-cross-validation">
+   Leave-one-out cross-validation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#k-fold-cross-validation">
+   K-fold cross-validation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#other-approaches">
+   Other approaches
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#cross-validated-predictions">
+   Cross-validated predictions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#model-finalization">
+   Model Finalization
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -338,6 +458,292 @@
                 
   <section class="tex2jax_ignore mathjax_ignore" id="cross-validation">
 <h1>Cross-validation<a class="headerlink" href="#cross-validation" title="Permalink to this headline">¶</a></h1>
+<p>In the <a class="reference internal" href="train_test.html"><span class="doc std std-doc">previous section</span></a>, we have seen that, to obtain unbiased estimates of the predictive performance of any model, it should be evaluated on data that the model has not seen before (during training).</p>
+<p>At this point, we often have to make a compromise: the larger the training sample the better our model might get, but - at the same time - we must hold out enough data to hev robust estimates of predictive performance.</p>
+<p>A data acquisition in biomedical research is usually costly (both financially and in terms of effort), holding out a significant part of the data solely for testing sounds pretty uneconomical.</p>
+<p>Cross-validation is a framework for using as much of the data for training as possible and, at the same time, get as reliable performance estimates of our model (and similar models) as possible.</p>
+<p>Yes, with cross-validation you can have your cake and eat it too! But of course only with some extra assumptions.</p>
+<section id="the-cross-validation-scheme">
+<h2>The cross-validation scheme<a class="headerlink" href="#the-cross-validation-scheme" title="Permalink to this headline">¶</a></h2>
+<p>The central idea behind cross-validation is that you create multiple models each oif them using different parts of the data as train and test sets.</p>
+<p>The assumption is that all of these models approximate our “idealistic” model (e.g. that we would get when trained on a reasonably large dataset) to a sufficient degree, i.e. they can be considered to constitute a narrow family of tha aforementioned idealistic model.</p>
+<p>With this assumptions, we can allows the single models to use as much data for training as possible (by have a relatively large training set small test set).
+We don’t have to be worried that the single models have too small test sets for robust inference of predictive performance.
+We can simply pool and summarize the prediction accuracy estimates of all these models.</p>
+<p>Importantly, such pooled estimates will not be specific for any of the models but rather characterise the whole family of models.
+In most cases, however, it is perfectly fine to be able to draw a conclusion about the predictive performance of “models similar to this”, instead of “this” very specific model.</p>
+</section>
+<section id="leave-one-out-cross-validation">
+<h2>Leave-one-out cross-validation<a class="headerlink" href="#leave-one-out-cross-validation" title="Permalink to this headline">¶</a></h2>
+<p>The simplest form of cross validation is leave-one-out (LOO) cross-validation.
+As illustrated on the figure <a class="reference internal" href="#loo"><span class="std std-numref">Fig. 2</span></a>, in LOO, we have as many models as many subjects(/participants/examples/rows) our dataset has and all of these models leave out a different single subject for testing purposes.</p>
+<figure class="align-default" id="loo">
+<a class="reference internal image-reference" href="https://upload.wikimedia.org/wikipedia/commons/c/c7/LOOCV.gif"><img alt="fishy" src="https://upload.wikimedia.org/wikipedia/commons/c/c7/LOOCV.gif" style="width: 400px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 2 </span><span class="caption-text">Leave-one-out cross-validation <em>(Source: <a class="reference external" href="https://en.wikipedia.org/wiki/Cross-validation_(statistics)#/media/File:LOOCV.gif">Wikipedia</a>, user: MBanuelos22, unmodified, CC BY-SA 4.0)</em>.</span><a class="headerlink" href="#loo" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>LOO is very simple to implement in python with a single for loop:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">subjects</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">])</span>
+<span class="n">num_subjects</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">subjects</span><span class="p">)</span>
+<span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">num_subjects</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;LOO iteration&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="s2">&quot;: Here is model&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="s2">&quot;to be fitted and tested on:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Train indices:&quot;</span><span class="p">,</span> <span class="n">indices</span><span class="p">[</span><span class="n">indices</span><span class="o">!=</span><span class="n">i</span><span class="p">],</span>  <span class="s2">&quot;Test index:&quot;</span><span class="p">,</span> <span class="n">indices</span><span class="p">[</span><span class="n">indices</span><span class="o">==</span><span class="n">i</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Train data   :&quot;</span><span class="p">,</span> <span class="n">subjects</span><span class="p">[</span><span class="n">indices</span><span class="o">!=</span><span class="n">i</span><span class="p">],</span>  <span class="s2">&quot;Test data :&quot;</span><span class="p">,</span> <span class="n">subjects</span><span class="p">[</span><span class="n">indices</span><span class="o">==</span><span class="n">i</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>LOO iteration 0 : Here is model 0 to be fitted and tested on:
+	Train indices: [1 2 3 4 5] Test index: [0]
+	Train data   : [&#39;b&#39; &#39;c&#39; &#39;d&#39; &#39;e&#39; &#39;f&#39;] Test data : [&#39;a&#39;]
+LOO iteration 1 : Here is model 1 to be fitted and tested on:
+	Train indices: [0 2 3 4 5] Test index: [1]
+	Train data   : [&#39;a&#39; &#39;c&#39; &#39;d&#39; &#39;e&#39; &#39;f&#39;] Test data : [&#39;b&#39;]
+LOO iteration 2 : Here is model 2 to be fitted and tested on:
+	Train indices: [0 1 3 4 5] Test index: [2]
+	Train data   : [&#39;a&#39; &#39;b&#39; &#39;d&#39; &#39;e&#39; &#39;f&#39;] Test data : [&#39;c&#39;]
+LOO iteration 3 : Here is model 3 to be fitted and tested on:
+	Train indices: [0 1 2 4 5] Test index: [3]
+	Train data   : [&#39;a&#39; &#39;b&#39; &#39;c&#39; &#39;e&#39; &#39;f&#39;] Test data : [&#39;d&#39;]
+LOO iteration 4 : Here is model 4 to be fitted and tested on:
+	Train indices: [0 1 2 3 5] Test index: [4]
+	Train data   : [&#39;a&#39; &#39;b&#39; &#39;c&#39; &#39;d&#39; &#39;f&#39;] Test data : [&#39;e&#39;]
+LOO iteration 5 : Here is model 5 to be fitted and tested on:
+	Train indices: [0 1 2 3 4] Test index: [5]
+	Train data   : [&#39;a&#39; &#39;b&#39; &#39;c&#39; &#39;d&#39; &#39;e&#39;] Test data : [&#39;f&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Scikit-learn provides a <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.LeaveOneOut.html">shorthand</a> for LOO:</p>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip install scikit-learn
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: scikit-learn in /home/tspisak/src/RPN-signature/venv/lib/python3.8/site-packages (0.24.2)
+Requirement already satisfied: scipy&gt;=0.19.1 in /home/tspisak/src/RPN-signature/venv/lib/python3.8/site-packages (from scikit-learn) (1.7.1)
+Requirement already satisfied: numpy&gt;=1.13.3 in /home/tspisak/src/RPN-signature/venv/lib/python3.8/site-packages (from scikit-learn) (1.19.5)
+Requirement already satisfied: joblib&gt;=0.11 in /home/tspisak/src/RPN-signature/venv/lib/python3.8/site-packages (from scikit-learn) (1.0.1)
+Requirement already satisfied: threadpoolctl&gt;=2.0.0 in /home/tspisak/src/RPN-signature/venv/lib/python3.8/site-packages (from scikit-learn) (2.2.0)
+<span class=" -Color -Color-Yellow">WARNING: You are using pip version 21.2.4; however, version 22.0.3 is available.</span>
+<span class=" -Color -Color-Yellow">You should consider upgrading via the &#39;/home/tspisak/src/RPN-signature/venv/bin/python -m pip install --upgrade pip&#39; command.</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">LeaveOneOut</span>
+
+<span class="n">subjects</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">])</span>
+<span class="n">cv</span> <span class="o">=</span> <span class="n">LeaveOneOut</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;train_index&quot;</span><span class="p">,</span> <span class="s2">&quot;test_index&quot;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">train_index</span><span class="p">,</span> <span class="n">test_index</span> <span class="ow">in</span> <span class="n">cv</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">subjects</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">train_index</span><span class="p">,</span> <span class="n">test_index</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>train_index	test_index
+[1 2 3 4 5]	[0]
+[0 2 3 4 5]	[1]
+[0 1 3 4 5]	[2]
+[0 1 2 4 5]	[3]
+[0 1 2 3 5]	[4]
+[0 1 2 3 4]	[5]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note that python start indexing arrays from 0, a convention that might be strange at first, but very helpful in practice.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You may notice that in python you must use indentation to define the scope of a for loop (and many other constructs). This forces you to write code that is easier to read.</p>
+</div>
+</section>
+<section id="k-fold-cross-validation">
+<h2>K-fold cross-validation<a class="headerlink" href="#k-fold-cross-validation" title="Permalink to this headline">¶</a></h2>
+<p>LOO uses as much data for training as possible. This makes it often the default solution in case of very small datasets.</p>
+<p>It has however some drawbacks:</p>
+<ul class="simple">
+<li><p>you need to fit as many models as many subjects you have. This might be time-consuming with large data and computationally intensive models.</p></li>
+<li><p>you have a limited picture on how consistently the individual models perform.</p></li>
+<li><p>LOO may lead to a larger variance of the expected generalization error, see this <a class="reference external" href="https://stats.stackexchange.com/questions/61783/bias-and-variance-in-leave-one-out-vs-k-fold-cross-validation">stackexchange thread</a> for details.</p></li>
+</ul>
+<p>For larger datasets, we can divide the dataset into k approximately equally sized, disjunct partitions, so-called folds.
+Then we leave one fold at a time, resulting in k models, as illustrated on figure <a class="reference internal" href="#loo"><span class="std std-numref">Fig. 2</span></a>.</p>
+<figure class="align-default" id="kfold">
+<a class="reference internal image-reference" href="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/KfoldCV.gif/1920px-KfoldCV.gif"><img alt="fishy" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/KfoldCV.gif/1920px-KfoldCV.gif" style="width: 400px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 3 </span><span class="caption-text">K-fold cross-validation <em>(Source: <a class="reference external" href="https://en.wikipedia.org/wiki/Cross-validation_(statistics)#/media/File:KfoldCV.gif">Wikipedia</a>, user: MBanuelos22, unmodified, CC BY-SA 4.0)</em>.</span><a class="headerlink" href="#kfold" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>While it is relatively easy to implement k-fold cross-validation in native python, here we simply use the scikit-learn <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html">shorthand</a>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">KFold</span>
+
+<span class="n">subjects</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">])</span>
+<span class="n">cv</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;train_index&quot;</span><span class="p">,</span> <span class="s2">&quot;test_index&quot;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">train_index</span><span class="p">,</span> <span class="n">test_index</span> <span class="ow">in</span> <span class="n">cv</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">subjects</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">train_index</span><span class="p">,</span> <span class="n">test_index</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>train_index	test_index
+[2 3 4 5]	[0 1]
+[0 1 4 5]	[2 3]
+[0 1 2 3]	[4 5]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>How many folds?</strong>
+This is a question without a good answer. The optimal number of folds largely depend on your dataset.
+Having a too large k may result on very long running times, having a too small k might result in insufficient test data for the models.</p>
+<p>A useful “rule of thumb” is to use LOO for low sample sizes (n&lt;30) and 10-fold cross-validation for moderate sample sizes (few hundreds) and 5-fold cross validation or even one single train-test split for large samples. In general, except for very low sample sizes, the results should be relatively stable for a wide range of k-s.</p>
+</div>
+</section>
+<section id="other-approaches">
+<h2>Other approaches<a class="headerlink" href="#other-approaches" title="Permalink to this headline">¶</a></h2>
+<p>Many other types of cross-validation exist. For instance:</p>
+<ul class="simple">
+<li><p>In classification problems (binary target varaible) one might want to make sure that the training sets contain subjects from both classes (otherwise you can’t evaluate the classification performace of that model). In this case, one can perform a so-called <a class="reference external" href="https://scikit-learn.org/stable/modules/cross_validation.html#stratified-k-fold">stratified cross-validation</a>.</p></li>
+<li><p>In multi-center studies, one might want to ensure that all centers are equally/fairly represented in all folds or, conversely, that the test set only contains observations from a center that was not seen at all by the model at hand. In these cases, the <a class="reference external" href="https://scikit-learn.org/stable/modules/cross_validation.html#leave-one-group-out">LeaveOneGroupOut</a> or <a class="reference external" href="https://scikit-learn.org/stable/modules/cross_validation.html#group-k-fold">GroupKFold</a> might come handy.</p></li>
+<li><p>In case of the classical cross-validation schemes you end up with one single prediction for all subjects, which makes pooling and summarizing the predictions easier. But this does not has to be the case. With alternative resampling schemes like <a class="reference external" href="https://scikit-learn.org/stable/modules/cross_validation.html#shufflesplit">ShuffleSplit</a>, the train-test labels are randomly assigned to the data. Repeating this for multiple iterations allows a finer control on the number of iterations and the proportion of samples on each side of the train / test split.</p></li>
+</ul>
+</section>
+<section id="cross-validated-predictions">
+<h2>Cross-validated predictions<a class="headerlink" href="#cross-validated-predictions" title="Permalink to this headline">¶</a></h2>
+<p>With cross-validation, we end up with one single prediction for all subjects (i.e. all subjects are used exactly once as a test subject). This makes aggregating (pooling and summarizing) the predictions very easy.</p>
+<p>Here we will use our example dataset to obtain cross-validated predictions corresponding to <code class="docutils literal notranslate"><span class="pre">model_2</span></code> form the <a class="reference internal" href="train_test.html"><span class="doc std std-doc">previous section</span></a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/pni-lab/predmod_lecture/master/ex_data/IXI/ixi.csv&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">loc</span><span class="p">[:</span><span class="mi">100</span><span class="p">,</span> <span class="p">:]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+<span class="c1"># cross validation</span>
+<span class="n">cv</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="c1"># 5 folds, 20 participants in each fold</span>
+
+<span class="c1"># names of the columns to be used</span>
+<span class="n">target</span> <span class="o">=</span> <span class="s1">&#39;Age&#39;</span>
+<span class="n">features</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+
+<span class="c1"># we will collect the predicted values here (initialize it with zeros)</span>
+<span class="n">cv_predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">train_index</span><span class="p">,</span> <span class="n">test_index</span> <span class="ow">in</span> <span class="n">cv</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="c1"># train on the actual training set</span>
+    <span class="n">model_2</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">train_index</span><span class="p">,</span> <span class="n">target</span><span class="p">],</span> <span class="n">X</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">train_index</span><span class="p">,</span> <span class="n">features</span><span class="p">])</span>
+    <span class="c1"># test on the actual test set and collect it</span>
+    <span class="n">cv_predictions</span><span class="p">[</span><span class="n">test_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">model_2</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">test_index</span><span class="p">,</span> <span class="n">features</span><span class="p">])</span>
+
+<span class="c1"># finally, plot cv_predictions vs. true age and calculate MAE</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;MAE = &#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">]</span> <span class="o">-</span> <span class="n">cv_predictions</span><span class="p">)),</span> <span class="s1">&#39;years&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MAE =  15.12735493479741 years
+</pre></div>
+</div>
+<img alt="../_images/cv_13_1.png" src="../_images/cv_13_1.png" />
+</div>
+</div>
+<p>In this example, in each cross-validation iteration, the size of the training set is 80, that is, equal to the size of the training set in the <a class="reference internal" href="train_test.html"><span class="doc std std-doc">previous section</span></a>.
+Using this data only, i.e. without utilizing the previous section’s test set, here we obtained unbiased estimates of predictive accuracy.</p>
+<p>Comparably reliable estimates of the true predictive power with almost half the total sample size than in the previous section.
+<strong>That’s the power of cross-validation!</strong></p>
+<p>Of course, scikit-learn has shorthand functions for obtaining cross-validated predictions and performance scores.
+This is illustrated here:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">cross_val_predict</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_absolute_error</span>
+
+<span class="n">cv_predictions</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">LinearRegression</span><span class="p">(),</span> <span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">X</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">features</span><span class="p">],</span> <span class="n">cv</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;MAE = &#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_true</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y_pred</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">),</span> <span class="s1">&#39;years&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MAE =  15.12735493479741 years
+</pre></div>
+</div>
+<img alt="../_images/cv_15_1.png" src="../_images/cv_15_1.png" />
+</div>
+</div>
+<p>This produces literally the same results, but is much shorter.</p>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Excercise 3.3</p>
+<p>Compare the MAE we got here to the MAE of model_2 on the training and test sets in the previous sections.</p>
+</div>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Excercise 3.4</p>
+<p>Try out other k-values for the KFold cross-validation and LOO with the same data?
+Does it change the results? Can you explain the differences?</p>
+</div>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Excercise 3.5</p>
+<p>Load in more data, than try out different k-values again.
+Is it still sensitive to k? Can you explain why/why not?
+Tip: Understanding learning curves might help, see &lt;todo: reference&gt;.</p>
+</div>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Excercise 3.6</p>
+<p>Load in your own data and train a linear model with cross-validation.</p>
+</div>
+</section>
+<section id="model-finalization">
+<h2>Model Finalization<a class="headerlink" href="#model-finalization" title="Permalink to this headline">¶</a></h2>
+<p>While cross-validation allows getting out the maximum of your dataset, as a result, you’ll have to deal with a set of models, instead of one single model.
+Although the cross-validation results may suggest that all of these models may be reasonably good, it might be still challenging to decide which one to present as the final model, for further use/validation.</p>
+<p>Constructing the final model after cross-validation is called <em>model finalization</em>.</p>
+<p>There are multiple strategies for model finalization. To mention a few, one can:</p>
+<ul class="simple">
+<li><p>simply pick one model from the cross-validation iterations (e.g randomly, or the best performing),</p></li>
+<li><p>average all models (model coefficients) from the cross-validation iterations,</p></li>
+<li><p>refit the model on the whole data and consider it as the final model.</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>You can read more about model finalization for instance <a class="reference external" href="https://machinelearningmastery.com/train-final-machine-learning-model/">here</a></p>
+</div>
+<p>The last solution, i.e. refitting the model on the whole data, can be considered a good solution in many situations, especially with low/moderate sample sizes.</p>
+<p>If the cross-validation was well designed, the performance measures will suitably describe how well the finalized model trained on all available historical data will perform in general.</p>
+<p>What’s more, if your model could - in general - benefit form more data (i.e. the learning curve is not yet saturating, see <todo> reference&gt;), than you can hope that the finalized model (using all available data) will perform even better on brand new (e.g. prospectively acquired) than expected from the cross-validated predictions, as it was trained on more data than any of the cross-validation models.</p>
+<p>Of course, in reality, generalization to newly measured data can be very problematic due to <a class="reference external" href="https://gsarantitis.wordpress.com/2020/04/16/data-shift-in-machine-learning-what-is-it-and-how-to-detect-it/">dataset shift</a>: changes in the data distribution, as compared to the training data.
+Read more about dataset shift and related model validation issues in <a class="reference internal" href="../6_validity/index.html"><span class="doc std std-doc">chapter 6</span></a></p>
+<p>In this chapter, we have seen how testing on unseen data (with single splits or with cross-validation) can provide unbiased estimates of predictive models, even if the models overfitted on the truing data. In the <a class="reference internal" href="../4_reducing_complexity/index.html"><span class="doc std std-doc">next section</span></a> we will see how overfitting can be prevented by fine-tuning model complexity.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">

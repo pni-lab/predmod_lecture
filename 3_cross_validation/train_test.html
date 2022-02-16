@@ -46,6 +46,8 @@
     <script src="../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
     <script>
         const thebe_selector = ".thebe,.cell"
@@ -56,7 +58,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Cross-validation" href="cv.html" />
-    <link rel="prev" title="Examples to Overfitting" href="overfitting_ex.html" />
+    <link rel="prev" title="3. Unbiased predictive performance estimates" href="index.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -139,12 +141,17 @@
   <ul>
    <li class="toctree-l2">
     <a class="reference internal" href="../2_linear_models/theory_linear_models.html">
-     Theory in Brief
+     Linear Models: a Brief Theory
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../2_linear_models/practice_linear_models.html">
-     Practice Session
+     Linear Model in action
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../2_linear_models/overfitting_ex.html">
+     The first Villain: overfitting
     </a>
    </li>
   </ul>
@@ -159,11 +166,6 @@
    </i>
   </label>
   <ul class="current">
-   <li class="toctree-l2">
-    <a class="reference internal" href="overfitting_ex.html">
-     Examples to Overfitting
-    </a>
-   </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
      Training and Test sets
@@ -176,15 +178,59 @@
    </li>
   </ul>
  </li>
- <li class="toctree-l1">
+ <li class="toctree-l1 has-children">
   <a class="reference internal" href="../4_reducing_complexity/index.html">
    4. Fighting Overfitting - The Advent of Machine Learning
   </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../4_reducing_complexity/overview.html">
+     Overview
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../4_reducing_complexity/theory_feature_reduction.html">
+     Feature Reduction: brief theory
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../4_reducing_complexity/practice_feature_reduction.html">
+     Feature Reduction in Action
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../4_reducing_complexity/theory_regularization.html">
+     Regularization: brief theory
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../4_reducing_complexity/practice_regularization.html">
+     Regularized Models in Action
+    </a>
+   </li>
+  </ul>
  </li>
- <li class="toctree-l1">
+ <li class="toctree-l1 has-children">
   <a class="reference internal" href="../5_hyperparameter_optimization/index.html">
    5. Hyperparameter Optimization and Nested Cross-Validation
   </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5_hyperparameter_optimization/leakage.html">
+     The Second Villain: Feature Leakage
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../6_validity/index.html">
@@ -388,7 +434,13 @@
 The next step is to evaluate, how much predictive performance we have when we rule out the effect of overfitting.
 There is a very straightforward solution: we can simply obtain predictions with our fitted model on data that it haven’t seen before.</p>
 <p>Below, we re-compute two models that we have fitted in the previous section and obtain more data that the models haven’t seen before and use it for testing their <em>unbiased</em> predictive performance.</p>
-<p>Let’s import some libraries and load our example dataset. The first 70 participants are loaded into <code class="docutils literal notranslate"><span class="pre">df_train</span></code>. Then, another 70 are loaded into <code class="docutils literal notranslate"><span class="pre">df_test</span></code>.</p>
+<p>Let’s install and import some libraries.
+Here we start using a new package&gt; <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference external" href="https://scikit-learn.org/stable/">Scikit-learn</a> is the leading package for “classical” machine learning, with an excellent documentation and a very active community.
+It offers a great start into predictive modelling and machine learning for people with a broad spectrum of background.</p>
+</div>
 <div class="cell tag_hide-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip install scikit-learn
@@ -396,8 +448,25 @@ There is a very straightforward solution: we can simply obtain predictions with 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 <span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
-
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/pni-lab/predmod_lecture/master/ex_data/IXI/ixi.csv&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: scikit-learn in /home/tspisak/src/RPN-signature/venv/lib/python3.8/site-packages (0.24.2)
+Requirement already satisfied: joblib&gt;=0.11 in /home/tspisak/src/RPN-signature/venv/lib/python3.8/site-packages (from scikit-learn) (1.0.1)
+Requirement already satisfied: threadpoolctl&gt;=2.0.0 in /home/tspisak/src/RPN-signature/venv/lib/python3.8/site-packages (from scikit-learn) (2.2.0)
+Requirement already satisfied: scipy&gt;=0.19.1 in /home/tspisak/src/RPN-signature/venv/lib/python3.8/site-packages (from scikit-learn) (1.7.1)
+Requirement already satisfied: numpy&gt;=1.13.3 in /home/tspisak/src/RPN-signature/venv/lib/python3.8/site-packages (from scikit-learn) (1.19.5)
+<span class=" -Color -Color-Yellow">WARNING: You are using pip version 21.2.4; however, version 22.0.3 is available.</span>
+<span class=" -Color -Color-Yellow">You should consider upgrading via the &#39;/home/tspisak/src/RPN-signature/venv/bin/python -m pip install --upgrade pip&#39; command.</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we load our example dataset, but in two non-overlapping pieces. The first 80 participants are loaded into <code class="docutils literal notranslate"><span class="pre">df_train</span></code>. Then, another 80 are loaded into <code class="docutils literal notranslate"><span class="pre">df_test</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/pni-lab/predmod_lecture/master/ex_data/IXI/ixi.csv&quot;</span><span class="p">)</span>
 <span class="n">train</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">[:</span><span class="mi">80</span><span class="p">]</span>
 <span class="n">test</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">80</span><span class="p">:</span><span class="mi">160</span><span class="p">]</span>
 <span class="n">features</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
@@ -405,21 +474,18 @@ There is a very straightforward solution: we can simply obtain predictions with 
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: scikit-learn in /home/tspisak/src/RPN-signature/venv/lib/python3.8/site-packages (0.24.2)
-Requirement already satisfied: threadpoolctl&gt;=2.0.0 in /home/tspisak/src/RPN-signature/venv/lib/python3.8/site-packages (from scikit-learn) (2.2.0)
-Requirement already satisfied: joblib&gt;=0.11 in /home/tspisak/src/RPN-signature/venv/lib/python3.8/site-packages (from scikit-learn) (1.0.1)
-Requirement already satisfied: numpy&gt;=1.13.3 in /home/tspisak/src/RPN-signature/venv/lib/python3.8/site-packages (from scikit-learn) (1.19.5)
-Requirement already satisfied: scipy&gt;=0.19.1 in /home/tspisak/src/RPN-signature/venv/lib/python3.8/site-packages (from scikit-learn) (1.7.1)
-<span class=" -Color -Color-Yellow">WARNING: You are using pip version 21.2.4; however, version 22.0.3 is available.</span>
-<span class=" -Color -Color-Yellow">You should consider upgrading via the &#39;/home/tspisak/src/RPN-signature/venv/bin/python -m pip install --upgrade pip&#39; command.</span>
-</pre></div>
-</div>
-</div>
 </div>
 <section id="train-overfitted-models">
 <h2>Train overfitted models<a class="headerlink" href="#train-overfitted-models" title="Permalink to this headline">¶</a></h2>
-<p>First, we train <code class="docutils literal notranslate"><span class="pre">model_1</span></code> with one single predictor, the right superior frontal cortex volume.</p>
+<p>First, we fit a linear model called <code class="docutils literal notranslate"><span class="pre">model_1</span></code>, with one single predictor, the right superior frontal cortex volume.</p>
+<p>This time we use <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>’s implementation of linear regression (instead of the <code class="docutils literal notranslate"><span class="pre">statsmodels</span></code>’ function).
+<code class="docutils literal notranslate"><span class="pre">Scikit-learn</span></code>’s <code class="docutils literal notranslate"><span class="pre">LinearRegression()</span></code> is a minimalistic implementation that is, in many ways, optimized for use in machine learning.
+It doesn’t even provide p-values. But we won’t miss them…</p>
+<p>Note that we use only the “training sample” (<code class="docutils literal notranslate"><span class="pre">df.loc[train,</span> <span class="pre">target]</span></code>) to fit the model.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Wonder, what <code class="docutils literal notranslate"><span class="pre">.loc</span></code> means in the code? It’s just the syntax for dataframe indexing/slicing in 2-dimensions (rows and columns). See the pandas <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html">documentation</a> for more detail.</p>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model_1</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">train</span><span class="p">,</span> <span class="n">target</span><span class="p">],</span> <span class="n">X</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">train</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;rh_superiorfrontal_volume&#39;</span><span class="p">]])</span>
@@ -437,10 +503,15 @@ Requirement already satisfied: scipy&gt;=0.19.1 in /home/tspisak/src/RPN-signatu
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;Age&#39;&gt;
 </pre></div>
 </div>
-<img alt="../_images/train_test_3_2.png" src="../_images/train_test_3_2.png" />
+<img alt="../_images/train_test_5_2.png" src="../_images/train_test_5_2.png" />
 </div>
 </div>
-<p>Then,we train <code class="docutils literal notranslate"><span class="pre">model_2</span></code> with all available predictors.</p>
+<p>We have computed a simple measure of how much the model predictions differ form the actual data: the mean absolute error (MAE):</p>
+<div class="math notranslate nohighlight">
+\[
+MAE = \sum|y - \hat{y}|
+\]</div>
+<p>Now, we train <code class="docutils literal notranslate"><span class="pre">model_2</span></code>, which takes use of <strong>all</strong> available predictors.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model_2</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">train</span><span class="p">,</span> <span class="n">target</span><span class="p">],</span> <span class="n">X</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">train</span><span class="p">,</span> <span class="n">features</span><span class="p">])</span>
@@ -458,7 +529,7 @@ Requirement already satisfied: scipy&gt;=0.19.1 in /home/tspisak/src/RPN-signatu
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;Age&#39;&gt;
 </pre></div>
 </div>
-<img alt="../_images/train_test_5_2.png" src="../_images/train_test_5_2.png" />
+<img alt="../_images/train_test_7_2.png" src="../_images/train_test_7_2.png" />
 </div>
 </div>
 <p>Finally, we train <code class="docutils literal notranslate"><span class="pre">model_3</span></code>, a dummy model with random features that are guaranteed to be independent form the target.</p>
@@ -481,13 +552,17 @@ Requirement already satisfied: scipy&gt;=0.19.1 in /home/tspisak/src/RPN-signatu
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;Age&#39;&gt;
 </pre></div>
 </div>
-<img alt="../_images/train_test_7_2.png" src="../_images/train_test_7_2.png" />
+<img alt="../_images/train_test_9_2.png" src="../_images/train_test_9_2.png" />
 </div>
 </div>
+<p>We see the same picture as in the previous section: adding more predictors increases performance on the training set, even if the predictors are just random noise.
+We also already know that this is due to overfitting the training set.</p>
+<p>But how much do these models overfit?
+Here comes the moment if justice!</p>
 </section>
 <section id="test-overfitted-models-on-unseen-data">
 <h2>Test overfitted models on unseen data<a class="headerlink" href="#test-overfitted-models-on-unseen-data" title="Permalink to this headline">¶</a></h2>
-<p>Here comes the moment if justice! Let’s test all models on the test set, i.e. on data that the model haven’t seen during training.</p>
+<p>Let’s test all models on the test set, i.e. on data that the model haven’t seen during training.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">yhat</span> <span class="o">=</span> <span class="n">model_1</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">test</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;rh_superiorfrontal_volume&#39;</span><span class="p">]])</span>
@@ -504,7 +579,7 @@ Requirement already satisfied: scipy&gt;=0.19.1 in /home/tspisak/src/RPN-signatu
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;Age&#39;&gt;
 </pre></div>
 </div>
-<img alt="../_images/train_test_9_2.png" src="../_images/train_test_9_2.png" />
+<img alt="../_images/train_test_11_2.png" src="../_images/train_test_11_2.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -523,7 +598,7 @@ Requirement already satisfied: scipy&gt;=0.19.1 in /home/tspisak/src/RPN-signatu
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;Age&#39;&gt;
 </pre></div>
 </div>
-<img alt="../_images/train_test_10_2.png" src="../_images/train_test_10_2.png" />
+<img alt="../_images/train_test_12_2.png" src="../_images/train_test_12_2.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -542,7 +617,7 @@ Requirement already satisfied: scipy&gt;=0.19.1 in /home/tspisak/src/RPN-signatu
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;Age&#39;&gt;
 </pre></div>
 </div>
-<img alt="../_images/train_test_11_2.png" src="../_images/train_test_11_2.png" />
+<img alt="../_images/train_test_13_2.png" src="../_images/train_test_13_2.png" />
 </div>
 </div>
 <p>Let’s summarise the results!</p>
@@ -563,18 +638,23 @@ Requirement already satisfied: scipy&gt;=0.19.1 in /home/tspisak/src/RPN-signatu
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;model&#39;, ylabel=&#39;MAE&#39;&gt;
 </pre></div>
 </div>
-<img alt="../_images/train_test_13_1.png" src="../_images/train_test_13_1.png" />
+<img alt="../_images/train_test_15_1.png" src="../_images/train_test_15_1.png" />
 </div>
 </div>
 <p>What we see that performance on the training and test sets can be strikingly different.
-The simplest model (<code class="docutils literal notranslate"><span class="pre">model_1</span></code>) with a single predictor performed best on the test set, actually even better (lower error) than on the training set, implying a negligible level of overfit in this model.
-The other two models were much more complex, i.e. they had a lot more parameters to overfit. Indeed, while they seemed to perform significantly better than <code class="docutils literal notranslate"><span class="pre">model_1</span></code> on the trainig set, their performance strikingly dropped on the test set. These models heavily overfitted the training data.</p>
-<p>Even though it overfitted the training sample, <code class="docutils literal notranslate"><span class="pre">model_2</span></code> has captured some generalizable knowledge, as well. On the other hand, <code class="docutils literal notranslate"><span class="pre">model_3</span></code> (as expected) didn’t perform better than chance on the test set and all its performance on the training set has to be attributed to overfitting.</p>
+The simplest model (<code class="docutils literal notranslate"><span class="pre">model_1</span></code>) with a single predictor performed best on the test set, actually even slightly better (lower error) than on the training set, implying a negligible level of overfitting in case of this model.
+The other two models were much more complex, i.e. they had a lot more parameters to (over)fit. Indeed, while they seemed to perform significantly better than <code class="docutils literal notranslate"><span class="pre">model_1</span></code> on the trainig set, their performance strikingly dropped on the test set. These models heavily overfitted the training data.</p>
+<p>Even though it overfitted the training sample, <code class="docutils literal notranslate"><span class="pre">model_2</span></code> has captured some generalizable knowledge, as well. On the other hand, our pure-noise model (<code class="docutils literal notranslate"><span class="pre">model_3</span></code>), as expected, didn’t perform better than chance on the test set and all its performance on the training set has to be attributed to overfitting.</p>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Excercise 3.3</p>
+<p>Does a simple linear model overfit with your own dataset, too?
+Try it out in Google Colab!</p>
+</div>
 </section>
 <section id="train-test-split">
 <h2>Train-test split<a class="headerlink" href="#train-test-split" title="Permalink to this headline">¶</a></h2>
 <p>Holding out a test set (or measuring new data post model training) is a very common practice in predictive modelling and machine learning, providing a very straightforward solution for ruling out the effect of overfitting and  to obtain unbiased estimates of predictive performance.</p>
-<p>However, due to the costs of the data acquisition, holding out a large number of participants solely for testing is a luxury.
+<p>However, due to the costs of the data acquisition, holding out a large number of participants solely for testing is often a luxury.
 In the <a class="reference internal" href="cv.html"><span class="doc std std-doc">next section</span></a> we will see, how cross-validation can help in getting out the most of our data when training predictive models.</p>
 </section>
 </section>
@@ -604,11 +684,11 @@ In the <a class="reference internal" href="cv.html"><span class="doc std std-doc
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="overfitting_ex.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="index.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Examples to Overfitting</p>
+            <p class="prev-next-title">3. Unbiased predictive performance estimates</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="cv.html" title="next page">

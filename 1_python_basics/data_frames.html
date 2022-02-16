@@ -139,12 +139,17 @@
   <ul>
    <li class="toctree-l2">
     <a class="reference internal" href="../2_linear_models/theory_linear_models.html">
-     Theory in Brief
+     Linear Models: a Brief Theory
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../2_linear_models/practice_linear_models.html">
-     Practice Session
+     Linear Model in action
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../2_linear_models/overfitting_ex.html">
+     The first Villain: overfitting
     </a>
    </li>
   </ul>
@@ -160,11 +165,6 @@
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../3_cross_validation/overfitting_ex.html">
-     Examples to Overfitting
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="../3_cross_validation/train_test.html">
      Training and Test sets
     </a>
@@ -176,15 +176,59 @@
    </li>
   </ul>
  </li>
- <li class="toctree-l1">
+ <li class="toctree-l1 has-children">
   <a class="reference internal" href="../4_reducing_complexity/index.html">
    4. Fighting Overfitting - The Advent of Machine Learning
   </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../4_reducing_complexity/overview.html">
+     Overview
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../4_reducing_complexity/theory_feature_reduction.html">
+     Feature Reduction: brief theory
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../4_reducing_complexity/practice_feature_reduction.html">
+     Feature Reduction in Action
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../4_reducing_complexity/theory_regularization.html">
+     Regularization: brief theory
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../4_reducing_complexity/practice_regularization.html">
+     Regularized Models in Action
+    </a>
+   </li>
+  </ul>
  </li>
- <li class="toctree-l1">
+ <li class="toctree-l1 has-children">
   <a class="reference internal" href="../5_hyperparameter_optimization/index.html">
    5. Hyperparameter Optimization and Nested Cross-Validation
   </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5_hyperparameter_optimization/leakage.html">
+     The Second Villain: Feature Leakage
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../6_validity/index.html">
@@ -449,7 +493,7 @@ For convenience, we also specify that from now on, we would like to refer to pan
 </section>
 <section id="loading-some-data">
 <h2>Loading some data<a class="headerlink" href="#loading-some-data" title="Permalink to this headline">¶</a></h2>
-<p>Now let’s load some example data. Throughout the book, we will use brain cortical volume and thickness data obtained from the publicly available <a class="reference external" href="https://brain-development.org/ixi-dataset/">“Information eXtraction from Images” (IXI) dataset</a></p>
+<p>Now let’s load some example data. Throughout the book, we will use brain cortical volume data obtained from the publicly available <a class="reference external" href="https://brain-development.org/ixi-dataset/">“Information eXtraction from Images” (IXI) dataset</a></p>
 <aside class="margin sidebar">
 <p class="sidebar-title">License info</p>
 <p>The IXI dataset is made available under the Creative Commons <a class="reference external" href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a> license. If you use the IXI data please acknowledge the source of the IXI data.</p>
@@ -778,8 +822,8 @@ For more information on analyzing anatomical MR images with Freesurfer e.g. on <
 <p>638 rows × 70 columns</p>
 </div></div></div>
 </div>
-<p>The first two columns of our example dataframe are participant ID and age, then we have a total of 68 cortical volume and thickness values, each computed in 34 regions.
-Rows correspond to participnats: a total of N=638.
+<p>The first two columns of our example dataframe are participant ID and age, then we have a total of 68 cortical volume values, each computed in 34 regions.
+Rows correspond to participants: a total of N=638.
 The brain regions were delineated by the as based on the Destrieux brain atlas <span id="id1">[<a class="reference internal" href="../references.html#id78">5</a>]</span>, shown below.</p>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">

@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Practice Session &#8212; A Gentle Introduction to Predictive Modelling</title>
+    <title>Linear Model in action &#8212; A Gentle Introduction to Predictive Modelling</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -57,8 +57,8 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="3. Unbiased predictive performance estimates" href="../3_cross_validation/index.html" />
-    <link rel="prev" title="Theory in Brief" href="theory_linear_models.html" />
+    <link rel="next" title="The first Villain: overfitting" href="overfitting_ex.html" />
+    <link rel="prev" title="Linear Models: a Brief Theory" href="theory_linear_models.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -141,12 +141,17 @@
   <ul class="current">
    <li class="toctree-l2">
     <a class="reference internal" href="theory_linear_models.html">
-     Theory in Brief
+     Linear Models: a Brief Theory
     </a>
    </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     Practice Session
+     Linear Model in action
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="overfitting_ex.html">
+     The first Villain: overfitting
     </a>
    </li>
   </ul>
@@ -162,11 +167,6 @@
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../3_cross_validation/overfitting_ex.html">
-     Examples to Overfitting
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="../3_cross_validation/train_test.html">
      Training and Test sets
     </a>
@@ -178,15 +178,59 @@
    </li>
   </ul>
  </li>
- <li class="toctree-l1">
+ <li class="toctree-l1 has-children">
   <a class="reference internal" href="../4_reducing_complexity/index.html">
    4. Fighting Overfitting - The Advent of Machine Learning
   </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../4_reducing_complexity/overview.html">
+     Overview
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../4_reducing_complexity/theory_feature_reduction.html">
+     Feature Reduction: brief theory
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../4_reducing_complexity/practice_feature_reduction.html">
+     Feature Reduction in Action
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../4_reducing_complexity/theory_regularization.html">
+     Regularization: brief theory
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../4_reducing_complexity/practice_regularization.html">
+     Regularized Models in Action
+    </a>
+   </li>
+  </ul>
  </li>
- <li class="toctree-l1">
+ <li class="toctree-l1 has-children">
   <a class="reference internal" href="../5_hyperparameter_optimization/index.html">
    5. Hyperparameter Optimization and Nested Cross-Validation
   </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5_hyperparameter_optimization/leakage.html">
+     The Second Villain: Feature Leakage
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../6_validity/index.html">
@@ -327,12 +371,7 @@
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h1 nav-item toc-entry">
   <a class="reference internal nav-link" href="#">
-   Practice Session
-  </a>
- </li>
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#id1">
-   Practice Session
+   Linear Model in action
   </a>
  </li>
  <li class="toc-h1 nav-item toc-entry">
@@ -362,7 +401,7 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Practice Session</h1>
+                <h1>Linear Model in action</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -374,12 +413,7 @@
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h1 nav-item toc-entry">
   <a class="reference internal nav-link" href="#">
-   Practice Session
-  </a>
- </li>
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#id1">
-   Practice Session
+   Linear Model in action
   </a>
  </li>
  <li class="toc-h1 nav-item toc-entry">
@@ -408,12 +442,9 @@
             
               <div>
                 
-  <section class="tex2jax_ignore mathjax_ignore" id="practice-session">
-<h1>Practice Session<a class="headerlink" href="#practice-session" title="Permalink to this headline">¶</a></h1>
-<p>Let’s begin with quickly importing the packages we will need here.</p>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="id1">
-<h1>Practice Session<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="linear-model-in-action">
+<h1>Linear Model in action<a class="headerlink" href="#linear-model-in-action" title="Permalink to this headline">¶</a></h1>
+<p>Here we will see linear models in action and meet our first Villain in predictive modelling: overfitting.</p>
 <p>Let’s begin with quickly importing the packages we will need here.</p>
 <div class="cell tag_hide-output docutils container">
 <div class="cell_input docutils container">
@@ -425,12 +456,50 @@
 </div>
 </div>
 </div>
-<p>Next, we continue with our example dataset, but let’s only fetch 70 subjects this time, for simplicity.
-Then we recreate the plot of the association between age and the volume of the right superior frontal cortex again.</p>
+<p>Next, we continue with our example dataset, but let’s only fetch 70 subjects this time, for simplicity.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/pni-lab/predmod_lecture/master/ex_data/IXI/ixi.csv&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">70</span><span class="p">,</span> <span class="p">:]</span>
-<span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;rh_superiorfrontal_volume&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Age&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We will consider Age as prediction target, i.e. aim to build a predictive model which predicts age based on brain morphology.
+Let’s see the age distribution in the dataset by plotting a histogram.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="s1">&#39;Age&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[&lt;AxesSubplot:title={&#39;center&#39;:&#39;Age&#39;}&gt;]], dtype=object)
+</pre></div>
+</div>
+<img alt="../_images/practice_linear_models_6_1.png" src="../_images/practice_linear_models_6_1.png" />
+</div>
+</div>
+<p>Possibly the simplest possible prediction for age could be a constant number, e.g. the mean age of the study population (36.3 years).
+Such trivial predictions often serve as a baseline to which “real” predictive models are compared to.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Weather forecast example: saying that tomorrow the weather will be tha same as it was today is a basline guess that was actually challenging to surpass by early wether forecast models.</p>
+</div>
+<div class="admonition-excercise-2-1 admonition">
+<p class="admonition-title">Excercise 2.1</p>
+<p>Try running this notebook interactively and print out the mean value for age and other variables.
+Try these options: <code class="docutils literal notranslate"><span class="pre">df['Age'].mean()</span></code>, <code class="docutils literal notranslate"><span class="pre">df.mean()</span></code> and <code class="docutils literal notranslate"><span class="pre">df.describe()</span></code>.</p>
+</div>
+<div class="admonition-excercise-2-2 admonition">
+<p class="admonition-title">Excercise 2.2</p>
+<p>Think about a straighforward way of estimating how much we are wrong on average when using mean age as our prediction?</p>
+</div>
+<p>Obviously, we can hope to improve upon such trivial predictions by using additional variables that are associated to the target variable.</p>
+<p>Do we have such variables in this dataset? Of course!</p>
+<p>Let’s recreate the plot of the association between age and the volume of the right superior frontal cortex, as we saw it in the previous section.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;rh_superiorfrontal_volume&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Age&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -438,10 +507,11 @@ Then we recreate the plot of the association between age and the volume of the r
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;rh_superiorfrontal_volume&#39;, ylabel=&#39;Age&#39;&gt;
 </pre></div>
 </div>
-<img alt="../_images/practice_linear_models_4_1.png" src="../_images/practice_linear_models_4_1.png" />
+<img alt="../_images/practice_linear_models_9_1.png" src="../_images/practice_linear_models_9_1.png" />
 </div>
 </div>
-<p>Let’s fit a linear model with the ols (ordinary least squares) function from the python package ‘<a class="reference external" href="https://scipy.org/">statsmodels</a>’ to assess the strength of the correlation.
+<p>As discussed in the previous page, linear models provide means to objectively characterize such an association.
+Let’s fit a linear model with the ols (ordinary least squares) function from the python package ‘<a class="reference external" href="https://scipy.org/">statsmodels</a>’ to assess the strength of the correlation.
 The syntax is similar to R’s linear models, we provide the formula, the data frame and fit the model.</p>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="fitting-a-simple-linear-model">
@@ -466,10 +536,10 @@ The syntax is similar to R’s linear models, we provide the formula, the data f
   <th>Method:</th>             <td>Least Squares</td>  <th>  F-statistic:       </th> <td>   20.33</td>
 </tr>
 <tr>
-  <th>Date:</th>             <td>Wed, 09 Feb 2022</td> <th>  Prob (F-statistic):</th> <td>2.64e-05</td>
+  <th>Date:</th>             <td>Wed, 16 Feb 2022</td> <th>  Prob (F-statistic):</th> <td>2.64e-05</td>
 </tr>
 <tr>
-  <th>Time:</th>                 <td>21:44:20</td>     <th>  Log-Likelihood:    </th> <td> -266.04</td>
+  <th>Time:</th>                 <td>11:04:22</td>     <th>  Log-Likelihood:    </th> <td> -266.04</td>
 </tr>
 <tr>
   <th>No. Observations:</th>      <td>    70</td>      <th>  AIC:               </th> <td>   536.1</td>
@@ -557,7 +627,7 @@ Let’s predict the age of a hypotetical new participant who’s right superior 
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;rh_superiorfrontal_volume&#39;, ylabel=&#39;Age&#39;&gt;
 </pre></div>
 </div>
-<img alt="../_images/practice_linear_models_11_1.png" src="../_images/practice_linear_models_11_1.png" />
+<img alt="../_images/practice_linear_models_16_1.png" src="../_images/practice_linear_models_16_1.png" />
 </div>
 </div>
 <p>Another one.</p>
@@ -574,7 +644,7 @@ Let’s predict the age of a hypotetical new participant who’s right superior 
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;rh_superiorfrontal_volume&#39;, ylabel=&#39;Age&#39;&gt;
 </pre></div>
 </div>
-<img alt="../_images/practice_linear_models_13_1.png" src="../_images/practice_linear_models_13_1.png" />
+<img alt="../_images/practice_linear_models_18_1.png" src="../_images/practice_linear_models_18_1.png" />
 </div>
 </div>
 <p>Now let’s plot many different values.</p>
@@ -591,7 +661,7 @@ Let’s predict the age of a hypotetical new participant who’s right superior 
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;rh_superiorfrontal_volume&#39;, ylabel=&#39;Age&#39;&gt;
 </pre></div>
 </div>
-<img alt="../_images/practice_linear_models_15_1.png" src="../_images/practice_linear_models_15_1.png" />
+<img alt="../_images/practice_linear_models_20_1.png" src="../_images/practice_linear_models_20_1.png" />
 </div>
 </div>
 <p>Yes, this is what we call the regression line.
@@ -606,7 +676,7 @@ The seaborn package from pythin has some more handy ways of plotting it (with 95
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;rh_superiorfrontal_volume&#39;, ylabel=&#39;Age&#39;&gt;
 </pre></div>
 </div>
-<img alt="../_images/practice_linear_models_17_1.png" src="../_images/practice_linear_models_17_1.png" />
+<img alt="../_images/practice_linear_models_22_1.png" src="../_images/practice_linear_models_22_1.png" />
 </div>
 </div>
 <div class="admonition note">
@@ -621,7 +691,7 @@ Normality and other assumptions never harm, but they are not required anymore in
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_new</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;rh_superiorfrontal_volume&#39;</span><span class="p">]</span>
 <span class="n">yhat</span> <span class="o">=</span> <span class="n">fitted_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_new</span><span class="p">)</span>
-<span class="c1"># Now we predict with the dedicated function from the `statsmodel` package, but is is equivalent with this:</span>
+<span class="c1"># Now we have computed the predictions with the dedicated function from the `statsmodel` package, but it is equivalent with this:</span>
 <span class="c1"># yhat = beta[0] + beta[1]*x_new</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;root mean squared error (MSE):  &#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Age&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">yhat</span><span class="p">))),</span> <span class="s1">&#39;years&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;    mean absolute error (MAE):  &#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Age&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">yhat</span><span class="p">)),</span> <span class="s1">&#39;years&#39;</span><span class="p">)</span>
@@ -638,7 +708,8 @@ Normality and other assumptions never harm, but they are not required anymore in
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="adding-more-predictors">
 <h1>Adding more predictors<a class="headerlink" href="#adding-more-predictors" title="Permalink to this headline">¶</a></h1>
-<p>So far so good, but of course the question arises, if we can improve on this prediction by adding more predictors?</p>
+<p>So far so good.
+However, at this point it becomes straightforward to ask: can we improve on this prediction by adding more predictors?</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fitted_model</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span><span class="s1">&#39;Age ~ rh_superiorfrontal_volume + lh_bankssts_volume + lh_caudalanteriorcingulate_volume + lh_caudalmiddlefrontal_volume + lh_cuneus_volume&#39;</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
@@ -678,7 +749,7 @@ Normality and other assumptions never harm, but they are not required anymore in
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:&gt;
 </pre></div>
 </div>
-<img alt="../_images/practice_linear_models_23_1.png" src="../_images/practice_linear_models_23_1.png" />
+<img alt="../_images/practice_linear_models_28_1.png" src="../_images/practice_linear_models_28_1.png" />
 </div>
 </div>
 <p>When adding all regions, the mean absolute error decreases to:</p>
@@ -694,7 +765,7 @@ Normality and other assumptions never harm, but they are not required anymore in
 </div>
 </div>
 </div>
-<p>Too good to be true! Latest predictive models in the literature usually report a mean absolute error around 3-5 years, with MAE=2.71 ± 2.10 being one of the top-performnig examples, achieved by a deep learning model trained on many thousands of subjects <span id="id2">[<a class="reference internal" href="../references.html#id79">6</a>]</span>.</p>
+<p>Too good to be true! Latest predictive models in the literature usually report a mean absolute error around 3-5 years, with MAE=2.71 ± 2.10 being one of the top-performnig examples, achieved by a deep learning model trained on many thousands of subjects <span id="id1">[<a class="reference internal" href="../references.html#id79">6</a>]</span>.</p>
 <p>To illustrate what’s wrong, let’s add randomly generated predictors, that can be garanteed to be independent of the target variable (age).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -719,7 +790,7 @@ Normality and other assumptions never harm, but they are not required anymore in
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Min MAE: 1.3992282965463547
 </pre></div>
 </div>
-<img alt="../_images/practice_linear_models_27_1.png" src="../_images/practice_linear_models_27_1.png" />
+<img alt="../_images/practice_linear_models_32_1.png" src="../_images/practice_linear_models_32_1.png" />
 </div>
 </div>
 <p>What the heck? Mean absolute error is even lower, even though the model is based on totally random predictors?
@@ -743,7 +814,7 @@ A drawback of this approach is that the researcher has to correct for the <a cla
 <p>Consider looking up ‘<a class="reference external" href="https://andysbrainbook.readthedocs.io/en/latest/fMRI_Short_Course/fMRI_05_1stLevelAnalysis.html">Andy’s Brain Book</a>’ for more details.</p>
 </div>
 <div class="tip dropdown admonition">
-<p class="admonition-title">Excercise 2.1</p>
+<p class="admonition-title">Excercise 2.3</p>
 <p>What could be the reason of higher overfitting with random noise than with the true cortical volume data?</p>
 <div class="tip dropdown admonition">
 <p class="admonition-title">Help</p>
@@ -755,7 +826,7 @@ A drawback of this approach is that the researcher has to correct for the <a cla
 </div>
 </div>
 <div class="tip dropdown admonition">
-<p class="admonition-title">Excercise 2.2</p>
+<p class="admonition-title">Excercise 2.4</p>
 <p>Launch this notebook interactively in Google Colab, upload and open your own dataset and fit some interesting models of your own choice.
 Try adding many predictors. Is your model suspicious of overfitting?</p>
 </div>
@@ -791,13 +862,13 @@ Try adding many predictors. Is your model suspicious of overfitting?</p>
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Theory in Brief</p>
+            <p class="prev-next-title">Linear Models: a Brief Theory</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../3_cross_validation/index.html" title="next page">
+    <a class='right-next' id="next-link" href="overfitting_ex.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">3. Unbiased predictive performance estimates</p>
+        <p class="prev-next-title">The first Villain: overfitting</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

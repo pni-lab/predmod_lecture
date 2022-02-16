@@ -1,4 +1,4 @@
-# Theory in Brief
+# Linear Models: a Brief Theory
 
 ## Linear Regression
 

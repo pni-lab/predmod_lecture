@@ -174,12 +174,49 @@
      Cross-validation
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="leakage.html">
+     The Villain: Feature Leakage
+    </a>
+   </li>
   </ul>
  </li>
- <li class="toctree-l1">
+ <li class="toctree-l1 has-children">
   <a class="reference internal" href="../4_reducing_complexity/index.html">
    4. Fighting Overfitting - The Advent of Machine Learning
   </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../4_reducing_complexity/overview.html">
+     Overview
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../4_reducing_complexity/theory_feature_reduction.html">
+     Feature Reduction: brief theory
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../4_reducing_complexity/practice_feature_reduction.html">
+     Feature Reduction in Action
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../4_reducing_complexity/theory_regularization.html">
+     Regularization: brief theory
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../4_reducing_complexity/practice_regularization.html">
+     Regularized Models in Action
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../5_hyperparameter_optimization/index.html">
@@ -397,7 +434,8 @@
 <p>Overfitting has many faces. We start this section by looking at some examples, so that you easily spot overfitting in the future.</p>
 <section id="inreasing-model-complexity-with-poliyomials">
 <h2>Inreasing model complexity with poliyomials<a class="headerlink" href="#inreasing-model-complexity-with-poliyomials" title="Permalink to this headline">¶</a></h2>
-<p>Let’s import necessary packages, load the first 50 participants from our example dataset and plot age versus the volume of another region: the right middle temporal gyrus.</p>
+<p>Let’s import necessary packages, and load our dataset again.
+This time we will randomly sample 50 participants from our example dataset and plot age versus the volume of another region: the right middle temporal gyrus.</p>
 <div class="cell tag_hide docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -449,6 +487,11 @@
 </div>
 <img alt="../_images/overfitting_ex_5_1.png" src="../_images/overfitting_ex_5_1.png" />
 </div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Note that this time we used another package for plotting: <code class="docutils literal notranslate"><span class="pre">seaborn</span></code>. With seaborn it is very simple to create nice visualizations of <code class="docutils literal notranslate"><span class="pre">pandas</span></code> dataframes.
+As many other pythin packages, seaborn, too, has an excellent <a class="reference external" href="https://seaborn.pydata.org/">documentation</a> and a very active community.</p>
 </div>
 <div class="tip dropdown admonition">
 <p class="admonition-title">Excercise 3.1</p>
