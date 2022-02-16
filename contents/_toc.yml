@@ -20,14 +20,10 @@ chapters:
     - file: 3_cross_validation/cv
 - file: 4_reducing_complexity/index
   sections:
-    - file: 4_reducing_complexity/overview
-    - file: 4_reducing_complexity/theory_feature_reduction
-    - file: 4_reducing_complexity/practice_feature_reduction
     - file: 4_reducing_complexity/theory_regularization
     - file: 4_reducing_complexity/practice_regularization
+    - file: 4_reducing_complexity/leakage
 - file: 5_hyperparameter_optimization/index
-  sections:
-    - file: 5_hyperparameter_optimization/leakage
 - file: 6_validity/index
 - file: 7_model_explanation/index
 - file: 8_complex_models/index

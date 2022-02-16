@@ -1,7 +1,0 @@
-# Regularization: brief theory
-
-
-
-
-
-
