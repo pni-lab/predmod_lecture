@@ -23,7 +23,12 @@ that the simplest - but yet very powerful - forms of these analysis techniques c
 as "classical" tools for statistical inference, they routinely use.
 
 This book aims to provide a practical hands-on experience and illustrates all the basic concepts
-by analyzing and example dataset with python code. These pages of the book (called notebooks) are interactive:
+by analyzing and example dataset with python code. It invites the reader
+to an exciting journey, towards predicting age from brain structure.
+While the example dataset is a structural MRI dataset, the jupyter book does not assume any neuroimaging-related 
+background knowledge. If, nevertheless, the reader is interested in some more background information, the are [many](https://carpentries-incubator.github.io/SDC-BIDS-sMRI/aio/index.html)
+good [resources](https://andysbrainbook.readthedocs.io/en/latest/) available on-line for free.
+The practice pages of the book are interactive notebooks:
 they can be run either on a local workstation or - with just one click - in the cloud.
 The book contains exercises which require the reader to modify the code.
 It is encouraged to go through the book with an own dataset, instead of the example dataset.
