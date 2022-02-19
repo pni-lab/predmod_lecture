@@ -46,6 +46,8 @@
     <script src="../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
     <script>
         const thebe_selector = ".thebe,.cell"
@@ -426,14 +428,16 @@ In the <a class="reference internal" href="leakage.html"><span class="doc std st
 In the <a class="reference internal" href="../5_hyperparameter_optimization/index.html"><span class="doc std std-doc">next chapter</span></a>, we will see how feature leakage during hyperparameter-tuning can be prevented by so-called nested cross-validation.</p>
 <section id="manual-feature-selection">
 <h2>Manual feature selection<a class="headerlink" href="#manual-feature-selection" title="Permalink to this headline">¶</a></h2>
-<p>Here we do something we have already done <a class="reference internal" href="../2_linear_models/practice_linear_models.html"><span class="doc std std-doc">before</span></a>: we simply don’t use all available features in order to reduce model complexity. While in the <a class="reference internal" href="theory_regularization.html"><span class="doc std std-doc">theory section</span></a> we discussed that selection could be done by selecting best features based on an arbitrary statistical test for the association between the features and the target variable, here we don’t apply this technique, as it is especially vulnerable to feature leakage, a common source of mistake we will discuss in the <a class="reference internal" href="leakage.html"><span class="doc std std-doc">next section</span></a>.</p>
-<p>Below, we simply show that using only the 10 first features (instead of all 68) already results in a large improvement of cross-validated predictive performance (in this dataset at this sample size).</p>
+<p>Here we do something we have already done <a class="reference internal" href="../2_linear_models/practice_linear_models.html"><span class="doc std std-doc">before</span></a>: we reduce model complexity by decreasing the number of predictors.</p>
+<p>Below, we simply select the 5 best features (from of all 68) in an <em>independent dataset</em> and then use only these five features of the (<a class="reference internal" href="../3_cross_validation/cv.html"><span class="doc std std-doc">previously used</span></a>) training set to construct cross-validated estimates of predictive performance..</p>
 <div class="cell tag_hide-cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#imports</span>
 <span class="o">!</span>pip install scikit-learn &gt; /dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">from</span> <span class="nn">sklearn.feature_selection</span> <span class="kn">import</span> <span class="n">SelectKBest</span>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">cross_val_predict</span><span class="p">,</span> <span class="n">KFold</span>
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_absolute_error</span>
 <span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
@@ -444,51 +448,81 @@ In the <a class="reference internal" href="../5_hyperparameter_optimization/inde
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#load data</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/pni-lab/predmod_lecture/master/ex_data/IXI/ixi.csv&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">loc</span><span class="p">[:</span><span class="mi">100</span><span class="p">,</span> <span class="p">:]</span>
-<span class="c1"># cross validation</span>
-<span class="n">cv</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="c1"># 5 folds, 20 participants in each fold</span>
+<span class="n">df_full</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/pni-lab/predmod_lecture/master/ex_data/IXI/ixi.csv&quot;</span><span class="p">)</span>
+
+<span class="c1"># select a subset for cross-validation</span>
+<span class="n">df_cv</span> <span class="o">=</span> <span class="n">df_full</span><span class="o">.</span><span class="n">loc</span><span class="p">[:</span><span class="mi">100</span><span class="p">,</span> <span class="p">:]</span>
+<span class="c1"># select an independent subset for searching for the k best features</span>
+<span class="n">df_ext</span> <span class="o">=</span> <span class="n">df_full</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">100</span><span class="p">:</span><span class="mi">200</span><span class="p">,</span> <span class="p">:]</span>
 
 <span class="c1"># names of the columns to be used</span>
 <span class="n">target</span> <span class="o">=</span> <span class="s1">&#39;Age&#39;</span>
-<span class="n">features</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">12</span><span class="p">]</span>
+<span class="n">features</span> <span class="o">=</span> <span class="n">df_cv</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
 
-<span class="n">cv_predictions</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">LinearRegression</span><span class="p">(),</span> <span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">X</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">features</span><span class="p">],</span> <span class="n">cv</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;MAE = &#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_true</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y_pred</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">),</span> <span class="s1">&#39;years&#39;</span><span class="p">)</span>
+<span class="c1"># select the 5 best features based on an independent sample</span>
+<span class="n">k_best_selector</span> <span class="o">=</span> <span class="n">SelectKBest</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">df_ext</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">X</span><span class="o">=</span><span class="n">df_ext</span><span class="p">[</span><span class="n">features</span><span class="p">])</span>
+<span class="c1"># then we choose these 5 features from the training set (without looking at the target in the training set)</span>
+<span class="n">k_best_features</span> <span class="o">=</span> <span class="n">k_best_selector</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df_cv</span><span class="p">[</span><span class="n">features</span><span class="p">])</span>
+<span class="c1"># cross validation</span>
+<span class="n">cv</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="c1"># 5 folds, 20 participants in each fold</span>
+
+<span class="n">cv_predictions</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">LinearRegression</span><span class="p">(),</span> <span class="n">y</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">X</span><span class="o">=</span><span class="n">k_best_features</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;MAE = &#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_true</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y_pred</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">),</span> <span class="s1">&#39;years&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MAE =  9.079447432962283 years
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/tspisak/src/RPN-signature/venv/lib/python3.8/site-packages/sklearn/feature_selection/_univariate_selection.py:116: RuntimeWarning: divide by zero encountered in true_divide
+  f = msb / msw
 </pre></div>
 </div>
-<img alt="../_images/practice_regularization_3_1.png" src="../_images/practice_regularization_3_1.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MAE =  8.854781824723458 years
+</pre></div>
+</div>
+<img alt="../_images/practice_regularization_3_2.png" src="../_images/practice_regularization_3_2.png" />
 </div>
 </div>
-<div class="admonition-exercise-4-1 admonition">
+<p>Apparently, this results in a large improvement of cross-validated predictive performance, as compared to the example in the previous chapter, comprising all features.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Take a look at how scikit-learn’s <code class="docutils literal notranslate"><span class="pre">SelectKBest</span></code> feature selector is used. By calling the <code class="docutils literal notranslate"><span class="pre">fit</span></code> function, it selects the best features from the external independnet dataset and the calling the fitted selector’s <code class="docutils literal notranslate"><span class="pre">transform</span></code> function, it applies what it has “learned” from the extarnal dataset, i.e. chooses the “best features”.
+The <code class="docutils literal notranslate"><span class="pre">fit</span></code>, <code class="docutils literal notranslate"><span class="pre">tarnsform</span></code>, and <code class="docutils literal notranslate"><span class="pre">fit_transform</span></code> (doing both operations on the same data) functions are central in scikit-learn, most of its functionality can be accessed trough these functions. Separating the learning process (<code class="docutils literal notranslate"><span class="pre">fit</span></code>) and the application of the learned knowledge (<code class="docutils literal notranslate"><span class="pre">transform</span></code>) always allows a clean separation of training and test datasets. We will see numerous examples to the usage of this scheme in the followings.</p>
+</div>
+<div class="tip dropdown admonition">
 <p class="admonition-title">Exercise 4.1</p>
-<p>Compare the above results to <a class="reference internal" href="../3_cross_validation/cv.html"><span class="doc std std-doc">the case</span></a> where we use all available features.</p>
+<p>How much is the improvement exactly? Compare the above results to <a class="reference internal" href="../3_cross_validation/cv.html"><span class="doc std std-doc">the case</span></a> where we use all available features.</p>
 </div>
-<div class="admonition-exercise-4-2 admonition">
+<div class="tip dropdown admonition">
 <p class="admonition-title">Exercise 4.2</p>
 <p>Try out different number of features. How does the cross-validated performance change?</p>
 </div>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Exercise 4.3</p>
+<p>Why do we have to use an <em>independent</em> dataset to select the k best features?
+The answer is to be found in the <a class="reference internal" href="leakage.html"><span class="doc std std-doc">next section</span></a>.</p>
+</div>
+<p>Despite the improvement, intuitively, you might feel that we have thrown out some information of the window, as we might have included variables that - even tough weaker - but still significantly predict the target.</p>
+<p>This issue can be tackled by converting the original features into new ‘latent’ variables, which contain the same information, but in a potentially more useful form.
+That’s what PCA and PLS do!</p>
 </section>
 <section id="dimensionality-reduction-pca-and-pls">
 <h2>Dimensionality Reduction: PCA and PLS<a class="headerlink" href="#dimensionality-reduction-pca-and-pls" title="Permalink to this headline">¶</a></h2>
+<p>As discussed in the <a class="reference internal" href="theory_regularization.html"><span class="doc std std-doc">theory section</span></a>, with PCA we can transform our features into ‘latent’ variables that are possibly more useful than the original ones. With PCA, the “essence” of a group of highly correlated features is “condensed down” into a single variable. Thus, taking the principal components as predictive features often allows decreasing the complexity of the model to a higher degree, as fewer PCA variables will be able to provide the same explanatory power as a larger number of original features.</p>
+<p>Let’s see it in practice! Below, we take the first five principal components calculated from all features.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span>
 
-<span class="n">features</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+<span class="n">features</span> <span class="o">=</span> <span class="n">df_cv</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
 
 <span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="n">pca_features</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">features</span><span class="p">])</span>
+<span class="n">pca_features</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df_cv</span><span class="p">[</span><span class="n">features</span><span class="p">])</span>
 
-<span class="c1"># same as in the previous example except:                                       VVV here VVV</span>
-<span class="n">cv_predictions</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">LinearRegression</span><span class="p">(),</span> <span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">X</span><span class="o">=</span><span class="n">pca_features</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;MAE = &#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_true</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y_pred</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">),</span> <span class="s1">&#39;years&#39;</span><span class="p">)</span>
+<span class="c1"># same as in the previous example except:                                          VVV here VVV</span>
+<span class="n">cv_predictions</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">LinearRegression</span><span class="p">(),</span> <span class="n">y</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">X</span><span class="o">=</span><span class="n">pca_features</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;MAE = &#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_true</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y_pred</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">),</span> <span class="s1">&#39;years&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -499,14 +533,16 @@ In the <a class="reference internal" href="../5_hyperparameter_optimization/inde
 <img alt="../_images/practice_regularization_6_1.png" src="../_images/practice_regularization_6_1.png" />
 </div>
 </div>
+<p>Again a small improvement. And this time we didn’t have to use the independent external dataset, as - unlike <code class="docutils literal notranslate"><span class="pre">SelectKBest</span></code> - <code class="docutils literal notranslate"><span class="pre">PCA</span></code> does not incorporate any information about the target variable, only looks at the features.</p>
+<p>Let’s look at PLS!</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.cross_decomposition</span> <span class="kn">import</span> <span class="n">PLSRegression</span>
 
 <span class="c1"># same as in the previous example except:            VVV here VVV</span>
-<span class="n">cv_predictions</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">PLSRegression</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">X</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">features</span><span class="p">],</span> <span class="n">cv</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;MAE = &#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_true</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y_pred</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">),</span> <span class="s1">&#39;years&#39;</span><span class="p">)</span>
+<span class="n">cv_predictions</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">PLSRegression</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">X</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">features</span><span class="p">],</span> <span class="n">cv</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;MAE = &#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_true</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y_pred</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">),</span> <span class="s1">&#39;years&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -514,22 +550,34 @@ In the <a class="reference internal" href="../5_hyperparameter_optimization/inde
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MAE =  8.190707243962333 years
 </pre></div>
 </div>
-<img alt="../_images/practice_regularization_7_1.png" src="../_images/practice_regularization_7_1.png" />
+<img alt="../_images/practice_regularization_8_1.png" src="../_images/practice_regularization_8_1.png" />
 </div>
+</div>
+<p>Performance slightly improved again. Note that in this case the dimensionality reduction and fitting the regression model happens in on e step, in <code class="docutils literal notranslate"><span class="pre">PLSRegression</span></code>.
+Indeed, the power of PLS lies in tailoring the dimensionality reduction to the characteristics of the target variable.</p>
+<p>Looks like with PCA and PLS we have a performance gain, as compared to using the original features. But do we also loose something?
+Yes, interpretability. Checking out the next exercise may shed some light on this. More details will be given in <a class="reference internal" href="../7_model_explanation/index.html"><span class="doc std std-doc">chapter 7 “Model Explanation”</span></a></p>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Exercise 4.4</p>
+<p>Which regions were included in the prediction in case of SelectKBest (first example)? Printout their names!
+Can you do the same with PCA or PLS?</p>
 </div>
 </section>
 <section id="regularized-models-ridge-and-lasso">
 <h2>Regularized models: Ridge and LASSO<a class="headerlink" href="#regularized-models-ridge-and-lasso" title="Permalink to this headline">¶</a></h2>
+<p>Exercise 4.4 illustrates that transforming our original features to latent variables may have some disadvantages in terms of interpretability.
+Let’s look at how regularized regression models can reduce model complexity (and, thereby, fight overfitting), but at the same time, retain all the original variables.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">Ridge</span>
 
-<span class="n">features</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+<span class="c1"># we taka all features</span>
+<span class="n">features</span> <span class="o">=</span> <span class="n">df_cv</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
 
 <span class="c1"># Changed:                                       VVV here VVV</span>
-<span class="n">cv_predictions</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">Ridge</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mi">10000000</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">X</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">features</span><span class="p">],</span> <span class="n">cv</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;MAE = &#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_true</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y_pred</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">),</span> <span class="s1">&#39;years&#39;</span><span class="p">)</span>
+<span class="n">cv_predictions</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">Ridge</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mi">10000000</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">X</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">features</span><span class="p">],</span> <span class="n">cv</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;MAE = &#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_true</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y_pred</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">),</span> <span class="s1">&#39;years&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -537,19 +585,19 @@ In the <a class="reference internal" href="../5_hyperparameter_optimization/inde
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MAE =  8.00562203685471 years
 </pre></div>
 </div>
-<img alt="../_images/practice_regularization_9_1.png" src="../_images/practice_regularization_9_1.png" />
+<img alt="../_images/practice_regularization_11_1.png" src="../_images/practice_regularization_11_1.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">Lasso</span>
 
-<span class="n">features</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+<span class="n">features</span> <span class="o">=</span> <span class="n">df_cv</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
 
 <span class="c1"># Changed:                                     VVV here VVV</span>
-<span class="n">cv_predictions</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">Lasso</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mi">1000</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">X</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">features</span><span class="p">],</span> <span class="n">cv</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;MAE = &#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_true</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y_pred</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">),</span> <span class="s1">&#39;years&#39;</span><span class="p">)</span>
+<span class="n">cv_predictions</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">Lasso</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mi">1000</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">X</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">features</span><span class="p">],</span> <span class="n">cv</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;MAE = &#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_true</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y_pred</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">),</span> <span class="s1">&#39;years&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -557,9 +605,163 @@ In the <a class="reference internal" href="../5_hyperparameter_optimization/inde
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MAE =  8.028189984232535 years
 </pre></div>
 </div>
-<img alt="../_images/practice_regularization_10_1.png" src="../_images/practice_regularization_10_1.png" />
+<img alt="../_images/practice_regularization_12_1.png" src="../_images/practice_regularization_12_1.png" />
 </div>
 </div>
+<p>Both Ride and LASSO seem to be able to provide a predictive performance that is comparable (even slightly better), than using the dimension reduction-based approaches.</p>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Exercise 4.5</p>
+<p>How would other values of the alpha hyperparameter perform? Try it out!</p>
+</div>
+<p>Curious, which regions are driving the prediction?
+Then we will now have a sneak-preview into model interpretation, which will be discussed in detail in <a class="reference internal" href="../7_model_explanation/index.html"><span class="doc std std-doc">chapter 7</span></a></p>
+<p>Remember that Ridge and LASSO are just linear models with some extra steps.
+So we can simply obtain the model coefficients (<span class="math notranslate nohighlight">\(\boldsymbol{b}\)</span>).
+As the model’s prediction is just a weighted average of the feature values, where the weights are the model’s coefficients, the coefficients themselves can be considered as  a kind of ‘feature importance’: the degree to which that feature influences the predictions.</p>
+<p>But there’s a problem: in case of cross-validation we have actually multiple model.</p>
+<p>Therefore, we must <a class="reference internal" href="../3_cross_validation/cv.html"><span class="doc std std-doc">finalize</span></a> the model first.
+Here we finalize our Ridge model by training it on the whole sample (without cv):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Ridge</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">X</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">features</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ridge(alpha=1000)
+</pre></div>
+</div>
+</div>
+</div>
+<p>And then, we can simply print out the coefficients, together with the names of the features.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">model</span><span class="o">.</span><span class="n">coef_</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="n">features</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>lh_bankssts_volume</th>
+      <td>0.000092</td>
+    </tr>
+    <tr>
+      <th>lh_caudalanteriorcingulate_volume</th>
+      <td>-0.001514</td>
+    </tr>
+    <tr>
+      <th>lh_caudalmiddlefrontal_volume</th>
+      <td>-0.001669</td>
+    </tr>
+    <tr>
+      <th>lh_cuneus_volume</th>
+      <td>-0.003873</td>
+    </tr>
+    <tr>
+      <th>lh_entorhinal_volume</th>
+      <td>-0.000299</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>rh_supramarginal_volume</th>
+      <td>0.002263</td>
+    </tr>
+    <tr>
+      <th>rh_frontalpole_volume</th>
+      <td>-0.007186</td>
+    </tr>
+    <tr>
+      <th>rh_temporalpole_volume</th>
+      <td>0.006122</td>
+    </tr>
+    <tr>
+      <th>rh_transversetemporal_volume</th>
+      <td>-0.006611</td>
+    </tr>
+    <tr>
+      <th>rh_insula_volume</th>
+      <td>0.003572</td>
+    </tr>
+  </tbody>
+</table>
+<p>68 rows × 1 columns</p>
+</div></div></div>
+</div>
+<p>With a few lines of code, we can visualize feature importance in 3D, to show the most important predictors of brain age:</p>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Exercise 4.6</p>
+<p>A little python exercise: sort the above list to see the regions with the smallest, largest coefficient.
+Tip: look up the <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.sort_values.html">pandas</a> documentation!
+All you need is to add: <code class="docutils literal notranslate"><span class="pre">.sort_values(by=0)</span></code></p>
+</div>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Exercise 4.7</p>
+<p>Sort the list of regions by the absolute value of their importance, to see the most important predictors in this model, regardless of the sign of the association with age.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip install ggseg &gt; /dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+<span class="kn">import</span> <span class="nn">ggseg</span>
+<span class="n">features_plot</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="c1"># convert labels:</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">features</span><span class="p">):</span>
+    <span class="n">parts</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;rh&#39;</span><span class="p">:</span>
+        <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;right&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;left&#39;</span>
+    <span class="n">features_plot</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="n">ggseg</span><span class="o">.</span><span class="n">plot_dk</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">features_plot</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">coef_</span><span class="p">)),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span>
+              <span class="n">background</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">bordercolor</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span>
+              <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Predictive Importance&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Morphological predictors of age&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/practice_regularization_19_0.png" src="../_images/practice_regularization_19_0.png" />
+</div>
+</div>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Exercise 4.8</p>
+<p>Finalize the LASSO model, too, and print and plot the coefficients.
+What is the main difference?</p>
+</div>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Exercise 4.9</p>
+<p>Load in your own dataset and see how these machine learning models work on that.</p>
+</div>
+<p>To recap, being able to control the complexity can drastically reduce the complexity of the model and thereby significantly improve predictive performance on unseen data.
+The complexity of machine learning models can usually be set via one or more hyperparameters.</p>
+<p>But how should we find the optimal values for the hyperparameters?
+Should we simply do it in a trial and error fashion? Or should we systematically search for the value with which the cross-validated prediction look best?</p>
+<p>Definitely not! To understand the reason why, we must get to know the second villain of machine learning: leakage!</p>
 </section>
 </section>
 

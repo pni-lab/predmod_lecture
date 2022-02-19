@@ -479,6 +479,8 @@ that are optimised during model fitting.</p></li>
 <li><p>introducing a <em>penalty</em> for complex models during model fitting,
 that prefers if the model leaves many of its parameters unused (zero coefficient).</p></li>
 </ul>
+<p>In this section, we touch upon the theoretical background of these techniques, only to a degree which is essential for the application of these models.
+For more details, the reader in encouraged to follow the link in the text and read more.</p>
 <section id="feature-reduction">
 <h2>Feature Reduction<a class="headerlink" href="#feature-reduction" title="Permalink to this headline">¶</a></h2>
 <p>Reducing the number of features naturally reduces model complexity.
@@ -534,9 +536,9 @@ models even in case of highly collinear features.</p>
 <a class="reference external" href="https://en.wikipedia.org/wiki/Partial_least_squares_regression">Partial Least Squares</a> (PLS) brings the best of both words.</p>
 <p>Instead of finding hyperplanes of maximum variance between the response
 and independent variables (as PCA does),
-PLS finds a linear regression model by projecting the predicted
-variables and the observable variables to a new space.</p>
-<p>The order of PLS components does not simply reflect how much total variance they explain.
+PLS finds a linear regression model by projecting <em>both</em> the predicted
+variables and the target to a new space.</p>
+<p>Therefore, the order of PLS components does not simply reflect how much total variance they explain.
 It reflects, how much variance they explain in the target variable.</p>
 <p>PLS often achieves a comparable performance to PCA, but with fewer components included.</p>
 <div class="admonition note">

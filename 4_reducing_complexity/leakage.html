@@ -46,8 +46,6 @@
     <script src="../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
     <script>
         const thebe_selector = ".thebe,.cell"
@@ -371,63 +369,127 @@
   <section class="tex2jax_ignore mathjax_ignore" id="the-second-villain-feature-leakage">
 <h1>The Second Villain: Feature Leakage<a class="headerlink" href="#the-second-villain-feature-leakage" title="Permalink to this headline">¶</a></h1>
 <p>The aim of train-test split and cross-validation is to make sure that the model is tested on data about which it has absolutely no information during training.
-Absolutely no information.</p>
-<p>But, unfortunately, information can easily leak, especially if we already have access to the testing data at the time of training, as in the case of cross-validation.</p>
+Absolutely no information. But, unfortunately, information about the target can easily “leak” into the training process, especially if we already have access to the testing data at the time of training, as in the case of cross-validation.</p>
 <p>The most typical form of information leakage is employing a common preprocessing step on all features that utilizes information from all subjects (both train and test).</p>
-<p>A simplistic example is feature standardization, i.e. converting the features to zero mean and unique variance. As several <a class="reference internal" href="index.html"><span class="doc std std-doc">machin learning models</span></a> are sensitive to the magnitude of the features, this is a common step in many predictive modelling pipelines.</p>
-<div class="math notranslate nohighlight">
-\[
-f_{std} = \frac{f-\mu_f}{\sigma_f}
-\]</div>
-<p>In case features are standardized all together, i.e before the train-test split or outside of the cross-validation loop, we end up with feature leakage.
-Namely, features values of subjects from the training set will be standardized with the <span class="math notranslate nohighlight">\(\mu\)</span> and <span class="math notranslate nohighlight">\(\sigma\)</span> values computed on all subjects, <strong>including subjects from the training set</strong></p>
-<p>Let’s quickly illustrate the problem with some code:</p>
+<p>A vey characteristic example is when we do feature selection on the whole dataset, including the data that we will test on, i.e before the train-test split or outside of the cross-validation loop. This way we will for sure end up with feature leakage and obtain overly optimistic estimates of prediction accuracy.</p>
+<p>Let’s quickly illustrate the problem with some code!</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">Ridge</span>
+<span class="kn">from</span> <span class="nn">sklearn.feature_selection</span> <span class="kn">import</span> <span class="n">SelectKBest</span>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">cross_val_predict</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_absolute_error</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">LeaveOneOut</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_absolute_error</span><span class="p">,</span> <span class="n">r2_score</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">LeaveOneOut</span><span class="p">,</span> <span class="n">KFold</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 </pre></div>
 </div>
 </div>
 </div>
+<p>To make sure there is no chance at all for the model to predict, we will take random data.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/pni-lab/predmod_lecture/master/ex_data/IXI/ixi.csv&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">loc</span><span class="p">[:</span><span class="mi">10</span><span class="p">,</span> <span class="p">:]</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">n_sub</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="n">p_features</span> <span class="o">=</span> <span class="mi">100</span>
 
 <span class="c1"># here we simulate random features - guaranteed to be independent of the target</span>
 <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span> <span class="o">=</span> <span class="mi">42</span><span class="p">)</span>
-<span class="n">df_random</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="mi">5</span><span class="p">)))</span>
-<span class="n">features</span> <span class="o">=</span> <span class="n">df_random</span><span class="o">.</span><span class="n">columns</span>
-<span class="n">target</span> <span class="o">=</span> <span class="s1">&#39;Age&#39;</span>
-<span class="n">df_random</span><span class="p">[</span><span class="n">target</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">]</span>
+<span class="n">df_random</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_sub</span><span class="p">,</span> <span class="n">p_features</span><span class="p">)))</span>
 
-<span class="c1">#######################################################################################################</span>
-<span class="c1">## here we standardize the features *globally*, before the train test split, to demonstrate leakage</span>
-<span class="c1"># DO NOT TRY THIS AT HOME</span>
-<span class="n">df_random</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">features</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_random</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">features</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_random</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">features</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">/</span> <span class="n">df_random</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">features</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
-<span class="c1">########################################################################################################</span>
+<span class="c1"># we load some real age data</span>
+<span class="n">age</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/pni-lab/predmod_lecture/master/ex_data/IXI/ixi.csv&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">loc</span><span class="p">[:</span><span class="n">n_sub</span><span class="o">-</span><span class="mi">1</span><span class="p">,[</span><span class="s1">&#39;Age&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
 
-<span class="n">cv_predictions</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">LinearRegression</span><span class="p">(),</span> <span class="n">y</span><span class="o">=</span><span class="n">df_random</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">X</span><span class="o">=</span><span class="n">df_random</span><span class="p">[</span><span class="n">features</span><span class="p">],</span> <span class="n">cv</span><span class="o">=</span><span class="n">LeaveOneOut</span><span class="p">())</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df_random</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;MAE = &#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_true</span><span class="o">=</span><span class="n">df_random</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y_pred</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">),</span> <span class="s1">&#39;years&#39;</span><span class="p">)</span>
+<span class="c1">##########################################################################################################################</span>
+<span class="c1">## DO NOT TRY THIS AT HOME: here we select the features *globally*, before the train test split, to demonstrate leakage  #</span>
+<span class="n">best_features</span> <span class="o">=</span> <span class="n">SelectKBest</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">age</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="n">df_random</span><span class="p">)</span> <span class="c1"># NEVER DO THIS OUTSIDE A CV                         #</span>
+<span class="c1">##########################################################################################################################</span>
+
+<span class="c1"># cross-validation with a Rideg model</span>
+<span class="n">cv_predictions</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">Ridge</span><span class="p">(</span><span class="mf">0.1</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="n">age</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="n">best_features</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">LeaveOneOut</span><span class="p">())</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">age</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;MAE = &#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_true</span><span class="o">=</span><span class="n">age</span><span class="p">,</span> <span class="n">y_pred</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">),</span> <span class="s1">&#39;years&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MAE =  28.424867768992854 years
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/tspisak/src/RPN-signature/venv/lib/python3.8/site-packages/sklearn/feature_selection/_univariate_selection.py:111: RuntimeWarning: invalid value encountered in true_divide
+  msw = sswn / float(dfwn)
 </pre></div>
 </div>
-<img alt="../_images/leakage_2_1.png" src="../_images/leakage_2_1.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MAE =  9.304656436978659 years
+</pre></div>
+</div>
+<img alt="../_images/leakage_3_2.png" src="../_images/leakage_3_2.png" />
 </div>
 </div>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference external" href="https://scikit-learn.org/stable/modules/preprocessing.html">https://scikit-learn.org/stable/modules/preprocessing.html</a></p>
+<p>As expected: if we do not select the best features on independnet datam, but instead on the sample which is also used for training (e.g. on the whole sample before the cross-validation), we do <a class="reference external" href="https://en.wikipedia.org/wiki/Circular_analysis">double-dipping</a>.</p>
+<p>While selecting best features in a circular way is a pretty obvious case of target leakage, there are much more subtle, hard-to-detect forms of information leakage.
+In general, suspicious is every analysis step that is done outside the cross-validation and incorporates information about any subject that is used for testing.</p>
+<p>A few examples:</p>
+<ul class="simple">
+<li><p>standardizing/scaling all features before the train-test split or the cross-validation (uses mean and standard deviation of the whole population),</p></li>
+<li><p>co-registering anatomical MRI images to a study-specific standard template (and then running train-test split or cross-validation),</p></li>
+<li><p>training and cross-validating the machine learning model with many different preprocessing pipelines and then selecting the best,</p></li>
+<li><p>training and cross-validating the machine learning model with various hyperparameter values and then selecting the best.</p></li>
+</ul>
+<p>As discussed in the <a class="reference internal" href="practice_regularization.html"><span class="doc std std-doc">previous sections</span></a>, the hyperparameters of machine learning models allow for fine-tuning the complexity of the model and, thereby, to fight overfitting an improve generalization to unseen data.
+But how to find the “sweat spot” when setting the hyperparameters if we can’t simply check different values and then  select the best?</p>
+<p>To understand, how that happens, let’s look again why we need train-test splits and cross-validation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">n_sub</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">p_features</span> <span class="o">=</span> <span class="mi">20</span>
+
+<span class="c1"># here we simulate random features - guaranteed to be independent of the target</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span> <span class="o">=</span> <span class="mi">42</span><span class="p">)</span>
+<span class="n">df_random</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_sub</span><span class="p">,</span> <span class="n">p_features</span><span class="p">)))</span>
+
+<span class="c1"># we load some real age data</span>
+<span class="n">age</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/pni-lab/predmod_lecture/master/ex_data/IXI/ixi.csv&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">loc</span><span class="p">[:</span><span class="n">n_sub</span><span class="o">-</span><span class="mi">1</span><span class="p">,[</span><span class="s1">&#39;Age&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
+<span class="c1"># sweep parameter space</span>
+<span class="n">best_preds</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">best_score</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+<span class="k">for</span> <span class="n">alpha</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="n">start</span><span class="o">=-</span><span class="mi">3</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+    <span class="c1"># cross-validation with a Rideg model</span>
+    <span class="n">cv_predictions</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">Ridge</span><span class="p">(</span><span class="n">alpha</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="n">age</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="n">df_random</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">LeaveOneOut</span><span class="p">())</span>
+    <span class="c1"># see if it&#39;s better</span>
+    <span class="n">score</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">age</span><span class="p">,</span> <span class="n">cv_predictions</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">score</span> <span class="o">&gt;</span> <span class="n">best_score</span><span class="p">:</span>
+        <span class="n">best_score</span> <span class="o">=</span> <span class="n">score</span>
+        <span class="n">best_preds</span> <span class="o">=</span> <span class="n">cv_predictions</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">age</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">best_preds</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;R = &#39;</span><span class="p">,</span> <span class="n">best_score</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>R =  0.6689770859791374
+</pre></div>
+</div>
+<img alt="../_images/leakage_6_1.png" src="../_images/leakage_6_1.png" />
+</div>
+</div>
+<p>As we have used random features, this is obviously a false result.
+Leakage trough hyperparameters can be especially problematic in case of many hyperparameters, low sample sizes and leave-one-out cross-validation.
+In other cases (low number and narrow range of hyperparameter values, large sample size) the risk and the degree of this type of leakage might be negligible.</p>
+<p>Either way, we should always ensure that leakage can’t happen in our machine learning analysis!
+As leakage can be sometimes very hard to spot, the real proof of a predictive model is always the fully independent <em>external</em> validation, e.g. evaluating model performance on newly acquired data. During the development of a predictive model, cross-validation (sometimes called <em>internal</em> validation) is usually only the first step. If a model performs well in internal validation, it is already worth to put efforts into acquiring a new, truely independent dataset for external validation.
+The best practice is to publish the predictive model before the acquisition of the new data starts (e.g. with <a class="reference external" href="https://www.cos.io/initiatives/prereg">preregistration</a>). Such an approach provides a transparent proof that the model performance estimates are unbiased and leakage-free.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Leakage issues in predictive modelling are not neccessary a consequence of malicious research practice. As machine learning is typically deployed in complex scenarios (many features, many alternative preprocessing strategies, many potential analysis choices), leakage can often happen unintentionally and unnoticably.
+Being conscious about the danger of leakage and minimizing (and transparently reporting) alternative analysis branches can, together with higher sample sizes, can boost our trust in the cross-validated results, and improve the chances of a successful external validation and a useful, robust, generalizable model.</p>
+</div>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Exercise 4.10</p>
+<p>In both leakage-examples, try increasing sample size. Does it attenuate the effect of leakage?</p>
+</div>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Exercise 4.11</p>
+<p>Think about possible leakage scenarios for your own datasets.</p>
 </div>
 </section>
 
