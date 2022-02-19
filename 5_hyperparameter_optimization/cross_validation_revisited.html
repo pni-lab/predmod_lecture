@@ -1,0 +1,795 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Cross-validation Revisited &#8212; A Gentle Introduction to Predictive Modelling</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
+        const thebe_selector = ".thebe,.cell"
+        const thebe_selector_input = "pre,.cell_input div.highlight"
+        const thebe_selector_output = ".output,.cell_output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Nested Cross-validation" href="nested_cross_validation.html" />
+    <link rel="prev" title="5. Hyperparameter Optimization and Nested Cross-Validation" href="index.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-QPT1100TCY"></script>
+<script>
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){ dataLayer.push(arguments); }
+                    gtag('js', new Date());
+                    gtag('config', 'G-QPT1100TCY');
+                </script>
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">A Gentle Introduction to Predictive Modelling</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../index.html">
+  </a>
+ </li>
+</ul>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../introduction.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../1_python_basics/index.html">
+   1. Python Basics
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../1_python_basics/python_intro.html">
+     Introduction to python
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../1_python_basics/data_frames.html">
+     Working with DataFrames
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../2_linear_models/index.html">
+   2. Linear Models and Overfitting
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../2_linear_models/theory_linear_models.html">
+     Linear Models: a Brief Theory
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../2_linear_models/practice_linear_models.html">
+     Linear Model in action
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../2_linear_models/overfitting_ex.html">
+     The first Villain: overfitting
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../3_cross_validation/index.html">
+   3. Unbiased predictive performance estimates
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../3_cross_validation/train_test.html">
+     Training and Test sets
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../3_cross_validation/cv.html">
+     Cross-validation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../4_reducing_complexity/index.html">
+   4. Fighting Overfitting - The Advent of Machine Learning
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../4_reducing_complexity/theory_regularization.html">
+     Feature Reduction and Regularization: a brief theory
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../4_reducing_complexity/practice_regularization.html">
+     Regularized Models in Action
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../4_reducing_complexity/leakage.html">
+     The Second Villain: Feature Leakage
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="index.html">
+   5. Hyperparameter Optimization and Nested Cross-Validation
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Cross-validation Revisited
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="nested_cross_validation.html">
+     Nested Cross-validation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../6_validity/index.html">
+   6. Generalizability, Validity,  Fairness
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../6_validity/generalizability.html">
+     Generalizability
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../6_validity/validity.html">
+     Validity and specificity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../6_validity/fairness.html">
+     Fairness
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../7_model_explanation/index.html">
+   7. Model Explanation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <label for="toctree-checkbox-7">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../7_model_explanation/classical.html">
+     Explainability of “Classical” Models
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../7_model_explanation/black_box.html">
+     Explainability vs. Black Box Models
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../8_complex_models/index.html">
+   8. Complex Models: from Ensembles to Deep Learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../9_examples/index.html">
+   9. Scientific Examples
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../references.html">
+   References
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/5_hyperparameter_optimization/cross_validation_revisited.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/pni-lab/predmod_lecture"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/pni-lab/predmod_lecture/issues/new?title=Issue%20on%20page%20%2F5_hyperparameter_optimization/cross_validation_revisited.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/pni-lab/predmod_lecture/master?urlpath=tree/contents/5_hyperparameter_optimization/cross_validation_revisited.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        <a class="colab-button" href="https://colab.research.google.com/github/pni-lab/predmod_lecture/blob/master/contents/5_hyperparameter_optimization/cross_validation_revisited.ipynb"><button type="button" class="btn btn-secondary topbarbtn"
+                title="Launch Colab" data-toggle="tooltip" data-placement="left"><img class="colab-button-logo"
+                    src="../_static/images/logo_colab.png"
+                    alt="Interact on Colab">Colab</button></a>
+        
+        <button type="button" class="btn btn-secondary topbarbtn"
+            onclick="initThebeSBT()" title="Launch Thebe" data-toggle="tooltip" data-placement="left"><i
+                class="fas fa-play"></i><span style="margin-left: .4em;">Live Code</span></button>
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#feature-selection-without-leakage">
+   Feature selection without leakage
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#hyperparameter-optimization-without-leakage">
+   Hyperparameter optimization without leakage
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Cross-validation Revisited</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#feature-selection-without-leakage">
+   Feature selection without leakage
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#hyperparameter-optimization-without-leakage">
+   Hyperparameter optimization without leakage
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="cross-validation-revisited">
+<h1>Cross-validation Revisited<a class="headerlink" href="#cross-validation-revisited" title="Permalink to this headline">¶</a></h1>
+<p>In the <a class="reference internal" href="../4_reducing_complexity/leakage.html"><span class="doc std std-doc">previous chapter</span></a>, we have seen the dangers of leakage.
+Here, we will see how the idea of cross-validation can defeat leakage and allow feature selection and hyperparameter optimization without having to be worries about the validity of the performance estimates.</p>
+<section id="feature-selection-without-leakage">
+<h2>Feature selection without leakage<a class="headerlink" href="#feature-selection-without-leakage" title="Permalink to this headline">¶</a></h2>
+<p>We will begin with revisiting the SelectKBest example from the <a class="reference internal" href="../4_reducing_complexity/practice_regularization.html"><span class="doc std std-doc">previous chapter</span></a>, but instead of using a separate, independent dataset, here we will incorporate the feature selection into the cross-validation scheme.</p>
+<p>To do this, we “fold out” the cross-validation, that is, instead of the scikit-learn shorthand function, we reach back to the for loop-based implementation, as in <a class="reference internal" href="../3_cross_validation/cv.html"><span class="doc std std-doc">chapter 3</span></a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1">#imports</span>
+<span class="o">!</span>pip install scikit-learn &gt; /dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> <span class="c1"># can never harm!!</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">from</span> <span class="nn">sklearn.feature_selection</span> <span class="kn">import</span> <span class="n">SelectKBest</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">cross_val_predict</span><span class="p">,</span> <span class="n">cross_val_score</span><span class="p">,</span> <span class="n">KFold</span><span class="p">,</span> <span class="n">GridSearchCV</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_absolute_error</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span><span class="p">,</span> <span class="n">Ridge</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1">#load data</span>
+<span class="n">df_full</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/pni-lab/predmod_lecture/master/ex_data/IXI/ixi.csv&quot;</span><span class="p">)</span>
+
+<span class="c1"># select a subset for cross-validation</span>
+<span class="n">df_cv</span> <span class="o">=</span> <span class="n">df_full</span><span class="o">.</span><span class="n">loc</span><span class="p">[:</span><span class="mi">100</span><span class="p">,</span> <span class="p">:]</span>
+<span class="c1"># unlike in the previous chapter, here we don&#39;t fetch an independnet dataset.</span>
+<span class="c1"># df_ext = df_full.loc[100:200, :]</span>
+
+<span class="c1"># names of the columns to be used</span>
+<span class="n">target</span> <span class="o">=</span> <span class="s1">&#39;Age&#39;</span>
+<span class="n">features</span> <span class="o">=</span> <span class="n">df_cv</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+
+<span class="n">cv</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="n">cv_predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df_cv</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">train_index</span><span class="p">,</span> <span class="n">test_index</span> <span class="ow">in</span> <span class="n">cv</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">df_cv</span><span class="p">):</span>
+    <span class="c1"># we select and fetch the best 5 feature in the actual training set</span>
+    <span class="n">k_best_selector</span> <span class="o">=</span> <span class="n">SelectKBest</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">df_cv</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">train_index</span><span class="p">,</span> <span class="n">target</span><span class="p">],</span> <span class="n">X</span><span class="o">=</span><span class="n">df_cv</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">train_index</span><span class="p">,</span> <span class="n">features</span><span class="p">])</span>
+    <span class="n">k_best_festures_train</span> <span class="o">=</span> <span class="n">k_best_selector</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">df_cv</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">train_index</span><span class="p">,</span> <span class="n">features</span><span class="p">])</span>
+    <span class="c1"># next, we train the model on these features</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">df_cv</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">train_index</span><span class="p">,</span> <span class="n">target</span><span class="p">],</span> <span class="n">X</span><span class="o">=</span><span class="n">k_best_festures_train</span><span class="p">)</span>
+
+    <span class="c1"># Now we fetch the *same* 5 features from the test set (although they might not be the &quot;top 5&quot; there)</span>
+    <span class="n">k_best_festures_test</span> <span class="o">=</span> <span class="n">k_best_selector</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">df_cv</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">test_index</span><span class="p">,</span> <span class="n">features</span><span class="p">])</span>
+    <span class="c1"># we store the predictions for this fold</span>
+    <span class="n">cv_predictions</span><span class="p">[</span><span class="n">test_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">k_best_festures_test</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;MAE = &#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_true</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y_pred</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">),</span> <span class="s1">&#39;years&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MAE =  8.860477094980913 years
+</pre></div>
+</div>
+<img alt="../_images/cross_validation_revisited_2_1.png" src="../_images/cross_validation_revisited_2_1.png" />
+</div>
+</div>
+<p>The results are pretty much comparable to those in the previous section. Without having to use an independent dataset.
+But, unfortunately, the code got longer and dirtier.</p>
+<p>But no worries, scikit-learn got shorthands for this, too!</p>
+<p>Namely, with scikit-learn, you can create arbitrary, multi-stage machine learning <a class="reference external" href="https://scikit-learn.org/stable/modules/compose.html#pipeline">pipelines</a> and have them cross-validated automatically.
+Everything can be put into a pipeline, as long as it has properly implemented <code class="docutils literal notranslate"><span class="pre">fit</span></code> and <code class="docutils literal notranslate"><span class="pre">transform</span></code> functions.</p>
+<p>Let’s have a look at it in practice:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+
+<span class="n">multistage_model</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;feature_selection&#39;</span><span class="p">,</span> <span class="n">SelectKBest</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)),</span>
+                       <span class="p">(</span><span class="s1">&#39;regression_model&#39;</span><span class="p">,</span> <span class="n">LinearRegression</span><span class="p">())])</span>
+
+<span class="c1"># The important change is:                    VVV here VVV</span>
+<span class="n">cv_predictions</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">multistage_model</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">X</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">features</span><span class="p">],</span> <span class="n">cv</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;MAE = &#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_true</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y_pred</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">),</span> <span class="s1">&#39;years&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MAE =  8.860477094980913 years
+</pre></div>
+</div>
+<img alt="../_images/cross_validation_revisited_4_1.png" src="../_images/cross_validation_revisited_4_1.png" />
+</div>
+</div>
+<p>The same result as above. Bitwise.
+But with much less (and cleaner) code.</p>
+<p>As you can see from the syntax, arbitrarily complex pipelines can be constructed, with as many steps as needed.
+Scikit-learn will take care that everything inside a pipeline is properly cross-validated and leakage-free.</p>
+<p>But what if we want to fine-tune the k-parameter?</p>
+</section>
+<section id="hyperparameter-optimization-without-leakage">
+<h2>Hyperparameter optimization without leakage<a class="headerlink" href="#hyperparameter-optimization-without-leakage" title="Permalink to this headline">¶</a></h2>
+<p>As demonstrated in the <a class="reference internal" href="../4_reducing_complexity/leakage.html"><span class="doc std std-doc">previous chapter</span></a>, hyperparamter optimization, similarly to feature selection, has to take place on a dataset that is independent of the test dataset. Otherwise our performance estimates will be overly optimistic.</p>
+<p>At this point, you might say: cross-validation can solve this, too, for sure!
+You are right!</p>
+<p>But how?</p>
+<p>If we would do it like we did with the feature selection, the hyperparameter-tuning would turn into an overfitting competition.</p>
+<p>The key is that we must apply the cross-validation trick once again:</p>
+<ul class="simple">
+<li><p>we will do an inner cross-validation where the “best” hyperparamters are determined.</p></li>
+<li><p>and an outer cross-validation, where the performance of the previously identifies “best model” is evaluated on the independent hold-out set.</p></li>
+</ul>
+<p>In this scheme, in each iteration, we are dividing the data into 3 samples:</p>
+<ul class="simple">
+<li><p>training sample</p></li>
+<li><p>test sample (on which we optimize the hyperparameters)</p></li>
+<li><p>validation sample (on which we calculate the unbiased performance estimates of the best model)</p></li>
+</ul>
+<p><strong>ToDo: figure</strong></p>
+<p>Before we look at the code, we must get familiar with <a class="reference external" href="https://scikit-learn.org/stable/modules/grid_search.html#grid-search"><code class="docutils literal notranslate"><span class="pre">GridSearchCV</span></code></a> of scikit-learn.
+<code class="docutils literal notranslate"><span class="pre">GridSearchCV</span></code> is similar to <code class="docutils literal notranslate"><span class="pre">cross_val_score</span></code>; it cross-validates the model it gets, with the data it gets.
+But, additionally, you can provide a list of hyperparameter values for <code class="docutils literal notranslate"><span class="pre">GridSearchCV</span></code>.
+It then runs the model with all possible combinations of all hyperparameters and selects the model which gives the best cross-validated results.
+Finally, it fits the best model on all data it sees, i.e. without cross-validation.</p>
+<p>Putting <code class="docutils literal notranslate"><span class="pre">GridSearchCV</span></code> inside of another cross-validation loop allows probing this best model in an unbiased way.</p>
+<p>Here’s the code:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">df_full</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/pni-lab/predmod_lecture/master/ex_data/IXI/ixi.csv&quot;</span><span class="p">)</span>
+<span class="n">df_cv</span> <span class="o">=</span> <span class="n">df_full</span><span class="o">.</span><span class="n">loc</span><span class="p">[:</span><span class="mi">100</span><span class="p">,</span> <span class="p">:]</span>
+<span class="n">target</span> <span class="o">=</span> <span class="s1">&#39;Age&#39;</span>
+<span class="n">features</span> <span class="o">=</span> <span class="n">df_cv</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+
+<span class="n">cv_outer</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">cv_inner</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="n">multistage_model</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;feature_selection&#39;</span><span class="p">,</span> <span class="n">SelectKBest</span><span class="p">()),</span>
+                       <span class="p">(</span><span class="s1">&#39;regression_model&#39;</span><span class="p">,</span> <span class="n">LinearRegression</span><span class="p">())])</span>
+
+<span class="n">hyperparameter_grid</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;feature_selection__k&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]},</span>
+
+<span class="c1"># we create the GridSerachCV:</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">multistage_model</span><span class="p">,</span>
+                   <span class="n">param_grid</span><span class="o">=</span><span class="n">hyperparameter_grid</span><span class="p">,</span>
+                   <span class="n">cv</span><span class="o">=</span><span class="n">cv_inner</span><span class="p">,</span>
+                   <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;neg_mean_absolute_error&#39;</span><span class="p">,</span>
+                   <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+
+<span class="n">cv_predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df_cv</span><span class="p">))</span>
+
+<span class="c1"># outer cross validation</span>
+<span class="k">for</span> <span class="n">outer_train_index</span><span class="p">,</span> <span class="n">validation_index</span> <span class="ow">in</span> <span class="n">cv_outer</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">df_cv</span><span class="p">):</span>
+
+    <span class="c1"># inner cross validations, realised by a GridSearchCV</span>
+    <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span> <span class="o">=</span> <span class="n">df_cv</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">outer_train_index</span><span class="p">,</span><span class="n">target</span><span class="p">],</span> <span class="n">X</span><span class="o">=</span><span class="n">df_cv</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">outer_train_index</span><span class="p">,</span><span class="n">features</span><span class="p">])</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="n">clf</span><span class="o">.</span><span class="n">best_params_</span><span class="p">,</span> <span class="n">clf</span><span class="o">.</span><span class="n">best_score_</span><span class="p">)</span>
+
+    <span class="c1"># now we call the predeict function of GridSearchCV, which calls the predict function of the best model, as finalized within the gridsearch</span>
+    <span class="n">cv_predictions</span><span class="p">[</span><span class="n">validation_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">df_cv</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">validation_index</span><span class="p">,</span><span class="n">features</span><span class="p">])</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;MAE = &#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_true</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y_pred</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">),</span> <span class="s1">&#39;years&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;feature_selection__k&#39;: 6} -8.74431319959252
+{&#39;feature_selection__k&#39;: 6} -8.52338625510901
+{&#39;feature_selection__k&#39;: 4} -8.669411483361305
+{&#39;feature_selection__k&#39;: 4} -9.322312975508792
+{&#39;feature_selection__k&#39;: 4} -8.0658978734489
+MAE =  8.694672158559634 years
+</pre></div>
+</div>
+<img alt="../_images/cross_validation_revisited_7_1.png" src="../_images/cross_validation_revisited_7_1.png" />
+</div>
+</div>
+<p>Slightly better performance.
+But the there is no consensus among the models regarding the best k.
+This is not necessarily a problem. As discussed earlier, the cross-validation characterizes not a single model but a whole family of models.
+Of course the broader the family of models is, the less specific the estimates to our model will be.</p>
+<p>Therefore, stability of the hypermarkets inside a nested cross-validation can always be considered as a good sign.
+On the other hand, the lack of agreement between cross-validation iterations might mean, that you don’t have enough data for so many hyperparameters.</p>
+<p>Now that we know the framework of nested cross-validation, let’s fit some other models:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span>
+
+<span class="n">df_cv</span> <span class="o">=</span> <span class="n">df_full</span><span class="o">.</span><span class="n">loc</span><span class="p">[:</span><span class="mi">100</span><span class="p">,</span> <span class="p">:]</span> <span class="c1"># we fetch a bit more data, as we will have a more complex model.</span>
+<span class="n">target</span> <span class="o">=</span> <span class="s1">&#39;Age&#39;</span>
+<span class="n">features</span> <span class="o">=</span> <span class="n">df_cv</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+
+<span class="n">cv_outer</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">cv_inner</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="n">multistage_model</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;feature_standardization&#39;</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">()),</span>
+                                   <span class="p">(</span><span class="s1">&#39;dimensionality_reduction&#39;</span><span class="p">,</span> <span class="n">PCA</span><span class="p">()),</span>
+                                   <span class="p">(</span><span class="s1">&#39;regression_model&#39;</span><span class="p">,</span> <span class="n">Ridge</span><span class="p">())])</span>
+
+<span class="n">hyperparameter_grid</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;dimensionality_reduction__n_components&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">40</span><span class="p">],</span>
+    <span class="s1">&#39;regression_model__alpha&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="c1"># we create the GridSerachCV:</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">multistage_model</span><span class="p">,</span>
+                   <span class="n">param_grid</span><span class="o">=</span><span class="n">hyperparameter_grid</span><span class="p">,</span>
+                   <span class="n">cv</span><span class="o">=</span><span class="n">cv_inner</span><span class="p">,</span>
+                   <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;neg_mean_absolute_error&#39;</span><span class="p">,</span>
+                   <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">cv_predictions</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">clf</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">X</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">features</span><span class="p">],</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv_outer</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;MAE = &#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_true</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y_pred</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">),</span> <span class="s1">&#39;years&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MAE =  7.2278935084762495 years
+</pre></div>
+</div>
+<img alt="../_images/cross_validation_revisited_9_1.png" src="../_images/cross_validation_revisited_9_1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">Lasso</span>
+
+<span class="n">df_cv</span> <span class="o">=</span> <span class="n">df_full</span><span class="o">.</span><span class="n">loc</span><span class="p">[:</span><span class="mi">100</span><span class="p">,</span> <span class="p">:]</span> <span class="c1"># we fetch a bit more data, as we will have a more complex model.</span>
+<span class="n">target</span> <span class="o">=</span> <span class="s1">&#39;Age&#39;</span>
+<span class="n">features</span> <span class="o">=</span> <span class="n">df_cv</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+
+<span class="n">cv_outer</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">cv_inner</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="n">multistage_model</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;feature_standardization&#39;</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">()),</span>
+                                   <span class="p">(</span><span class="s1">&#39;dimensionality_reduction&#39;</span><span class="p">,</span> <span class="n">PCA</span><span class="p">()),</span>
+                                   <span class="p">(</span><span class="s1">&#39;regression_model&#39;</span><span class="p">,</span> <span class="n">Lasso</span><span class="p">())])</span>
+
+<span class="n">hyperparameter_grid</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;dimensionality_reduction__n_components&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">40</span><span class="p">],</span>
+    <span class="s1">&#39;regression_model__alpha&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="c1"># we create the GridSerachCV:</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">multistage_model</span><span class="p">,</span>
+                   <span class="n">param_grid</span><span class="o">=</span><span class="n">hyperparameter_grid</span><span class="p">,</span>
+                   <span class="n">cv</span><span class="o">=</span><span class="n">cv_inner</span><span class="p">,</span>
+                   <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;neg_mean_absolute_error&#39;</span><span class="p">,</span>
+                   <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">cv_predictions</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">clf</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">X</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">features</span><span class="p">],</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv_outer</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;MAE = &#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_true</span><span class="o">=</span><span class="n">df_cv</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">y_pred</span><span class="o">=</span><span class="n">cv_predictions</span><span class="p">),</span> <span class="s1">&#39;years&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MAE =  7.269020953383818 years
+</pre></div>
+</div>
+<img alt="../_images/cross_validation_revisited_10_1.png" src="../_images/cross_validation_revisited_10_1.png" />
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "pni-lab/predmod_lecture",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./5_hyperparameter_optimization"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="index.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">5. Hyperparameter Optimization and Nested Cross-Validation</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="nested_cross_validation.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Nested Cross-validation</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            
+        </div>
+    </div>
+    <footer class="footer">
+  <p>
+    
+      By Tamas Spisak<br/>
+    
+        &copy; Copyright 2021.<br/>
+  </p>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

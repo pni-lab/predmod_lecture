@@ -1,1 +1,1 @@
-# 8. Complex Models, Deep Learning
+# 8. Complex Models: from Ensembles to Deep Learning

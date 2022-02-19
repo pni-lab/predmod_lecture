@@ -211,24 +211,80 @@
    </li>
   </ul>
  </li>
- <li class="toctree-l1">
+ <li class="toctree-l1 has-children">
   <a class="reference internal" href="../5_hyperparameter_optimization/index.html">
    5. Hyperparameter Optimization and Nested Cross-Validation
   </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5_hyperparameter_optimization/cross_validation_revisited.html">
+     Cross-validation Revisited
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5_hyperparameter_optimization/nested_cross_validation.html">
+     Nested Cross-validation
+    </a>
+   </li>
+  </ul>
  </li>
- <li class="toctree-l1">
+ <li class="toctree-l1 has-children">
   <a class="reference internal" href="../6_validity/index.html">
-   6. Validity, Generalizability, Fairness
+   6. Generalizability, Validity,  Fairness
   </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../6_validity/generalizability.html">
+     Generalizability
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../6_validity/validity.html">
+     Validity and specificity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../6_validity/fairness.html">
+     Fairness
+    </a>
+   </li>
+  </ul>
  </li>
- <li class="toctree-l1">
+ <li class="toctree-l1 has-children">
   <a class="reference internal" href="../7_model_explanation/index.html">
    7. Model Explanation
   </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <label for="toctree-checkbox-7">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../7_model_explanation/classical.html">
+     Explainability of “Classical” Models
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../7_model_explanation/black_box.html">
+     Explainability vs. Black Box Models
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../8_complex_models/index.html">
-   8. Complex Models, Deep Learning
+   8. Complex Models: from Ensembles to Deep Learning
   </a>
  </li>
  <li class="toctree-l1">
@@ -375,7 +431,9 @@ Absolutely no information. But, unfortunately, information about the target can 
 <p>Let’s quickly illustrate the problem with some code!</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">Ridge</span>
 <span class="kn">from</span> <span class="nn">sklearn.feature_selection</span> <span class="kn">import</span> <span class="n">SelectKBest</span>
@@ -413,14 +471,10 @@ Absolutely no information. But, unfortunately, information about the target can 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/tspisak/src/RPN-signature/venv/lib/python3.8/site-packages/sklearn/feature_selection/_univariate_selection.py:111: RuntimeWarning: invalid value encountered in true_divide
-  msw = sswn / float(dfwn)
-</pre></div>
-</div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MAE =  9.304656436978659 years
 </pre></div>
 </div>
-<img alt="../_images/leakage_3_2.png" src="../_images/leakage_3_2.png" />
+<img alt="../_images/leakage_3_1.png" src="../_images/leakage_3_1.png" />
 </div>
 </div>
 <p>As expected: if we do not select the best features on independnet datam, but instead on the sample which is also used for training (e.g. on the whole sample before the cross-validation), we do <a class="reference external" href="https://en.wikipedia.org/wiki/Circular_analysis">double-dipping</a>.</p>
