@@ -24,8 +24,18 @@ chapters:
     - file: 4_reducing_complexity/practice_regularization
     - file: 4_reducing_complexity/leakage
 - file: 5_hyperparameter_optimization/index
+  sections:
+    - file: 5_hyperparameter_optimization/cross_validation_revisited
+    - file: 5_hyperparameter_optimization/nested_cross_validation
 - file: 6_validity/index
+  sections:
+    - file: 6_validity/generalizability
+    - file: 6_validity/validity
+    - file: 6_validity/fairness
 - file: 7_model_explanation/index
+  sections:
+    - file: 7_model_explanation/classical
+    - file: 7_model_explanation/black_box
 - file: 8_complex_models/index
 - file: 9_examples/index
 - file: references
