@@ -1,0 +1,57 @@
+Copyright (c) 2022-2026 Tamas Spisak and contributors
+
+TEXT, FIGURES AND OTHER BOOK CONTENT
+====================================
+
+This work is licensed under the Creative Commons Attribution-ShareAlike 4.0
+International License (CC BY-SA 4.0).
+
+You are free to share and adapt the material for any purpose, including
+commercially, provided you give appropriate credit and distribute your
+contributions under the same license.
+
+The full legal text is available at:
+
+    https://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+A human-readable summary is at:
+
+    https://creativecommons.org/licenses/by-sa/4.0/
+
+ShareAlike is used here for a reason: the example data is derived from the IXI
+dataset (https://brain-development.org/ixi-dataset/), which is itself released
+under CC BY-SA 3.0.
+
+
+CODE SAMPLES
+============
+
+The code in this repository -- notebook cells, scripts under figures/, and
+configuration -- may additionally be used under the MIT license:
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+DATA
+====
+
+ex_data/IXI/ixi.csv is derived from the IXI dataset, made available under
+CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0/). If you use this
+data, please acknowledge the source:
+
+    https://brain-development.org/ixi-dataset/

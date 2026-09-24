@@ -50,7 +50,8 @@ html:
   use_issues_button: true
   use_repository_button: true
   use_edit_page_button: true
-  google_analytics_id: G-QPT1100TCY
+  analytics:
+    google_analytics_id: G-QPT1100TCY
 
 # Launch button settings
 launch_buttons:

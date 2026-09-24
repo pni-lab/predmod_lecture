@@ -1,50 +1,72 @@
 # Introduction
 
 ```{image} img.png
-:alt: cover image
+:alt: Illustration of brains and data
 :class: bg-primary mb-1
 :width: 100%
 :align: left
 ```
 
-
-Predictive modelling and machine learning have recently become increasingly important in biomedical
-research and hold promise for delivering biomarkers that substantially impact
-clinical practice and public health 
+Predictive modelling and machine learning have become central to biomedical research, and they hold
+real promise for delivering biomarkers that change clinical practice and public health
 {cite:p}`vogt2018machine, kent2018personalized, spisak2020pain, walsh2021dome`.
-For many researchers, "machine learning" is a mysterious term that may be more familiar from science-fiction than their actual research activity.
-At the same time many of these researchers routinely apply rather complex statistical techniques 
-like mixed-effect models and find their way in highly complex analysis workflows of dedicated software environments.
-.
 
-These type of researchers are the primary target readership of this lecture book.
-The aim of this book is to demystify predictive modelling and machine learning and to show
-that the simplest - but yet very powerful - forms of these analysis techniques can as much accessible and straightforward
-as "classical" tools for statistical inference, they routinely use.
+For many researchers, though, "machine learning" remains a slightly mysterious term — more familiar
+from science fiction than from their own work. This is odd, because the same researchers routinely
+use mixed-effects models, navigate complicated analysis pipelines, and think carefully about
+confounding. The obstacle is not mathematical sophistication. It is that predictive modelling asks a
+different question from the one their training prepared them for.
 
-This book aims to provide a practical hands-on experience and illustrates all the basic concepts
-by analyzing and example dataset with python code. It invites the reader
-to an exciting journey, towards predicting age from brain structure.
-While the example dataset is a structural MRI dataset, the jupyter book does not assume any neuroimaging-related 
-background knowledge. If, nevertheless, the reader is interested in some more background information, the are [many](https://carpentries-incubator.github.io/SDC-BIDS-sMRI/aio/index.html)
-good [resources](https://andysbrainbook.readthedocs.io/en/latest/) available on-line for free.
-The practice pages of the book are interactive notebooks:
-they can be run either on a local workstation or - with just one click - in the cloud.
-The book contains exercises which require the reader to modify the code.
-It is encouraged to go through the book with an own dataset, instead of the example dataset.
-This approach may be although more challenging, but it will make the reader deeply *internalize* the core concepts
-and - hopefully - push her over the entry limit for applying predictive modelling in her own research.
-While this lecture book focuses on simple and easily explainable machine learning models,
-it also highlights, how the paradigm of predictive modelling makes it possible to use "black box" model,
-without having to sacrifice confidence in the reliability of the predictions.
+## Who this book is for
 
-This is not a conventional lecture book. This is an interactive jupyter book, being constantly developed.
-Please contribute to making it better by leaving feedback or opening an [issue](https://github.com/pni-lab/predmod_lecture/issues/new) at the github repository of the book.
+You, if you are comfortable fitting a linear model and interpreting a p-value, and would like to
+know what changes when the goal becomes prediction rather than inference.
 
-[![GitHub issues](https://img.shields.io/github/issues/pni-lab/mlconfound.svg)](https://GitHub.com/pni-lab/predmod_lecture/issues/)
+The aim of this book is to demystify predictive modelling by showing that its simplest — and
+already very powerful — forms are as accessible as the tools you use every day. Not by
+simplifying the ideas, but by being concrete about them.
 
-Have a lot of fun while discovering a new way of dealing with your data.
+## How it works
 
+Everything is illustrated on one dataset, with python code, in a single running example: predicting
+age from brain structure. The data is structural MRI, but no neuroimaging knowledge is assumed. If
+you would like some background anyway, there are
+[many](https://carpentries-incubator.github.io/SDC-BIDS-sMRI/aio/index.html) good
+[resources](https://andysbrainbook.readthedocs.io/en/latest/) available free online.
 
+Practice pages are interactive notebooks. They run on your own machine or, with one click, in the
+cloud — look for the rocket icon at the top of the page. Exercises throughout ask you to modify the
+code, and each has a worked solution folded underneath it. Open the solution *after* you have tried;
+the failures are where the learning is.
 
+```{tip}
+The single best way to use this book is to work through it with **your own dataset** alongside the
+example. It is harder, and it is the difference between recognising these concepts and owning them.
+```
 
+## What to expect
+
+The book has a plot, and it is not a flattering one. Chapter by chapter, results that look
+impressive turn out to be artefacts, and the methods that fix them introduce subtler problems of
+their own. Two villains recur: **overfitting**, which makes models look good on the data they were
+built from, and **leakage**, which makes them look good even on data they were not.
+
+This is not pessimism. The point is that predictive modelling comes with a small number of specific
+failure modes, that they are well understood, and that avoiding them is mostly a matter of
+discipline rather than mathematics. By [chapter 5](5_hyperparameter_optimization/index.md) you will
+have a complete recipe for building a model and reporting its performance honestly.
+
+The book focuses on simple, explainable models. But it also shows how the predictive framework lets
+you use a genuine "black box" without giving up confidence in what it does — because in this
+framework, trust comes from how a model was *validated*, not from whether you can read its
+coefficients.
+
+## A living document
+
+This is not a conventional textbook. It is a Jupyter Book under continuous development. If something
+is wrong, unclear, or missing, please open an
+[issue](https://github.com/pni-lab/predmod_lecture/issues/new) — that is how it gets better.
+
+[![GitHub issues](https://img.shields.io/github/issues/pni-lab/predmod_lecture.svg)](https://github.com/pni-lab/predmod_lecture/issues/)
+
+Have fun discovering a new way of dealing with your data.
