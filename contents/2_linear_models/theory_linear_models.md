@@ -21,7 +21,7 @@ $$
 The leftovers $\varepsilon_i$ are the *residuals*, and the coefficients are chosen to make them as
 small as possible. "As small as possible" has to be made precise, and the usual choice is
 [the method of least squares](https://en.wikipedia.org/wiki/Least_squares): pick the $\beta$ that
-minimises the sum of squared residuals.
+minimizes the sum of squared residuals.
 
 $$
 \underset{\beta_0, \beta_1}{\operatorname{arg\,min}} \sum_{i=1}^{n} \big[\, y_i - (\beta_{0} + \beta_{1} x_{i}) \,\big]^2
@@ -31,7 +31,9 @@ $$
 :name: least-squares
 :width: 90%
 
-Least squares in one picture. Each vertical grey line is one residual $\varepsilon_i$: the
+Least squares in one picture. (Note the axes: here volume is modelled *from* age, the reverse
+of the prediction task the rest of the book sets itself — it makes the line easier to read.)
+Each vertical grey line is one residual $\varepsilon_i$: the
 distance between an observed value and what the line predicts for it. The fitted line (red) is
 the one line, out of all possible lines, that makes the *sum of the squares* of those distances
 as small as it can be. The panel on the right shows that sum as a function of the slope: it is a
@@ -50,7 +52,7 @@ The aim and the method are unchanged: we decompose the target variable into a we
 [linear combination](https://en.wikipedia.org/wiki/Linear_combination) — of the predictors, as
 close to the target as possible. Collecting the predictors into an $n \times p$ matrix
 $\boldsymbol{X}$ (one row per observation, one column per predictor, plus a column of ones for the
-intercept) and the coefficients into a vector $\boldsymbol{\beta}$, the quantity to minimise is
+intercept) and the coefficients into a vector $\boldsymbol{\beta}$, the quantity to minimize is
 
 $$
 \underset{\boldsymbol{\beta}}{\operatorname{arg\,min}} \; \lVert\, \boldsymbol{y} - \boldsymbol{X}\boldsymbol{\beta} \,\rVert^2
@@ -95,7 +97,7 @@ $$
 \hat{\boldsymbol{y}} = \boldsymbol{X}\boldsymbol{\beta}
 $$
 
-To judge how good those predictions are we need to summarise the errors in one number. Two
+To judge how good those predictions are we need to summarize the errors in one number. Two
 measures are used throughout this book:
 
 $$

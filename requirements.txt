@@ -1,6 +1,7 @@
 # Environment for building and running "A Gentle Introduction to Predictive Modelling".
-# Versions are pinned so that the book builds reproducibly and the numbers printed
-# in the text match the numbers produced by the notebooks.
+# Version ranges are constrained so that the book keeps building and the numbers
+# printed in the text keep matching the numbers the notebooks produce. The committed
+# outputs were generated with python 3.11, numpy 2.4, pandas 3.0 and scikit-learn 1.8.
 
 # book build
 jupyter-book>=1.0,<2.0
@@ -16,5 +17,6 @@ seaborn>=0.13,<0.14
 scikit-learn>=1.5,<2.0
 statsmodels>=0.14
 
-# brain visualisation (optional: notebooks fall back to a bar plot if unavailable)
+# brain visualization, used for two figures; those cells fall back to a bar plot
+# if it is not installed, so the rest of the book works without it
 ggseg>=0.1

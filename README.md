@@ -34,7 +34,8 @@ jupyter-book build contents/
 The result is written to `contents/_build/html/`. Notebook outputs are committed to the
 repository, so the build itself does not execute anything. The notebooks are re-executed in
 continuous integration (`.github/workflows/book.yml`), which is what keeps those committed outputs
-trustworthy — if a notebook stops running, or its numbers change, the build fails.
+trustworthy: if a notebook stops running, the build fails, and if its outputs drift from what is
+committed, the run reports it.
 
 To re-execute everything locally:
 

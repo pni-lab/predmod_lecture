@@ -41,7 +41,7 @@ the failures are where the learning is.
 
 ```{tip}
 The single best way to use this book is to work through it with **your own dataset** alongside the
-example. It is harder, and it is the difference between recognising these concepts and owning them.
+example. It is harder, and it is the difference between recognizing these concepts and owning them.
 ```
 
 ## What to expect

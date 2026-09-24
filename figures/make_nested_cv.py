@@ -39,31 +39,32 @@ ax.text(n_outer * block_w / 2, outer_top + block_h + 0.06,
 # ---------------------------------------------------------------- inner loop
 inner_top = outer_top - n_outer * (block_h + gap) - 1.25
 inner_block_w = block_w * 4 / n_inner   # the 4 non-test outer folds, re-divided into n_inner parts
+inner_left = 0.0                        # they are outer round 5's training folds: columns 1-4
 
 for round_index in range(n_inner):
     y = inner_top - round_index * (block_h + gap)
     for fold in range(n_inner):
         is_validation = (fold == round_index)
-        ax.add_patch(Rectangle((block_w + fold * inner_block_w, y), inner_block_w * 0.97, block_h,
+        ax.add_patch(Rectangle((inner_left + fold * inner_block_w, y), inner_block_w * 0.97, block_h,
                                facecolor=VALIDATION if is_validation else INNER_TRAIN,
                                edgecolor='white', lw=1.5))
-    ax.text(block_w - 0.25, y + block_h / 2, f'round {round_index + 1}',
+    ax.text(inner_left - 0.25, y + block_h / 2, f'round {round_index + 1}',
             ha='right', va='center', fontsize=9)
 
-ax.text(block_w + 2 * block_w, inner_top + block_h + 0.30,
+ax.text(inner_left + 2 * block_w, inner_top + block_h + 0.30,
         'INNER cross-validation  —  chooses the hyperparameters', ha='center',
         fontsize=12, weight='bold')
-ax.text(block_w + 2 * block_w, inner_top + block_h + 0.06,
+ax.text(inner_left + 2 * block_w, inner_top + block_h + 0.06,
         'run separately inside every outer round, on that round\'s training data only',
         ha='center', fontsize=9, color='0.35')
 
-# arrow from the training part of outer round 1 down into the inner loop
-ax.add_patch(FancyArrowPatch((3.0, outer_top - (n_outer - 1) * (block_h + gap) - 0.05),
-                             (3.0, inner_top + block_h + 0.62),
+# arrow from the training part of the last outer round down into the inner loop
+ax.add_patch(FancyArrowPatch((2.0, outer_top - (n_outer - 1) * (block_h + gap) - 0.05),
+                             (2.0, inner_top + block_h + 0.62),
                              arrowstyle='-|>', mutation_scale=18, color='0.45', lw=1.5,
                              connectionstyle='arc3,rad=0.0'))
-ax.text(3.15, (outer_top - (n_outer - 1) * (block_h + gap) + inner_top + block_h) / 2 + 0.2,
-        'the training data of\none outer round', fontsize=9, color='0.35', va='center')
+ax.text(2.15, (outer_top - (n_outer - 1) * (block_h + gap) + inner_top + block_h) / 2 + 0.2,
+        'the training data of\nthis outer round', fontsize=9, color='0.35', va='center')
 
 # ---------------------------------------------------------------- legend
 legend = [(TRAIN, 'training data of the outer round'),

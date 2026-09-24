@@ -1,4 +1,4 @@
-# 5. Hyperparameter Optimization and Nested Cross-Validation
+# 5. Hyperparameter Optimization and Nested Cross-validation
 
 [Chapter 4](../4_reducing_complexity/index.md) gave us dials to control model complexity, and then
 showed that turning them by looking at cross-validated performance quietly inflates the result.
