@@ -86,7 +86,8 @@ Here is the distinction that the whole book rests on. Given a fitted model, you 
   about *individuals*.
 
 They are not the same question, and — as we will see repeatedly — a model can do very well on one
-and disastrously on the other.
+and disastrously on the other. {cite:t}`shmueli2010explain` is the classic treatment of the
+distinction, and is worth reading alongside this book.
 
 ## Predictions
 
