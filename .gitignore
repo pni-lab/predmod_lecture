@@ -1,0 +1,14 @@
+# jupyter-book build output
+contents/_build/
+_build/
+
+# python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+*.egg-info/
+.venv/
+venv/
+
+# os
+.DS_Store

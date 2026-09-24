@@ -4,15 +4,29 @@
 title: A Gentle Introduction to Predictive Modelling
 author: Tamas Spisak
 logo: logo.png
+copyright: "2022-2026"
 
-# Force re-execution of notebooks on each build.
-# See https://jupyterbook.org/content/execute.html
+# Notebook outputs are committed to the repository, so the book itself builds without
+# re-running anything. The notebooks are executed separately in continuous integration
+# (.github/workflows/book.yml), which is what catches notebooks that have stopped running
+# and reports outputs that have drifted from what is committed.
 execute:
   execute_notebooks: 'off'
+
+only_build_toc_files: true
 
 sphinx:
   config:
     bibtex_reference_style: label
+    html_show_copyright: true
+
+parse:
+  myst_enable_extensions:
+    - amsmath
+    - colon_fence
+    - dollarmath
+    - linkify
+    - substitution
 
 # Define the name of the latex output file for PDF builds
 latex:
@@ -34,7 +48,9 @@ repository:
 html:
   use_issues_button: true
   use_repository_button: true
-  google_analytics_id: G-QPT1100TCY
+  use_edit_page_button: true
+  analytics:
+    google_analytics_id: G-QPT1100TCY
 
 # Launch button settings
 launch_buttons:
