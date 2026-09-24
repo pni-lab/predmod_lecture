@@ -20,3 +20,8 @@ statsmodels>=0.14
 # brain visualization, used for two figures; those cells fall back to a bar plot
 # if it is not installed, so the rest of the book works without it
 ggseg>=0.1
+
+# confounder testing (chapter 6). Note: mlconfound pins pygam==0.8.0, which calls a
+# SciPy sparse-matrix alias removed in newer SciPy; contents/6_validity/validity.ipynb
+# restores it in two lines rather than constraining the rest of the environment.
+mlconfound>=0.21

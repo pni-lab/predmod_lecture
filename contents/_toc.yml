@@ -37,6 +37,12 @@ chapters:
     - file: 7_model_explanation/classical
     - file: 7_model_explanation/black_box
 - file: 8_complex_models/index
+  sections:
+    - file: 8_complex_models/ensembles
 - file: 9_examples/index
+  sections:
+    - file: 9_examples/pain_signature
+    - file: 9_examples/registered_model
+    - file: 9_examples/wrong_target
 - file: references
 
