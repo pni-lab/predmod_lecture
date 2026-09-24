@@ -5,7 +5,7 @@ coefficients — because every concept that matters is visible in it, and visibl
 absence of machinery.
 
 The toolbox is much larger, and this chapter surveys it: bagging, random forests, boosting, kernel
-methods and neural networks. The organising question is not which algorithm wins, but what each one
+methods and neural networks. The organizing question is not which algorithm wins, but what each one
 *assumes*, and therefore when its assumptions are likely to suit your problem.
 
 The chapter also does something the literature rarely does: it runs all of them on the book's data,

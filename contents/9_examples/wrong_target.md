@@ -21,10 +21,10 @@ feature.
 ## The finding
 
 At the same risk score, Black patients were substantially sicker than White patients: **26.3% more
-chronic conditions** (4.8 versus 3.8), worse blood pressure control, worse diabetic control. Across
-the cohort, nearly 49,000 active chronic conditions were invisible to the score. Closing the health
-gap at a given score would have raised the share of Black patients receiving the extra help from
-**17.7% to 46.5%**.
+chronic conditions** (4.8 versus 3.8), worse blood pressure control, worse diabetic control. Closing
+the health gap at a given score would have raised the share of Black patients receiving the extra
+help from **17.7% to 46.5%**. The manufacturer repeated the analysis on its own national database of
+**3.7 million** insured patients and confirmed the finding.
 
 ## Why it happened
 
@@ -42,20 +42,25 @@ label carrying a group-dependent offset. The algorithm learned a historical patt
 treatment and re-expressed it as a prediction of unequal need.
 
 The authors did not change the algorithm. They changed the label — the identical procedure trained
-to predict active chronic conditions instead of costs — which removed **84% of the measured bias**
-and roughly doubled the share of Black patients auto-enrolled.
+to predict active chronic conditions instead of costs — which **roughly doubled** the share of Black
+patients auto-enrolled, from 14.1% to 26.7%. A further variant predicting a combined health-and-cost
+index cut their measure of bias (the excess chronic conditions carried by Black patients at equal
+risk score) by **84%**.
 
 ## Why this is the most important example in the chapter
 
 Go through this book's checklist. The model passes all of it.
 
-- **Not overfitted.** It held up out of sample.
+- **Not overfitted.** It held up out of sample, and was deployed at national scale.
 - **Not leaky.** No implausible performance.
-- **Externally validated**, at a scale almost nobody in academic research achieves: the manufacturer
-  replicated the analysis on its own national database of **3.7 million patients**.
-- **Well calibrated** — and calibrated *equally* across racial groups. At every level of predicted
-  risk, Black and White patients went on to incur about the same costs.
+- **Well calibrated** on the quantity it predicted — and calibrated *equally* across racial groups.
+  At every level of predicted risk, Black and White patients went on to incur about the same costs.
 - **It did not use the protected attribute at all.**
+- **Its behaviour reproduced** in an independent national database of 3.7 million patients.
+
+And an external validation would have passed it. Take the model to a new hospital, compare predicted
+with actual costs, and it predicts costs well there too — because it does predict costs well. Every
+validation available to you validates the model against its label.
 
 Cross-validation asks whether your estimate generalizes to new draws from the same distribution.
 External validation asks whether it transports to a new site. **Neither asks whether the label was

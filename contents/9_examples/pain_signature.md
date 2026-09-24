@@ -55,7 +55,8 @@ paper was widely read as delivering an objective pain-o-meter. {cite:t}`han2022e
 studies and separated two effects that the original design conflated: *within-person* prediction
 (does this trial hurt more than that one, in the same person) is very strong, with a mean effect size
 of 1.45 across eight studies; *between-person* prediction (does this person report more pain than
-that one) is weak and was significant in only one study out of eight. The signature is a within-person
+that one) is medium at best (mean d = 0.49) and was statistically significant in only one study out
+of eight. The signature is a within-person
 mechanistic measure, not a between-person diagnostic. {cite:t}`zunhammer2018placebo` pooled 20
 studies and found that placebo reduced reported pain roughly eight times more than it reduced the
 signature — so a large part of what makes pain better is invisible to it. And as a standalone
@@ -68,9 +69,10 @@ None of that is a refutation. It is a decade of people finding out precisely wha
 ## The lesson that generalizes: specificity has a boundary you did not test
 
 In 2021, a study tested the signature against two conditions nobody had tried: breathlessness, and a
-**finger-opposition motor task**. Breathlessness activated it (d = 0.90). The non-aversive motor task
-activated it more than anything else tested (d = 1.44). The authors — including the signature's
-original senior author — concluded that global signature activity alone is not specific to pain
+**finger-opposition motor task**. Breathlessness activated it (d = 0.90), and the non-aversive motor
+task activated it more strongly still (d = 1.44) — although that study contained no painful
+condition, so it could make no direct comparison against pain. The authors — including the
+signature's first author — concluded that global signature activity alone is not specific to pain
 {cite:p}`harrison2021investigating`.
 
 Look at what had happened. Every specificity test for eight years had compared pain against other

@@ -41,7 +41,8 @@ Roughly five-sixths of the explained variance did not survive.
 It is worth being precise about what did *not* go wrong here, because the list is long. There was no
 leakage: feature selection and tuning were inside the loops. There was no hyperparameter fishing: the
 model was registered before validation. There was no publication sleight of hand: the abstract leads
-with the 8–12%, not with the 52%. The senior author is the same person who wrote the confounder-testing
+with the 8–12%, not with the 52%. And still the external correlation came out at about half the
+internal one, and the external variance explained at about a fifth. The senior author is the same person who wrote the confounder-testing
 tool of [chapter 6](../6_validity/validity.ipynb), and the paper duly reports that age, four separate
 measures of head motion, depression and several pain-related questionnaires showed no evidence of
 biasing the model.

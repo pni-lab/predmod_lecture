@@ -1,7 +1,8 @@
 # Environment for building and running "A Gentle Introduction to Predictive Modelling".
-# Version ranges are constrained so that the book keeps building and the numbers
-# printed in the text keep matching the numbers the notebooks produce. The committed
-# outputs were generated with python 3.11, numpy 2.4, pandas 3.0 and scikit-learn 1.8.
+# Version ranges are constrained to combinations the book is known to build with.
+# They are not tight enough to guarantee identical numbers -- library defaults change --
+# so the committed outputs record the environment they came from: python 3.11,
+# numpy 2.4, pandas 3.0, scikit-learn 1.8, scipy 1.17.
 
 # book build
 jupyter-book>=1.0,<2.0
