@@ -1,6 +1,15 @@
-# 3. Unbiased predictive performance estimates
+# 3. Unbiased Estimates of Predictive Performance
 
-*In this chapter:*
- - [Examples to overfitting](../2_linear_models/overfitting_ex.ipynb)
- - [Train-Test Split](train_test.ipynb)
- - [Cross-validation](cv.ipynb)
+[Chapter 2](../2_linear_models/index.md) left us unable to trust the only number we had. The error
+a model makes on the data it was fitted to can be driven to zero by adding predictors — real ones
+or nonsense ones — so it says nothing about whether the model has learned anything.
+
+This chapter fixes the measurement problem. It does not yet fix overfitting itself; that is
+[chapter 4](../4_reducing_complexity/index.md). But nothing can be fixed before it can be measured.
+
+**In this chapter:**
+
+- **[Training and Test Sets](train_test.ipynb)** — evaluating on unseen data, and the complexity
+  curve that the rest of the book is about.
+- **[Cross-validation](cv.ipynb)** — getting an unbiased estimate without sacrificing a test set,
+  and what exactly that estimate refers to.

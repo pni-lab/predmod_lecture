@@ -1,7 +1,20 @@
-jupyter-book
-matplotlib
-numpy
-pandas
-nilearn
-scikit-learn
+# Environment for building and running "A Gentle Introduction to Predictive Modelling".
+# Versions are pinned so that the book builds reproducibly and the numbers printed
+# in the text match the numbers produced by the notebooks.
 
+# book build
+jupyter-book>=1.0,<2.0
+
+# core scientific stack
+numpy>=2.0,<3.0
+pandas>=2.2,<4.0
+scipy>=1.11
+matplotlib>=3.8
+seaborn>=0.13,<0.14
+
+# modelling
+scikit-learn>=1.5,<2.0
+statsmodels>=0.14
+
+# brain visualisation (optional: notebooks fall back to a bar plot if unavailable)
+ggseg>=0.1
