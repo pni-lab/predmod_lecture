@@ -7,11 +7,16 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write     # the deploy step pushes the built site to the gh-pages branch
+
+concurrency:
+  group: book-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   # Builds the book from the committed notebook outputs. Fast; catches broken
-  # references, missing figures and malformed markdown.
+  # references, missing figures and malformed markdown. On master, the result is
+  # published to the gh-pages branch, which is what GitHub Pages serves.
   build:
     runs-on: ubuntu-latest
     steps:
@@ -28,6 +33,20 @@ jobs:
         with:
           name: book-html
           path: contents/_build/html
+
+      # Publish. ghp-import copies the built HTML onto the gh-pages branch and
+      # pushes it, using the token actions/checkout already configured. -n adds
+      # the .nojekyll file Sphinx sites need (GitHub's Jekyll would otherwise
+      # swallow the _static and _images directories).
+      - name: Publish to GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: |
+          pip install ghp-import
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          ghp-import --no-jekyll --push --force --no-history \
+            --message "Publish book from ${GITHUB_SHA::7}" \
+            contents/_build/html
 
   # Re-executes every notebook from scratch. This is what keeps the committed
   # outputs honest: if a notebook stops running, the build fails here.
