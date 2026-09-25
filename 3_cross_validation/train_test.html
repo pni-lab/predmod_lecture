@@ -1,0 +1,1115 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Training and Test Sets &#8212; A Gentle Introduction to Predictive Modelling</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-QPT1100TCY"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
+                gtag('js', new Date());
+                gtag('config', 'G-QPT1100TCY');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
+                gtag('js', new Date());
+                gtag('config', 'G-QPT1100TCY');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '3_cross_validation/train_test';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Cross-validation" href="cv.html" />
+    <link rel="prev" title="3. Honest Estimates of Predictive Performance" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="A Gentle Introduction to Predictive Modelling - Home"/>
+    <img src="../_static/logo.png" class="logo__image only-dark pst-js-only" alt="A Gentle Introduction to Predictive Modelling - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    A Gentle Introduction to Predictive Modelling
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../1_python_basics/index.html">1. Python Basics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../1_python_basics/python_intro.html">Introduction to Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../1_python_basics/data_frames.html">Working with DataFrames</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../2_linear_models/index.html">2. Linear Models and Overfitting</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../2_linear_models/theory_linear_models.html">Linear Models: a Brief Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../2_linear_models/practice_linear_models.html">Linear Models in Action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../2_linear_models/overfitting_ex.html">The First Villain: Overfitting</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">3. Honest Estimates of Predictive Performance</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Training and Test Sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cv.html">Cross-validation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../4_reducing_complexity/index.html">4. Fighting Overfitting: the Advent of Machine Learning</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../4_reducing_complexity/theory_regularization.html">Reducing Complexity: a Brief Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../4_reducing_complexity/practice_regularization.html">Reducing Complexity in Action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../4_reducing_complexity/leakage.html">The Second Villain: Leakage</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../5_hyperparameter_optimization/index.html">5. Hyperparameter Optimization and Nested Cross-validation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../5_hyperparameter_optimization/cross_validation_revisited.html">Cross-validation Revisited</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../5_hyperparameter_optimization/nested_cross_validation.html">Nested Cross-validation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../6_validity/index.html">6. Generalizability, Validity, Fairness</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../6_validity/generalizability.html">Generalizability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../6_validity/validity.html">Validity and Specificity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../6_validity/fairness.html">Fairness</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../7_model_explanation/index.html">7. Model Explanation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../7_model_explanation/classical.html">Explaining “Classical” Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../7_model_explanation/black_box.html">Black Boxes</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../8_complex_models/index.html">8. Complex Models: from Ensembles to Deep Learning</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../8_complex_models/ensembles.html">From Ensembles to Deep Learning</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../9_examples/index.html">9. Scientific Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../9_examples/pain_signature.html">The Neurologic Pain Signature</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../9_examples/registered_model.html">A Pre-registered Model, and the Price of Honesty</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../9_examples/wrong_target.html">The Model That Was Accurate and Wrong</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/pni-lab/predmod_lecture/master?urlpath=tree/contents/3_cross_validation/train_test.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/pni-lab/predmod_lecture/blob/master/contents/3_cross_validation/train_test.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="initThebeSBT()"
+  class="btn btn-sm btn-launch-thebe dropdown-item"
+  title="Launch Thebe"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="btn__text-container">Live Code</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/pni-lab/predmod_lecture" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pni-lab/predmod_lecture/edit/master/contents/3_cross_validation/train_test.ipynb" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pni-lab/predmod_lecture/issues/new?title=Issue%20on%20page%20%2F3_cross_validation/train_test.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/3_cross_validation/train_test.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Training and Test Sets</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up">Setting up</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#three-models">Three models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing-on-unseen-data">Testing on unseen data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-complexity-curve">The complexity curve</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-cost-of-a-test-set">The cost of a test set</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="training-and-test-sets">
+<h1>Training and Test Sets<a class="headerlink" href="#training-and-test-sets" title="Link to this heading">#</a></h1>
+<p>We ended <a class="reference internal" href="../2_linear_models/practice_linear_models.html"><span class="std std-doc">chapter 2</span></a> with a problem: the error a
+model makes on the data it was fitted to can be driven to zero by adding predictors, whether or
+not those predictors mean anything. That number cannot be used to judge a model.</p>
+<p>The way out is almost embarrassingly simple. If we want to know how well a model predicts data it
+has never seen, we should show it data it has never seen.</p>
+<section id="setting-up">
+<h2>Setting up<a class="headerlink" href="#setting-up" title="Link to this heading">#</a></h2>
+<p>We take 160 participants and split them into two halves of 80: one for <em>training</em>, one for
+<em>testing</em>. Because mean age drifts substantially across the file (see
+<a class="reference internal" href="../1_python_basics/data_frames.html"><span class="std std-doc">chapter 1</span></a>), the shuffle is what makes these two halves
+comparable — without it we would be testing on a systematically older group and calling the
+difference “overfitting”.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LinearRegression</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">mean_absolute_error</span>
+
+<span class="n">DATA_URL</span> <span class="o">=</span> <span class="s2">"https://raw.githubusercontent.com/pni-lab/predmod_lecture/master/ex_data/IXI/ixi.csv"</span>
+
+<span class="n">ixi</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_URL</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">TARGET</span> <span class="o">=</span> <span class="s1">'Age'</span>
+<span class="n">FEATURES</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ixi</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">'_volume'</span><span class="p">)]</span>
+
+<span class="n">train</span> <span class="o">=</span> <span class="n">ixi</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">80</span><span class="p">]</span>
+<span class="n">test</span> <span class="o">=</span> <span class="n">ixi</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">80</span><span class="p">:</span><span class="mi">160</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'train: n=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">train</span><span class="p">)</span><span class="si">}</span><span class="s1">, mean age </span><span class="si">{</span><span class="n">train</span><span class="p">[</span><span class="n">TARGET</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'test : n=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">test</span><span class="p">)</span><span class="si">}</span><span class="s1">, mean age </span><span class="si">{</span><span class="n">test</span><span class="p">[</span><span class="n">TARGET</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>train: n=80, mean age 47.6
+test : n=80, mean age 48.2
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference external" href="https://scikit-learn.org/stable/">Scikit-learn</a> is the standard package for “classical” machine
+learning in python, with excellent documentation and a very active community. From here on it
+does most of the work. Its <code class="docutils literal notranslate"><span class="pre">LinearRegression</span></code> is a minimal implementation, tuned for use inside
+larger pipelines — it does not even give you p-values. We will not miss them.</p>
+</div>
+<p>Everything is measured against the same baseline as before: predicting the mean age of the
+training set for everybody.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">baseline_prediction</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">TARGET</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="n">baseline_train</span> <span class="o">=</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">train</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">train</span><span class="p">),</span> <span class="n">baseline_prediction</span><span class="p">))</span>
+<span class="n">baseline_test</span> <span class="o">=</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">test</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">test</span><span class="p">),</span> <span class="n">baseline_prediction</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'baseline MAE on train: </span><span class="si">{</span><span class="n">baseline_train</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> years'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'baseline MAE on test : </span><span class="si">{</span><span class="n">baseline_test</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> years'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>baseline MAE on train: 13.55 years
+baseline MAE on test : 16.86 years
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="three-models">
+<h2>Three models<a class="headerlink" href="#three-models" title="Link to this heading">#</a></h2>
+<p><strong>Model 1</strong> uses a single predictor, the volume of the right superior frontal cortex. Note that
+it is fitted on the training set only.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">one_feature</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'rh_superiorfrontal_volume'</span><span class="p">]</span>
+
+<span class="n">model_1</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">train</span><span class="p">[</span><span class="n">one_feature</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">train</span><span class="p">[</span><span class="n">TARGET</span><span class="p">])</span>
+
+<span class="n">mae_1_train</span> <span class="o">=</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">train</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span> <span class="n">model_1</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">train</span><span class="p">[</span><span class="n">one_feature</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'model 1, MAE on train: </span><span class="si">{</span><span class="n">mae_1_train</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> years'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>model 1, MAE on train: 10.55 years
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Model 2</strong> uses all 68 regions — the model that looked so impressive in chapter 2.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model_2</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">train</span><span class="p">[</span><span class="n">FEATURES</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">train</span><span class="p">[</span><span class="n">TARGET</span><span class="p">])</span>
+
+<span class="n">mae_2_train</span> <span class="o">=</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">train</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span> <span class="n">model_2</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">train</span><span class="p">[</span><span class="n">FEATURES</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'model 2, MAE on train: </span><span class="si">{</span><span class="n">mae_2_train</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> years'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>model 2, MAE on train: 2.48 years
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Model 3</strong> is our control: 68 random numbers per participant, guaranteed to know nothing about
+anybody’s age. We generate them for all 160 participants at once and split them the same way, so
+that the model can later be tested on random features it has not seen either.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">noise</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">160</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">FEATURES</span><span class="p">))),</span>
+                     <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">'noise_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">'</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">FEATURES</span><span class="p">))])</span>
+<span class="n">noise_train</span> <span class="o">=</span> <span class="n">noise</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">80</span><span class="p">]</span>
+<span class="n">noise_test</span> <span class="o">=</span> <span class="n">noise</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">80</span><span class="p">:</span><span class="mi">160</span><span class="p">]</span>
+
+<span class="n">model_3</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">noise_train</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">train</span><span class="p">[</span><span class="n">TARGET</span><span class="p">])</span>
+
+<span class="n">mae_3_train</span> <span class="o">=</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">train</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span> <span class="n">model_3</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">noise_train</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'model 3, MAE on train: </span><span class="si">{</span><span class="n">mae_3_train</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> years'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>model 3, MAE on train: 4.97 years
+</pre></div>
+</div>
+</div>
+</div>
+<p>The familiar picture: on the training data, the two complex models crush the simple one, and pure
+noise does about as well as real anatomy. Now for the moment of truth.</p>
+</section>
+<section id="testing-on-unseen-data">
+<h2>Testing on unseen data<a class="headerlink" href="#testing-on-unseen-data" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mae_1_test</span> <span class="o">=</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">test</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span> <span class="n">model_1</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test</span><span class="p">[</span><span class="n">one_feature</span><span class="p">]))</span>
+<span class="n">mae_2_test</span> <span class="o">=</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">test</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span> <span class="n">model_2</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test</span><span class="p">[</span><span class="n">FEATURES</span><span class="p">]))</span>
+<span class="n">mae_3_test</span> <span class="o">=</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">test</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span> <span class="n">model_3</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">noise_test</span><span class="p">))</span>
+
+<span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">'model'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'1: one region'</span><span class="p">,</span> <span class="s1">'1: one region'</span><span class="p">,</span>
+              <span class="s1">'2: all 68 regions'</span><span class="p">,</span> <span class="s1">'2: all 68 regions'</span><span class="p">,</span>
+              <span class="s1">'3: 68 random numbers'</span><span class="p">,</span> <span class="s1">'3: 68 random numbers'</span><span class="p">],</span>
+    <span class="s1">'sample'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'train'</span><span class="p">,</span> <span class="s1">'test'</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="s1">'MAE'</span><span class="p">:</span> <span class="p">[</span><span class="n">mae_1_train</span><span class="p">,</span> <span class="n">mae_1_test</span><span class="p">,</span> <span class="n">mae_2_train</span><span class="p">,</span> <span class="n">mae_2_test</span><span class="p">,</span> <span class="n">mae_3_train</span><span class="p">,</span> <span class="n">mae_3_test</span><span class="p">],</span>
+<span class="p">})</span>
+<span class="n">results</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>model</th>
+      <th>sample</th>
+      <th>MAE</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1: one region</td>
+      <td>train</td>
+      <td>10.55</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1: one region</td>
+      <td>test</td>
+      <td>12.09</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2: all 68 regions</td>
+      <td>train</td>
+      <td>2.48</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2: all 68 regions</td>
+      <td>test</td>
+      <td>30.77</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>3: 68 random numbers</td>
+      <td>train</td>
+      <td>4.97</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>3: 68 random numbers</td>
+      <td>test</td>
+      <td>46.14</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">'model'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">'MAE'</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">'sample'</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">results</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">baseline_test</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">'--'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'0.4'</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="o">-</span><span class="mf">0.45</span><span class="p">,</span> <span class="n">baseline_test</span> <span class="o">+</span> <span class="mf">0.6</span><span class="p">,</span> <span class="s1">'baseline: predict the mean age'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'0.4'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">'mean absolute error (years)'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">''</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/10c6c68cfd0cb3c9d4cad9cec4e285fef967b6883e6280d90fa708623fb7c5b5.png" src="../_images/10c6c68cfd0cb3c9d4cad9cec4e285fef967b6883e6280d90fa708623fb7c5b5.png" />
+</div>
+</div>
+<p>Read that figure slowly, because it contains most of the message of this book.</p>
+<ul class="simple">
+<li><p><strong>Model 1</strong>, the humble one-predictor model, does almost as well on the test set as on the
+training set. It learned something small and real, and that something transfers.</p></li>
+<li><p><strong>Model 2</strong> was more than four times better than model 1 on the training data — and on the test
+data it is <em>worse than predicting the mean age of everybody</em>. All of its apparent superiority
+was memorization. Not merely useless: actively harmful.</p></li>
+<li><p><strong>Model 3</strong>, which by construction knows nothing, is catastrophic on the test set, missing by
+decades. Its training error was never a measure of knowledge at all.</p></li>
+</ul>
+<aside class="margin sidebar">
+<p class="sidebar-title">Worse than nothing</p>
+<p>A model can be <em>worse</em> than the trivial baseline on new data, and badly overfitted models usually
+are. Having fitted meaningless coefficients to noise, it applies them confidently to the next
+person — and confidently wrong is worse than admitting you do not know.</p>
+</aside>
+<p>The gap between the light and dark bars is the amount of overfitting. It is not a small
+correction; for model 2 it is the entire result.</p>
+</section>
+<section id="the-complexity-curve">
+<h2>The complexity curve<a class="headerlink" href="#the-complexity-curve" title="Link to this heading">#</a></h2>
+<p>Let’s watch this happen continuously rather than in three snapshots, by increasing the number of
+predictors one at a time and tracking the error on both samples.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># we keep looking at the same region first, so that the curve below starts from the model we have</span>
+<span class="c1"># just fitted, and then adds the other 67 in a fixed order</span>
+<span class="n">ORDERED_FEATURES</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'rh_superiorfrontal_volume'</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">FEATURES</span> <span class="k">if</span> <span class="n">f</span> <span class="o">!=</span> <span class="s1">'rh_superiorfrontal_volume'</span><span class="p">]</span>
+
+<span class="n">n_features</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">FEATURES</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">train_curve</span><span class="p">,</span> <span class="n">test_curve</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">n_features</span><span class="p">:</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="n">ORDERED_FEATURES</span><span class="p">[:</span><span class="n">k</span><span class="p">]</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">train</span><span class="p">[</span><span class="n">columns</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">train</span><span class="p">[</span><span class="n">TARGET</span><span class="p">])</span>
+    <span class="n">train_curve</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">train</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">train</span><span class="p">[</span><span class="n">columns</span><span class="p">])))</span>
+    <span class="n">test_curve</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">test</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test</span><span class="p">[</span><span class="n">columns</span><span class="p">])))</span>
+
+<span class="n">best_k</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">test_curve</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">n_features</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="n">train_curve</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'training set (data the model saw)'</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">n_features</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="n">test_curve</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'test set (unseen data)'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">baseline_test</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">'--'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'0.6'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">best_k</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">':'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'0.4'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">best_k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">test_curve</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.8</span><span class="p">,</span> <span class="sa">f</span><span class="s1">'best on test: </span><span class="si">{</span><span class="n">best_k</span><span class="si">}</span><span class="s1"> predictors'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'0.4'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">'number of predictors (model complexity)'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">'mean absolute error (years)'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'best test MAE </span><span class="si">{</span><span class="nb">min</span><span class="p">(</span><span class="n">test_curve</span><span class="p">)</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> years with </span><span class="si">{</span><span class="n">best_k</span><span class="si">}</span><span class="s1"> predictors '</span>
+      <span class="sa">f</span><span class="s1">'(training MAE there: </span><span class="si">{</span><span class="n">train_curve</span><span class="p">[</span><span class="n">best_k</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">)'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/379d7d1bbd632c68acdda7e71776a4763e0d1777c18132bcaa2c467d81b2c698.png" src="../_images/379d7d1bbd632c68acdda7e71776a4763e0d1777c18132bcaa2c467d81b2c698.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>best test MAE 11.23 years with 29 predictors (training MAE there: 7.25)
+</pre></div>
+</div>
+</div>
+</div>
+<p>This picture is worth committing to memory, because every method in the rest of the book is an
+attempt to find the bottom of that valley.</p>
+<p>The training error (blue) falls essentially without limit: more complexity buys a better fit to
+the data at hand. The test error (orange) does something quite different. It hardly moves for the
+first handful of predictors — those regions are so correlated with the one we started from that
+they add almost nothing — then drifts down into a broad, bumpy valley around 25 to 30 predictors,
+and finally climbs steeply as the model starts fitting noise instead of anatomy. Beyond about 57
+predictors it crosses the baseline for good, and the model is worse than useless.</p>
+<p>Notice how <em>flat and noisy</em> the bottom of the valley is. The exact position of the minimum is
+not a meaningful quantity here: with 80 test participants, the difference between 20 and 30
+predictors is well within the noise of the estimate. What the curve tells us reliably is the
+shape — a range of sensible complexities, with disaster on the right.</p>
+<p>The two regimes have names. To the left of the minimum the model is <strong>underfitting</strong>: too rigid to
+use the information available. To the right it is <strong>overfitting</strong>: flexible enough to memorize.
+The minimum is the <em>sweet spot</em>, and its location depends on how much data you have and how much
+signal is in it — it cannot be known in advance, it has to be found empirically.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This curve is the practical face of the <strong>bias-variance trade-off</strong>. A model that is too simple is
+wrong in a systematic way no matter how much data it sees (<em>bias</em>); a model that is too flexible
+gives wildly different answers depending on which particular sample it was trained on
+(<em>variance</em>). Prediction error contains both, and they move in opposite directions as complexity
+changes.</p>
+</div>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Exercise 3.1</p>
+<p>Delete <code class="docutils literal notranslate"><span class="pre">.sample(frac=1,</span> <span class="pre">random_state=42).reset_index(drop=True)</span></code> from the loading cell — that is,
+use the data in its original order — and re-run the notebook. What happens to the test errors and
+to the baseline, and how would your interpretation of the figure change?</p>
+<div class="note dropdown admonition">
+<p class="admonition-title">Solution</p>
+<p>Every test error changes, and so does the baseline, because the unshuffled test set is on average
+about five and a half years older than the unshuffled training set. The overfitting gap for model
+2 <em>shrinks</em>,
+which is not good news: two different effects are now mixed into one number, and they happen to
+partly cancel.</p>
+<p>This is more than a technicality. When training and test data differ systematically — different
+scanner, different hospital, different decade — the test error stops being a measure of
+overfitting and becomes a measure of overfitting <em>plus</em> whatever else differs. Both are worth
+measuring, but not through the same number without knowing it. We return to this under the name
+<strong>dataset shift</strong> in <a class="reference internal" href="../6_validity/index.html"><span class="std std-doc">chapter 6</span></a>.</p>
+</div>
+</div>
+<div class="docutils">
+<div class="tip dropdown admonition">
+<p class="admonition-title">Exercise 3.2</p>
+<p>The curve above has a clearly best number of predictors. Why can we not simply report that model
+and its test error as our result?</p>
+<div class="note dropdown admonition">
+<p class="admonition-title">Solution</p>
+<p>Because we chose it <em>by looking at the test set</em>. The moment the test data influences a decision
+about the model, it stops being unseen data, and the error we report for the winner is optimistic
+— we picked the luckiest point on a noisy curve. This is a form of leakage, and it is the subject
+of <a class="reference internal" href="../4_reducing_complexity/leakage.html"><span class="std std-doc">chapter 4</span></a> and
+<a class="reference internal" href="../5_hyperparameter_optimization/index.html"><span class="std std-doc">chapter 5</span></a>. Recognizing the problem here, before you
+have the machinery to solve it, is exactly the right order.</p>
+</div>
+</div>
+</div>
+<div class="docutils">
+<h2 class="rubric" id="doing-the-split-properly">Doing the split properly</h2>
+<p>Splitting by position, as we did, is fine on shuffled data. In practice you would normally let
+scikit-learn do it, which also makes the randomness explicit and reproducible:</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="n">train_auto</span><span class="p">,</span> <span class="n">test_auto</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">ixi</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">160</span><span class="p">],</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'train: n=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">train_auto</span><span class="p">)</span><span class="si">}</span><span class="s1">,  test: n=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">test_auto</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>train: n=80,  test: n=80
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For a classification problem, use <code class="docutils literal notranslate"><span class="pre">stratify=</span></code> so that both halves contain a comparable proportion
+of each class. For data with group structure — several scans per person, several sites — a plain
+random split will put related observations on both sides and quietly inflate your performance;
+scikit-learn’s <a class="reference external" href="https://scikit-learn.org/stable/modules/cross_validation.html#group-cv"><code class="docutils literal notranslate"><span class="pre">GroupShuffleSplit</span></code></a>
+handles that case.</p>
+</div>
+</section>
+<section id="the-cost-of-a-test-set">
+<h2>The cost of a test set<a class="headerlink" href="#the-cost-of-a-test-set" title="Link to this heading">#</a></h2>
+<p>Holding out data for testing is the most direct way to get an honest performance estimate, and
+when the held-out data is genuinely new — a different hospital, a later cohort — it is the
+strongest evidence a predictive model can have.</p>
+<p>But it is expensive. We just spent 80 participants to learn one number, and those 80 participants
+were unavailable for training the model that number describes. In biomedical research, where each
+participant costs real money and real effort, this stings.</p>
+<p><a class="reference internal" href="cv.html"><span class="std std-doc">The next page</span></a> shows how cross-validation lets us have it both ways.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "pni-lab/predmod_lecture",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./3_cross_validation"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">3. Honest Estimates of Predictive Performance</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="cv.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Cross-validation</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up">Setting up</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#three-models">Three models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing-on-unseen-data">Testing on unseen data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-complexity-curve">The complexity curve</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-cost-of-a-test-set">The cost of a test set</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Tamas Spisak
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022-2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

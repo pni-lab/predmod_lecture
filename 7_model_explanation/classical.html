@@ -1,0 +1,1017 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Explaining “Classical” Models &#8212; A Gentle Introduction to Predictive Modelling</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-QPT1100TCY"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
+                gtag('js', new Date());
+                gtag('config', 'G-QPT1100TCY');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
+                gtag('js', new Date());
+                gtag('config', 'G-QPT1100TCY');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '7_model_explanation/classical';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Black Boxes" href="black_box.html" />
+    <link rel="prev" title="7. Model Explanation" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="A Gentle Introduction to Predictive Modelling - Home"/>
+    <img src="../_static/logo.png" class="logo__image only-dark pst-js-only" alt="A Gentle Introduction to Predictive Modelling - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    A Gentle Introduction to Predictive Modelling
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../1_python_basics/index.html">1. Python Basics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../1_python_basics/python_intro.html">Introduction to Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../1_python_basics/data_frames.html">Working with DataFrames</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../2_linear_models/index.html">2. Linear Models and Overfitting</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../2_linear_models/theory_linear_models.html">Linear Models: a Brief Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../2_linear_models/practice_linear_models.html">Linear Models in Action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../2_linear_models/overfitting_ex.html">The First Villain: Overfitting</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../3_cross_validation/index.html">3. Honest Estimates of Predictive Performance</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../3_cross_validation/train_test.html">Training and Test Sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../3_cross_validation/cv.html">Cross-validation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../4_reducing_complexity/index.html">4. Fighting Overfitting: the Advent of Machine Learning</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../4_reducing_complexity/theory_regularization.html">Reducing Complexity: a Brief Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../4_reducing_complexity/practice_regularization.html">Reducing Complexity in Action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../4_reducing_complexity/leakage.html">The Second Villain: Leakage</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../5_hyperparameter_optimization/index.html">5. Hyperparameter Optimization and Nested Cross-validation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../5_hyperparameter_optimization/cross_validation_revisited.html">Cross-validation Revisited</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../5_hyperparameter_optimization/nested_cross_validation.html">Nested Cross-validation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../6_validity/index.html">6. Generalizability, Validity, Fairness</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../6_validity/generalizability.html">Generalizability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../6_validity/validity.html">Validity and Specificity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../6_validity/fairness.html">Fairness</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">7. Model Explanation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Explaining “Classical” Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="black_box.html">Black Boxes</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../8_complex_models/index.html">8. Complex Models: from Ensembles to Deep Learning</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../8_complex_models/ensembles.html">From Ensembles to Deep Learning</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../9_examples/index.html">9. Scientific Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../9_examples/pain_signature.html">The Neurologic Pain Signature</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../9_examples/registered_model.html">A Pre-registered Model, and the Price of Honesty</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../9_examples/wrong_target.html">The Model That Was Accurate and Wrong</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/pni-lab/predmod_lecture/master?urlpath=tree/contents/7_model_explanation/classical.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/pni-lab/predmod_lecture/blob/master/contents/7_model_explanation/classical.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="initThebeSBT()"
+  class="btn btn-sm btn-launch-thebe dropdown-item"
+  title="Launch Thebe"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="btn__text-container">Live Code</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/pni-lab/predmod_lecture" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pni-lab/predmod_lecture/edit/master/contents/7_model_explanation/classical.ipynb" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pni-lab/predmod_lecture/issues/new?title=Issue%20on%20page%20%2F7_model_explanation/classical.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/7_model_explanation/classical.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Explaining “Classical” Models</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1-the-weights-are-not-stable">Problem 1: the weights are not stable</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2-a-weight-is-not-an-importance">Problem 2: a weight is not an importance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-the-coefficients-still-cannot-tell-you">What the coefficients still cannot tell you</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#permutation-importance-asking-the-model-what-it-uses">Permutation importance: asking the model what it uses</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="explaining-classical-models">
+<h1>Explaining “Classical” Models<a class="headerlink" href="#explaining-classical-models" title="Link to this heading">#</a></h1>
+<p>A linear model seems like the easy case for interpretation. The prediction is a weighted sum, the
+weights are right there, and reading off which features matter looks like a matter of sorting a
+list.</p>
+<p>It is not, and the reasons are worth understanding before we get anywhere near a black box —
+because if we cannot correctly interpret a linear model, we have no business claiming to interpret
+a neural network.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ridge</span><span class="p">,</span> <span class="n">Lasso</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">cross_val_predict</span><span class="p">,</span> <span class="n">KFold</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">mean_absolute_error</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.inspection</span><span class="w"> </span><span class="kn">import</span> <span class="n">permutation_importance</span>
+
+<span class="n">DATA_URL</span> <span class="o">=</span> <span class="s2">"https://raw.githubusercontent.com/pni-lab/predmod_lecture/master/ex_data/IXI/ixi.csv"</span>
+
+<span class="n">ixi</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_URL</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">TARGET</span> <span class="o">=</span> <span class="s1">'Age'</span>
+<span class="n">FEATURES</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ixi</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">'_volume'</span><span class="p">)]</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([(</span><span class="s1">'standardize'</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">()),</span> <span class="p">(</span><span class="s1">'regression'</span><span class="p">,</span> <span class="n">Ridge</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mi">100</span><span class="p">))])</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">ixi</span><span class="p">[</span><span class="n">FEATURES</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">ixi</span><span class="p">[</span><span class="n">TARGET</span><span class="p">])</span>
+
+<span class="n">weights</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">named_steps</span><span class="p">[</span><span class="s1">'regression'</span><span class="p">]</span><span class="o">.</span><span class="n">coef_</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">FEATURES</span><span class="p">)</span>
+<span class="n">weights</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>rh_superiorfrontal_volume    -2.469
+rh_frontalpole_volume        -1.950
+lh_superiorfrontal_volume    -1.855
+lh_parsopercularis_volume    -1.752
+rh_parstriangularis_volume   -1.676
+dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+<p>Because the features were standardized first, these coefficients are comparable with each other:
+each is the change in predicted age associated with a one-standard-deviation change in that
+region’s volume, holding the others constant. That is a real advantage over raw coefficients, whose
+size depends on the units of the feature.</p>
+<p>So: are these the regions that matter for ageing?</p>
+<section id="problem-1-the-weights-are-not-stable">
+<h2>Problem 1: the weights are not stable<a class="headerlink" href="#problem-1-the-weights-are-not-stable" title="Link to this heading">#</a></h2>
+<p>Let’s fit the identical model to two random halves of the data and compare.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">half_a</span> <span class="o">=</span> <span class="n">ixi</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">319</span><span class="p">]</span>
+<span class="n">half_b</span> <span class="o">=</span> <span class="n">ixi</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">319</span><span class="p">:]</span>
+
+<span class="n">weights_a</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">half_a</span><span class="p">[</span><span class="n">FEATURES</span><span class="p">],</span> <span class="n">half_a</span><span class="p">[</span><span class="n">TARGET</span><span class="p">])</span>
+                      <span class="o">.</span><span class="n">named_steps</span><span class="p">[</span><span class="s1">'regression'</span><span class="p">]</span><span class="o">.</span><span class="n">coef_</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">FEATURES</span><span class="p">)</span>
+<span class="n">weights_b</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">half_b</span><span class="p">[</span><span class="n">FEATURES</span><span class="p">],</span> <span class="n">half_b</span><span class="p">[</span><span class="n">TARGET</span><span class="p">])</span>
+                      <span class="o">.</span><span class="n">named_steps</span><span class="p">[</span><span class="s1">'regression'</span><span class="p">]</span><span class="o">.</span><span class="n">coef_</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">FEATURES</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'correlation between the two weight vectors: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">weights_a</span><span class="p">,</span><span class="w"> </span><span class="n">weights_b</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'features changing sign between halves     : </span><span class="si">{</span><span class="nb">int</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">weights_a</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">weights_b</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="si">}</span><span class="s1"> of </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">FEATURES</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'strongest 5 regions, half A:'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'   '</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">weights_a</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'strongest 5 regions, half B:'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'   '</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">weights_b</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>correlation between the two weight vectors: 0.67
+features changing sign between halves     : 13 of 68
+
+strongest 5 regions, half A:
+    ['lh_insula_volume', 'lh_parsorbitalis_volume', 'rh_superiorfrontal_volume', 'rh_frontalpole_volume', 'rh_isthmuscingulate_volume']
+strongest 5 regions, half B:
+    ['lh_superiorfrontal_volume', 'rh_parsopercularis_volume', 'lh_parsopercularis_volume', 'lh_insula_volume', 'rh_rostralmiddlefrontal_volume']
+</pre></div>
+</div>
+</div>
+</div>
+<p>Two random halves of the same dataset, the same model, and a substantially different story about
+which regions matter — with many coefficients changing sign outright.</p>
+<p>The cause is collinearity, which we have known about since
+<a class="reference internal" href="../1_python_basics/data_frames.html"><span class="std std-doc">chapter 1</span></a>: regional volumes are strongly correlated with
+one another. When two features carry nearly the same information, the fitting procedure has no
+principled way to divide the credit between them, and small differences in the sample push the
+weight from one to the other. Ridge regression spreads weight across a correlated group, which
+stabilizes <em>predictions</em> but does not make the individual coefficients meaningful. LASSO is worse
+for this purpose: it picks one member of each correlated group and zeroes the rest, so the
+“selected features” can change completely with a handful of participants.</p>
+<aside class="margin sidebar">
+<p class="sidebar-title">A rule worth adopting</p>
+<p>Before interpreting any coefficient, refit the model on random subsamples and look at how much it
+moves. If you would not bet on the sign, do not write a sentence about the direction of the effect.</p>
+</aside>
+</section>
+<section id="problem-2-a-weight-is-not-an-importance">
+<h2>Problem 2: a weight is not an importance<a class="headerlink" href="#problem-2-a-weight-is-not-an-importance" title="Link to this heading">#</a></h2>
+<p>The deeper issue is conceptual, and it is the one most often missed in the neuroimaging literature.</p>
+<p>A predictive model is a <strong>backward model</strong>: it maps measurements to the thing you want to know.
+Its weights answer the question <em>how should I combine these features to reconstruct the target?</em>
+They do not answer <em>which features carry information about the target?</em> — and the two can differ
+dramatically.</p>
+<p>The classic example: a feature may receive a large weight not because it relates to the target, but
+because it captures noise present in <em>other</em> features, which the model needs to subtract. Such a
+<strong>suppressor variable</strong> can have a large coefficient while being completely uncorrelated with the
+target. Conversely, a feature strongly related to the target can get a weight of zero because a
+correlated neighbour already carries the information.</p>
+<p><span class="bibtex-citation" id="id1">Haufe <em>et al.</em> [<a class="reference internal" href="../references.html#id98" title="Stefan Haufe, Frank Meinecke, Kai Görgen, Sven Dähne, John-Dylan Haynes, Benjamin Blankertz, and Felix Bießmann. On the interpretation of weight vectors of linear models in multivariate neuroimaging. NeuroImage, 87:96–110, 2014. doi:10.1016/j.neuroimage.2013.10.067.">30</a>]</span> showed how to convert a backward model into the corresponding
+<strong>forward model</strong> — the pattern that describes how the target is actually expressed in the
+features. For a linear model, the transformation is remarkably simple:</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{A} = \boldsymbol{\Sigma}_X \, \boldsymbol{w} \, \sigma^{-2}_{\hat{y}}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\boldsymbol{\Sigma}_X\)</span> is the covariance matrix of the (standardized) features,
+<span class="math notranslate nohighlight">\(\boldsymbol{w}\)</span> the model weights, and <span class="math notranslate nohighlight">\(\sigma^{2}_{\hat{y}}\)</span> the variance of the model output —
+a scalar, so it rescales the pattern without changing its shape, and we drop it below. The resulting pattern <span class="math notranslate nohighlight">\(\boldsymbol{A}\)</span> is interpretable as
+“how each feature reflects the signal the model extracted” — and it is what should be plotted on a
+brain, not the weights.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">ixi</span><span class="p">[</span><span class="n">FEATURES</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">ixi</span><span class="p">[</span><span class="n">TARGET</span><span class="p">])</span>
+<span class="n">weights</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">named_steps</span><span class="p">[</span><span class="s1">'regression'</span><span class="p">]</span><span class="o">.</span><span class="n">coef_</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">FEATURES</span><span class="p">)</span>
+
+<span class="n">standardized</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">ixi</span><span class="p">[</span><span class="n">FEATURES</span><span class="p">])</span>
+<span class="n">haufe_pattern</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">standardized</span><span class="p">,</span> <span class="n">rowvar</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">@</span> <span class="n">weights</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">FEATURES</span><span class="p">)</span>
+
+<span class="n">univariate</span> <span class="o">=</span> <span class="n">ixi</span><span class="p">[</span><span class="n">FEATURES</span><span class="p">]</span><span class="o">.</span><span class="n">corrwith</span><span class="p">(</span><span class="n">ixi</span><span class="p">[</span><span class="n">TARGET</span><span class="p">])</span>      <span class="c1"># the plain feature-target association</span>
+
+<span class="n">comparison</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'model weight'</span><span class="p">:</span> <span class="n">weights</span><span class="p">,</span>
+                           <span class="s1">'Haufe pattern'</span><span class="p">:</span> <span class="n">haufe_pattern</span><span class="p">,</span>
+                           <span class="s1">'correlation with age'</span><span class="p">:</span> <span class="n">univariate</span><span class="p">})</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">'agreement with the plain feature-target correlation:'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'   raw model weights: r = </span><span class="si">{</span><span class="n">comparison</span><span class="p">[</span><span class="s2">"model weight"</span><span class="p">]</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">univariate</span><span class="p">)</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'   Haufe pattern    : r = </span><span class="si">{</span><span class="n">comparison</span><span class="p">[</span><span class="s2">"Haufe pattern"</span><span class="p">]</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">univariate</span><span class="p">)</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'model weights that have the opposite sign to the feature-target correlation: '</span>
+      <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="nb">int</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">univariate</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="si">}</span><span class="s1"> of </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">FEATURES</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>agreement with the plain feature-target correlation:
+   raw model weights: r = 0.60
+   Haufe pattern    : r = 1.00
+
+model weights that have the opposite sign to the feature-target correlation: 30 of 68
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mf">4.4</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">column</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="p">[</span><span class="s1">'model weight'</span><span class="p">,</span> <span class="s1">'Haufe pattern'</span><span class="p">]):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">comparison</span><span class="p">[</span><span class="s1">'correlation with age'</span><span class="p">],</span> <span class="n">comparison</span><span class="p">[</span><span class="n">column</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'0.7'</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'0.7'</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"region's correlation with age"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">column</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">column</span><span class="si">}</span><span class="s1"> vs. univariate association</span><span class="se">\n</span><span class="s1">'</span>
+                 <span class="sa">f</span><span class="s1">'r = </span><span class="si">{</span><span class="n">comparison</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">univariate</span><span class="p">)</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/8736a7f5ee95903cef2497bf517221b63684f08260537fb580498f6ac4dca782.png" src="../_images/8736a7f5ee95903cef2497bf517221b63684f08260537fb580498f6ac4dca782.png" />
+</div>
+</div>
+<p>The left panel is the map that gets published. The right panel is the one that means something.</p>
+<p>Nearly half of the model’s weights — 30 of 68 — point in the <em>opposite</em> direction to the region’s
+own association with age: regions whose volume declines with age receive a positive weight, and
+vice versa. Read naively, those would be reported as “regions where more volume means an older brain”,
+which is the reverse of the truth. They are suppressors: the model is using them to cancel
+variance it does not want, which is a legitimate thing for a predictor to do and a terrible thing
+to put in a figure.</p>
+<p>The Haufe-transformed pattern lines up with the univariate associations almost exactly (r = 1.00).
+Part of that is exact by construction: the forward pattern <em>is</em>, up to a scale factor, the
+covariance between each feature and the model’s own output <span class="math notranslate nohighlight">\(\hat{y}\)</span>. That it also agrees this
+closely with each feature’s covariance with the <em>true</em> target is an empirical fact about this
+heavily regularized model, not a mathematical identity — a model that predicted badly would show
+the two coming apart.</p>
+<p>That symmetry invites an obvious objection — if the interpretable pattern is essentially the
+univariate associations, why fit a multivariate model at all? Because the two are for different
+jobs. The multivariate model <em>predicts</em>: it combines 68 weak, redundant signals into one estimate
+far better than any single region could. The forward pattern <em>describes</em>: it says where in the
+brain the extracted signal lives. Using the backward weights for the descriptive job is the error;
+the multivariate model has not become unnecessary, it has simply never been the right object to
+read anatomy off.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This applies to every backward model — every classifier and regressor trained to predict from
+measurements. If you have ever plotted the weight map of an SVM or a logistic regression on a brain
+and interpreted the anatomy, this is the correction you needed.</p>
+</div>
+</section>
+<section id="what-the-coefficients-still-cannot-tell-you">
+<h2>What the coefficients still cannot tell you<a class="headerlink" href="#what-the-coefficients-still-cannot-tell-you" title="Link to this heading">#</a></h2>
+<p>Even a properly transformed pattern is a statement about <em>association</em>, not about mechanism. It
+tells you how the target is expressed in your measurements, in this sample, with this
+preprocessing. It does not tell you that the region does anything, that intervening on it would
+change the target, or that it would appear again in a different cohort.</p>
+<p>And it remains entirely compatible with the model being confounded. Our brain-age model is
+substantially driven by total cortical volume (<a class="reference internal" href="../6_validity/validity.html"><span class="std std-doc">chapter 6</span></a>); the
+Haufe pattern shows <em>where</em> that plays out anatomically, but says nothing about whether the
+underlying signal is ageing or head size.</p>
+</section>
+<section id="permutation-importance-asking-the-model-what-it-uses">
+<h2>Permutation importance: asking the model what it uses<a class="headerlink" href="#permutation-importance-asking-the-model-what-it-uses" title="Link to this heading">#</a></h2>
+<p>A different approach sidesteps coefficients entirely: shuffle one feature, see how much worse the
+predictions get. The bigger the damage, the more the model was relying on it. This works for any
+model, which is why we meet it again on <a class="reference internal" href="black_box.html"><span class="std std-doc">the next page</span></a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">half_a</span><span class="p">[</span><span class="n">FEATURES</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">half_a</span><span class="p">[</span><span class="n">TARGET</span><span class="p">])</span>
+<span class="n">importance</span> <span class="o">=</span> <span class="n">permutation_importance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="n">half_b</span><span class="p">[</span><span class="n">FEATURES</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">half_b</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span>
+                                    <span class="n">scoring</span><span class="o">=</span><span class="s1">'neg_mean_absolute_error'</span><span class="p">,</span>
+                                    <span class="n">n_repeats</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">ranked</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">importance</span><span class="o">.</span><span class="n">importances_mean</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">FEATURES</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">'most important regions by permutation importance (years of MAE lost when shuffled):'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ranked</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'largest single importance: </span><span class="si">{</span><span class="n">ranked</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1"> years'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'sum of all importances   : </span><span class="si">{</span><span class="n">ranked</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1"> years'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>most important regions by permutation importance (years of MAE lost when shuffled):
+rh_superiorfrontal_volume    0.576
+lh_parsorbitalis_volume      0.546
+rh_frontalpole_volume        0.466
+lh_parsopercularis_volume    0.336
+lh_insula_volume             0.285
+
+largest single importance: 0.576 years
+sum of all importances   : 6.026 years
+</pre></div>
+</div>
+</div>
+</div>
+<p>Notice how small these numbers are. Shuffling the single most important region costs a fraction of
+a year of accuracy — because 67 correlated regions remain, and they carry much the same
+information. <strong>Permutation importance measures how much a feature is needed <em>given all the
+others</em>, not how much information it carries.</strong> With collinear features, everything looks
+unimportant, and the sum of the individual importances bears no relation to the model’s total
+performance.</p>
+<p>This is not a flaw to be fixed by a better algorithm; it is the correct answer to the question
+being asked. If you want to know whether a region carries information about age, fit a model with
+only that region and cross-validate it. If you want to know whether it adds information beyond the
+others, permutation importance is your tool. These are different questions with different answers,
+and conflating them produces most of the confusion in the literature on feature importance.</p>
+<p>Note too that the individual importances do not add up to anything in particular — they are not a
+decomposition of the model’s performance, and with correlated features they can sum to more or
+less than the model’s total advantage over the baseline.</p>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Exercise 7.1</p>
+<p>Take the region with the highest permutation importance and the region with the <em>lowest</em>, and
+cross-validate a single-feature model with each. Does the ranking survive?</p>
+<div class="note dropdown admonition">
+<p class="admonition-title">Solution</p>
+<p>Often not, and sometimes it reverses. A region can be individually informative and redundant given
+the rest (low permutation importance, good single-feature model), or individually uninformative
+but useful as a suppressor (the opposite). Both “importances” are real; they answer different
+questions.</p>
+</div>
+</div>
+<div class="docutils">
+<div class="tip dropdown admonition">
+<p class="admonition-title">Exercise 7.2</p>
+<p>Repeat the two-halves stability analysis for the Haufe-transformed pattern instead of the raw
+weights. Is it more stable? Why would you expect it to be?</p>
+<div class="note dropdown admonition">
+<p class="admonition-title">Solution</p>
+<p>Considerably more stable. The instability of the weights comes from the arbitrary division of
+credit among correlated features; multiplying by the covariance matrix undoes precisely that
+division, mapping the weights back into the space of observable associations, which are estimated
+far more reliably.</p>
+</div>
+</div>
+</div>
+<div class="docutils">
+<p>Linear models, then, are interpretable only with care, and the naive reading of their coefficients
+is usually wrong. That is worth holding onto when we turn, on
+<a class="reference internal" href="black_box.html"><span class="std std-doc">the next page</span></a>, to models with no coefficients at all.</p>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "pni-lab/predmod_lecture",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./7_model_explanation"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">7. Model Explanation</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="black_box.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Black Boxes</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1-the-weights-are-not-stable">Problem 1: the weights are not stable</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2-a-weight-is-not-an-importance">Problem 2: a weight is not an importance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-the-coefficients-still-cannot-tell-you">What the coefficients still cannot tell you</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#permutation-importance-asking-the-model-what-it-uses">Permutation importance: asking the model what it uses</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Tamas Spisak
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022-2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

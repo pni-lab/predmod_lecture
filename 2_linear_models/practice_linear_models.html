@@ -1,0 +1,1352 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Linear Models in Action &#8212; A Gentle Introduction to Predictive Modelling</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-QPT1100TCY"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
+                gtag('js', new Date());
+                gtag('config', 'G-QPT1100TCY');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
+                gtag('js', new Date());
+                gtag('config', 'G-QPT1100TCY');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '2_linear_models/practice_linear_models';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="The First Villain: Overfitting" href="overfitting_ex.html" />
+    <link rel="prev" title="Linear Models: a Brief Theory" href="theory_linear_models.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="A Gentle Introduction to Predictive Modelling - Home"/>
+    <img src="../_static/logo.png" class="logo__image only-dark pst-js-only" alt="A Gentle Introduction to Predictive Modelling - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    A Gentle Introduction to Predictive Modelling
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../1_python_basics/index.html">1. Python Basics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../1_python_basics/python_intro.html">Introduction to Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../1_python_basics/data_frames.html">Working with DataFrames</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">2. Linear Models and Overfitting</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="theory_linear_models.html">Linear Models: a Brief Theory</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Linear Models in Action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overfitting_ex.html">The First Villain: Overfitting</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../3_cross_validation/index.html">3. Honest Estimates of Predictive Performance</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../3_cross_validation/train_test.html">Training and Test Sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../3_cross_validation/cv.html">Cross-validation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../4_reducing_complexity/index.html">4. Fighting Overfitting: the Advent of Machine Learning</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../4_reducing_complexity/theory_regularization.html">Reducing Complexity: a Brief Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../4_reducing_complexity/practice_regularization.html">Reducing Complexity in Action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../4_reducing_complexity/leakage.html">The Second Villain: Leakage</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../5_hyperparameter_optimization/index.html">5. Hyperparameter Optimization and Nested Cross-validation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../5_hyperparameter_optimization/cross_validation_revisited.html">Cross-validation Revisited</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../5_hyperparameter_optimization/nested_cross_validation.html">Nested Cross-validation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../6_validity/index.html">6. Generalizability, Validity, Fairness</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../6_validity/generalizability.html">Generalizability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../6_validity/validity.html">Validity and Specificity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../6_validity/fairness.html">Fairness</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../7_model_explanation/index.html">7. Model Explanation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../7_model_explanation/classical.html">Explaining “Classical” Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../7_model_explanation/black_box.html">Black Boxes</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../8_complex_models/index.html">8. Complex Models: from Ensembles to Deep Learning</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../8_complex_models/ensembles.html">From Ensembles to Deep Learning</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../9_examples/index.html">9. Scientific Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../9_examples/pain_signature.html">The Neurologic Pain Signature</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../9_examples/registered_model.html">A Pre-registered Model, and the Price of Honesty</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../9_examples/wrong_target.html">The Model That Was Accurate and Wrong</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/pni-lab/predmod_lecture/master?urlpath=tree/contents/2_linear_models/practice_linear_models.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/pni-lab/predmod_lecture/blob/master/contents/2_linear_models/practice_linear_models.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="initThebeSBT()"
+  class="btn btn-sm btn-launch-thebe dropdown-item"
+  title="Launch Thebe"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="btn__text-container">Live Code</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/pni-lab/predmod_lecture" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pni-lab/predmod_lecture/edit/master/contents/2_linear_models/practice_linear_models.ipynb" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pni-lab/predmod_lecture/issues/new?title=Issue%20on%20page%20%2F2_linear_models/practice_linear_models.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/2_linear_models/practice_linear_models.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Linear Models in Action</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-baseline-the-simplest-possible-prediction">A baseline: the simplest possible prediction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#more-predictors">More predictors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-same-experiment-with-nonsense">The same experiment, with nonsense</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-far-does-this-go">How far does this go?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overfitting">Overfitting</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#where-this-leaves-us">Where this leaves us</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="linear-models-in-action">
+<h1>Linear Models in Action<a class="headerlink" href="#linear-models-in-action" title="Link to this heading">#</a></h1>
+<p>Here we put linear models to work on the IXI data, and meet the first villain of predictive
+modelling: <strong>overfitting</strong>.</p>
+<p>We start, as every notebook in this book does, by loading the data, shuffling it with a fixed
+seed (see <a class="reference internal" href="../1_python_basics/data_frames.html"><span class="std std-doc">chapter 1</span></a> for why), and naming the target and
+the features.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">statsmodels.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sm</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">statsmodels.formula.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">smf</span>
+
+<span class="n">DATA_URL</span> <span class="o">=</span> <span class="s2">"https://raw.githubusercontent.com/pni-lab/predmod_lecture/master/ex_data/IXI/ixi.csv"</span>
+
+<span class="n">ixi</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_URL</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">TARGET</span> <span class="o">=</span> <span class="s1">'Age'</span>
+<span class="n">FEATURES</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ixi</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">'_volume'</span><span class="p">)]</span>
+
+<span class="c1"># for this chapter we deliberately work with a small study: 70 participants</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">ixi</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">70</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s1"> participants, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">FEATURES</span><span class="p">)</span><span class="si">}</span><span class="s1"> candidate features'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>70 participants, 68 candidate features
+</pre></div>
+</div>
+</div>
+</div>
+<aside class="margin sidebar">
+<p class="sidebar-title">Why only 70?</p>
+<p>Small samples make the phenomena of this chapter visible to the naked eye. Everything here
+happens at larger sample sizes too — just more slowly, and therefore more insidiously. Most
+biomedical studies are small.</p>
+</aside>
+<section id="a-baseline-the-simplest-possible-prediction">
+<h2>A baseline: the simplest possible prediction<a class="headerlink" href="#a-baseline-the-simplest-possible-prediction" title="Link to this heading">#</a></h2>
+<p>Before building anything, it is worth asking what a <em>trivial</em> prediction achieves. The simplest
+possible guess for someone’s age, if we know nothing about them, is the average age of the group:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="s1">'Age'</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">'age (years)'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">mean_age</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">TARGET</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'mean age: </span><span class="si">{</span><span class="n">mean_age</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1"> years'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/276e7ca9e61efde2407d1343cf2df8b9b3b602319f4d154ca333a66d6f978daf.png" src="../_images/276e7ca9e61efde2407d1343cf2df8b9b3b602319f4d154ca333a66d6f978daf.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>mean age: 48.2 years
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">baseline_predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="n">mean_age</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">mae</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">y_true</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">y_pred</span><span class="p">)))</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">rmse</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">y_true</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">y_pred</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'baseline MAE : </span><span class="si">{</span><span class="n">mae</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span><span class="w"> </span><span class="n">baseline_predictions</span><span class="p">)</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> years'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'baseline RMSE: </span><span class="si">{</span><span class="n">rmse</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span><span class="w"> </span><span class="n">baseline_predictions</span><span class="p">)</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> years'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>baseline MAE : 13.67 years
+baseline RMSE: 15.70 years
+</pre></div>
+</div>
+</div>
+</div>
+<p>Roughly fourteen years off, on average. That is our yardstick: any model worth the name has to
+beat it, and “our model achieves an MAE of 10 years” means nothing until you know what the
+trivial guess achieves on the same data.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Baselines like this are standard practice outside biomedicine. In weather forecasting, the
+benchmark that early models struggled to beat was <em>persistence</em>: predicting that tomorrow will be
+like today. Many published prediction models in the clinical literature are never compared to
+any baseline at all, which makes their performance impossible to judge.</p>
+</div>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Exercise 2.1</p>
+<p>Try <code class="docutils literal notranslate"><span class="pre">df['Age'].mean()</span></code>, <code class="docutils literal notranslate"><span class="pre">df['Age'].median()</span></code> and <code class="docutils literal notranslate"><span class="pre">df.describe()</span></code>. Does predicting the <em>median</em>
+age give a better or worse MAE than predicting the mean? Why?</p>
+<div class="note dropdown admonition">
+<p class="admonition-title">Solution</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">mae</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="n">df</span><span class="p">[</span><span class="n">TARGET</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mae</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="n">df</span><span class="p">[</span><span class="n">TARGET</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">())))</span>
+</pre></div>
+</div>
+<p>The median is usually at least as good, and often better. The reason is worth knowing: the
+constant that minimizes the <em>mean absolute</em> error is the median, while the constant that
+minimizes the <em>squared</em> error is the mean. The error measure you choose changes which prediction
+counts as best — which is exactly why least squares gives you the mean-like answer.</p>
+</div>
+</div>
+<div class="docutils">
+<h2 class="rubric" id="one-predictor">One predictor</h2>
+<p>We can surely do better by using something we know about each person. From
+<a class="reference internal" href="../1_python_basics/data_frames.html"><span class="std std-doc">chapter 1</span></a> we know that cortical volume declines with age
+more or less everywhere. Let’s use one region:</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">'rh_superiorfrontal_volume'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">'Age'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ac3aef86ef0f2861be0cc7b15a243bc662e370b791e4907c31e5429878249616.png" src="../_images/ac3aef86ef0f2861be0cc7b15a243bc662e370b791e4907c31e5429878249616.png" />
+</div>
+</div>
+<p>We fit a linear model with <code class="docutils literal notranslate"><span class="pre">ols</span></code> (ordinary least squares) from
+<a class="reference external" href="https://www.statsmodels.org/">statsmodels</a>. The syntax mirrors R: a formula, then the data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fitted_model</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span><span class="s1">'Age ~ rh_superiorfrontal_volume'</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="n">fitted_model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><table class="simpletable">
+<caption>OLS Regression Results</caption>
+<tr>
+  <th>Dep. Variable:</th>           <td>Age</td>       <th>  R-squared:         </th> <td>   0.305</td>
+</tr>
+<tr>
+  <th>Model:</th>                   <td>OLS</td>       <th>  Adj. R-squared:    </th> <td>   0.294</td>
+</tr>
+<tr>
+  <th>Method:</th>             <td>Least Squares</td>  <th>  F-statistic:       </th> <td>   29.79</td>
+</tr>
+<tr>
+  <th>Date:</th>             <td>Thu, 24 Sep 2026</td> <th>  Prob (F-statistic):</th> <td>7.33e-07</td>
+</tr>
+<tr>
+  <th>Time:</th>                 <td>12:14:24</td>     <th>  Log-Likelihood:    </th> <td> -279.35</td>
+</tr>
+<tr>
+  <th>No. Observations:</th>      <td>    70</td>      <th>  AIC:               </th> <td>   562.7</td>
+</tr>
+<tr>
+  <th>Df Residuals:</th>          <td>    68</td>      <th>  BIC:               </th> <td>   567.2</td>
+</tr>
+<tr>
+  <th>Df Model:</th>              <td>     1</td>      <th>                     </th>     <td> </td>   
+</tr>
+<tr>
+  <th>Covariance Type:</th>      <td>nonrobust</td>    <th>                     </th>     <td> </td>   
+</tr>
+</table>
+<table class="simpletable">
+<tr>
+              <td></td>                 <th>coef</th>     <th>std err</th>      <th>t</th>      <th>P>|t|</th>  <th>[0.025</th>    <th>0.975]</th>  
+</tr>
+<tr>
+  <th>Intercept</th>                 <td>  106.5395</td> <td>   10.807</td> <td>    9.859</td> <td> 0.000</td> <td>   84.975</td> <td>  128.104</td>
+</tr>
+<tr>
+  <th>rh_superiorfrontal_volume</th> <td>   -0.0027</td> <td>    0.000</td> <td>   -5.458</td> <td> 0.000</td> <td>   -0.004</td> <td>   -0.002</td>
+</tr>
+</table>
+<table class="simpletable">
+<tr>
+  <th>Omnibus:</th>       <td> 1.207</td> <th>  Durbin-Watson:     </th> <td>   2.333</td>
+</tr>
+<tr>
+  <th>Prob(Omnibus):</th> <td> 0.547</td> <th>  Jarque-Bera (JB):  </th> <td>   1.270</td>
+</tr>
+<tr>
+  <th>Skew:</th>          <td>-0.276</td> <th>  Prob(JB):          </th> <td>   0.530</td>
+</tr>
+<tr>
+  <th>Kurtosis:</th>      <td> 2.639</td> <th>  Cond. No.          </th> <td>1.50e+05</td>
+</tr>
+</table><br/><br/>Notes:<br/>[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.<br/>[2] The condition number is large, 1.5e+05. This might indicate that there are<br/>strong multicollinearity or other numerical problems.</div></div>
+</div>
+<p>This is the output a “classical” analysis would stop at: a significant negative association,
+with an <span class="math notranslate nohighlight">\(R^2\)</span> telling us how much of the variance in age is explained. Let’s instead pull out
+the coefficients and use them to <em>predict</em>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">beta</span> <span class="o">=</span> <span class="n">fitted_model</span><span class="o">.</span><span class="n">params</span>
+<span class="n">beta</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Intercept                    106.53953
+rh_superiorfrontal_volume     -0.00267
+dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+<p>The coefficients are the <span class="math notranslate nohighlight">\(\beta_0\)</span> and <span class="math notranslate nohighlight">\(\beta_1\)</span> of the equation
+<span class="math notranslate nohighlight">\(y_{i} = \beta_{0} + \beta_{1}x_{i} + \varepsilon_{i}\)</span>, so we can predict the age of a
+hypothetical new participant whose right superior frontal cortex has a volume of 25,000 mm³
+with nothing more than arithmetic:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_new</span> <span class="o">=</span> <span class="mi">25000</span>
+<span class="n">y_hat</span> <span class="o">=</span> <span class="n">beta</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">beta</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">x_new</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'predicted age: </span><span class="si">{</span><span class="n">y_hat</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1"> years'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>predicted age: 39.8 years
+</pre></div>
+</div>
+</div>
+</div>
+<p>Do that for a whole range of volumes and you have drawn the regression line:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">14000</span><span class="p">,</span> <span class="mi">30000</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+<span class="n">y_grid</span> <span class="o">=</span> <span class="n">beta</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">beta</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">x_grid</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">'rh_superiorfrontal_volume'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">'Age'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_grid</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_grid</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'red'</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/74b264525a3e32da91563f930791b38c9794aee7a3d64b90d3a597539f6db538.png" src="../_images/74b264525a3e32da91563f930791b38c9794aee7a3d64b90d3a597539f6db538.png" />
+</div>
+</div>
+<p>Seaborn draws the same thing in one line, with a confidence band:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">'rh_superiorfrontal_volume'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">'Age'</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">line_kws</span><span class="o">=</span><span class="p">{</span><span class="s1">'color'</span><span class="p">:</span> <span class="s1">'red'</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/3ec4a7a4d8015bb12c734f677823a6eb17bc7a7833b1239e9bd3cd665dec39a7.png" src="../_images/3ec4a7a4d8015bb12c734f677823a6eb17bc7a7833b1239e9bd3cd665dec39a7.png" />
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You may have noticed that the predictors are not normally distributed. Normality and the other
+assumptions of linear regression matter a great deal for <em>inference</em> — for p-values and
+confidence intervals to mean what they claim. They are not preconditions for a model to
+<em>predict</em> well. A properly validated predictive model is judged by its errors on unseen data,
+and that judgement does not rest on distributional assumptions. This is one of the genuine
+liberations of the predictive framework, and we will make use of it.</p>
+</div>
+<p>How much did one brain region buy us?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y_hat_all</span> <span class="o">=</span> <span class="n">fitted_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'baseline (mean age)  MAE: </span><span class="si">{</span><span class="n">mae</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span><span class="w"> </span><span class="n">baseline_predictions</span><span class="p">)</span><span class="si">:</span><span class="s1">5.2f</span><span class="si">}</span><span class="s1"> years'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'one-region model     MAE: </span><span class="si">{</span><span class="n">mae</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span><span class="w"> </span><span class="n">y_hat_all</span><span class="p">)</span><span class="si">:</span><span class="s1">5.2f</span><span class="si">}</span><span class="s1"> years'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'one-region model    RMSE: </span><span class="si">{</span><span class="n">rmse</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span><span class="w"> </span><span class="n">y_hat_all</span><span class="p">)</span><span class="si">:</span><span class="s1">5.2f</span><span class="si">}</span><span class="s1"> years'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>baseline (mean age)  MAE: 13.67 years
+one-region model     MAE: 10.77 years
+one-region model    RMSE: 13.09 years
+</pre></div>
+</div>
+</div>
+</div>
+<p>A few years better than the trivial guess. Modest, but real.</p>
+</section>
+<section id="more-predictors">
+<h2>More predictors<a class="headerlink" href="#more-predictors" title="Link to this heading">#</a></h2>
+<p>We have 67 more regions sitting unused. The obvious next move is to add them.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">five_regions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'rh_superiorfrontal_volume'</span><span class="p">,</span> <span class="s1">'lh_bankssts_volume'</span><span class="p">,</span>
+                <span class="s1">'lh_caudalanteriorcingulate_volume'</span><span class="p">,</span> <span class="s1">'lh_caudalmiddlefrontal_volume'</span><span class="p">,</span>
+                <span class="s1">'lh_cuneus_volume'</span><span class="p">]</span>
+
+<span class="n">model_5</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span><span class="s1">'Age ~ '</span> <span class="o">+</span> <span class="s1">' + '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">five_regions</span><span class="p">),</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="n">y_hat_5</span> <span class="o">=</span> <span class="n">model_5</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'five-region model    MAE: </span><span class="si">{</span><span class="n">mae</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span><span class="w"> </span><span class="n">y_hat_5</span><span class="p">)</span><span class="si">:</span><span class="s1">5.2f</span><span class="si">}</span><span class="s1"> years'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>five-region model    MAE: 10.41 years
+</pre></div>
+</div>
+</div>
+</div>
+<p>Better again. So let’s be systematic: add regions one at a time, and watch the error fall.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">fit_and_score</span><span class="p">(</span><span class="n">feature_columns</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Fit OLS on the given columns and return the MAE on the same data."""</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">add_constant</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">feature_columns</span><span class="p">)]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">OLS</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">TARGET</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">mae</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
+
+
+<span class="c1"># a fixed, nested sequence of feature sets: the first k features, for k = 1 ... 68</span>
+<span class="c1"># we keep looking at the same region first, so that the curve below starts from the model we have</span>
+<span class="c1"># just fitted, and then adds the other 67 in a fixed order</span>
+<span class="n">ORDERED_FEATURES</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'rh_superiorfrontal_volume'</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">FEATURES</span> <span class="k">if</span> <span class="n">f</span> <span class="o">!=</span> <span class="s1">'rh_superiorfrontal_volume'</span><span class="p">]</span>
+
+<span class="n">n_features</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">FEATURES</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">mae_real</span> <span class="o">=</span> <span class="p">[</span><span class="n">fit_and_score</span><span class="p">(</span><span class="n">ORDERED_FEATURES</span><span class="p">[:</span><span class="n">k</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">n_features</span><span class="p">]</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">n_features</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="n">mae_real</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">'number of predictors in the model'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">'MAE on the data used for fitting (years)'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">mae</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span> <span class="n">baseline_predictions</span><span class="p">),</span> <span class="n">ls</span><span class="o">=</span><span class="s1">'--'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'0.6'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">mae</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span> <span class="n">baseline_predictions</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.7</span><span class="p">,</span> <span class="s1">'baseline'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'0.5'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'lowest MAE reached: </span><span class="si">{</span><span class="nb">min</span><span class="p">(</span><span class="n">mae_real</span><span class="p">)</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> years'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/9a51daabe4abf683e933d138abc920fbf51163178b44fd6ee5b78f0156abc8d4.png" src="../_images/9a51daabe4abf683e933d138abc920fbf51163178b44fd6ee5b78f0156abc8d4.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>lowest MAE reached: 0.00 years
+</pre></div>
+</div>
+</div>
+</div>
+<p>The error falls steadily, and with all 68 regions in the model it has collapsed to essentially
+zero. Age predicted to within a small fraction of a year from brain structure alone!</p>
+<p>This should worry you. The best published brain-age models — deep networks trained on tens of
+thousands of scans — report mean absolute errors in the region of 3 to 5 years, with
+MAE = 2.71 ± 2.10 among the strongest results <span class="bibtex-citation" id="id1">[<a class="reference internal" href="../references.html#id80" title="Nicola K Dinsdale, Emma Bluemke, Stephen M Smith, Zobair Arya, Diego Vidaurre, Mark Jenkinson, and Ana IL Namburete. Learning patterns of the ageing brain in mri using deep convolutional networks. NeuroImage, 224:117401, 2021.">7</a>]</span>. We have just
+beaten the state of the art with 70 participants and a linear model.</p>
+</section>
+<section id="the-same-experiment-with-nonsense">
+<h2>The same experiment, with nonsense<a class="headerlink" href="#the-same-experiment-with-nonsense" title="Link to this heading">#</a></h2>
+<p>To see what is actually happening, let’s repeat the experiment with predictors that are
+<em>guaranteed</em> to carry no information about age at all: random numbers.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">random_features</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">FEATURES</span><span class="p">))),</span>
+    <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">'noise_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">'</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">FEATURES</span><span class="p">))],</span>
+<span class="p">)</span>
+<span class="n">random_features</span><span class="p">[</span><span class="n">TARGET</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">TARGET</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+<span class="n">mae_random</span> <span class="o">=</span> <span class="p">[</span><span class="n">fit_and_score</span><span class="p">(</span><span class="n">random_features</span><span class="o">.</span><span class="n">columns</span><span class="p">[:</span><span class="n">k</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">random_features</span><span class="p">)</span>
+              <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">n_features</span><span class="p">]</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">n_features</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="n">mae_real</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'68 cortical volumes'</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">n_features</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="n">mae_random</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'68 random numbers'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">'number of predictors in the model'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">'MAE on the data used for fitting (years)'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'lowest MAE with real features  : </span><span class="si">{</span><span class="nb">min</span><span class="p">(</span><span class="n">mae_real</span><span class="p">)</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> years'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'lowest MAE with random features: </span><span class="si">{</span><span class="nb">min</span><span class="p">(</span><span class="n">mae_random</span><span class="p">)</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> years'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/1e94012ff8b0a06dfc322ca198d6e85ac9e0c0e714a6504b61b0a526deb50bd5.png" src="../_images/1e94012ff8b0a06dfc322ca198d6e85ac9e0c0e714a6504b61b0a526deb50bd5.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>lowest MAE with real features  : 0.00 years
+lowest MAE with random features: 2.51 years
+</pre></div>
+</div>
+</div>
+</div>
+<p>Look at what the random curve does. Predictors that cannot possibly know anything about age
+still drive the error down from the 13.7-year baseline to under three years, simply by being
+added to the model. Nothing was learned; the model merely acquired enough free parameters to
+bend itself through the 70 points in front of it.</p>
+<p>The real features do stay below the noise features throughout, and that vertical gap is the one
+part of the picture that reflects genuine information about ageing. But the gap is a <em>small</em>
+fraction of the total drop. Most of what looks like improvement in the left-hand curve is the
+same memorization that produced the right-hand one — and from the fitting error alone, you
+cannot tell the two apart.</p>
+</section>
+<section id="how-far-does-this-go">
+<h2>How far does this go?<a class="headerlink" href="#how-far-does-this-go" title="Link to this heading">#</a></h2>
+<p>We stopped at 68 random predictors only because that is how many brain regions we have. Nothing
+stops us generating more. So let’s draw a fresh, wider set of noise — 69 columns this time — and
+watch what happens as the number of free parameters approaches the number of participants.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># a fresh, wider draw of noise: one column short of one per participant</span>
+<span class="n">more_noise</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)),</span>
+    <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">'noise_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">'</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)],</span>
+<span class="p">)</span>
+<span class="n">more_noise</span><span class="p">[</span><span class="n">TARGET</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">TARGET</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+<span class="n">n_noise</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">))</span>
+<span class="n">mae_more</span> <span class="o">=</span> <span class="p">[</span><span class="n">fit_and_score</span><span class="p">(</span><span class="n">more_noise</span><span class="o">.</span><span class="n">columns</span><span class="p">[:</span><span class="n">k</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">more_noise</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">n_noise</span><span class="p">]</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">n_noise</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="n">mae_more</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'#d62728'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">'--'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'0.4'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">mae_more</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.18</span><span class="p">,</span>
+         <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1"> predictors + intercept</span><span class="se">\n</span><span class="s1">= </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s1"> parameters</span><span class="se">\n</span><span class="s1">= </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s1"> participants'</span><span class="p">,</span>
+         <span class="n">color</span><span class="o">=</span><span class="s1">'0.4'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">'number of random predictors in the model'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">'MAE on the data used for fitting (years)'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/f4f6c05a779ec162d6dd3d1d916c0436058c03562059f394b0c47548ea261ae6.png" src="../_images/f4f6c05a779ec162d6dd3d1d916c0436058c03562059f394b0c47548ea261ae6.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">fit_summary</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""MAE and R-squared of an OLS fit on the first k random predictors."""</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">add_constant</span><span class="p">(</span><span class="n">more_noise</span><span class="p">[</span><span class="n">more_noise</span><span class="o">.</span><span class="n">columns</span><span class="p">[:</span><span class="n">k</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+    <span class="n">fitted</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">OLS</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">TARGET</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+    <span class="n">predictions</span> <span class="o">=</span> <span class="n">fitted</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">'random predictors'</span><span class="p">:</span> <span class="n">k</span><span class="p">,</span>
+            <span class="s1">'free parameters'</span><span class="p">:</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s1">'MAE (years)'</span><span class="p">:</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">mae</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span><span class="w"> </span><span class="n">predictions</span><span class="p">)</span><span class="si">:</span><span class="s1">.6f</span><span class="si">}</span><span class="s1">'</span><span class="p">,</span>
+            <span class="s1">'R-squared'</span><span class="p">:</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">fitted</span><span class="o">.</span><span class="n">rsquared</span><span class="si">:</span><span class="s1">.6f</span><span class="si">}</span><span class="s1">'</span><span class="p">}</span>
+
+
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">fit_summary</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">67</span><span class="p">,</span> <span class="mi">68</span><span class="p">,</span> <span class="mi">69</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>random predictors</th>
+      <th>free parameters</th>
+      <th>MAE (years)</th>
+      <th>R-squared</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>20</td>
+      <td>21</td>
+      <td>11.892333</td>
+      <td>0.180820</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>40</td>
+      <td>41</td>
+      <td>8.596495</td>
+      <td>0.547342</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>60</td>
+      <td>61</td>
+      <td>5.438402</td>
+      <td>0.823156</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>67</td>
+      <td>68</td>
+      <td>2.773354</td>
+      <td>0.948718</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>68</td>
+      <td>69</td>
+      <td>2.770694</td>
+      <td>0.948719</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>69</td>
+      <td>70</td>
+      <td>0.000000</td>
+      <td>1.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>At 69 random predictors — 70 free parameters, for 70 participants — the error does not merely get
+small. It becomes <strong>zero</strong>, and <span class="math notranslate nohighlight">\(R^2\)</span> becomes <strong>1</strong>. The model reproduces every participant’s age
+to the last decimal place, from numbers drawn out of a random number generator. (The printed
+values are zero and one to six decimal places; the residuals are around <span class="math notranslate nohighlight">\(10^{-13}\)</span>, which is
+floating-point arithmetic’s way of writing zero.)</p>
+<p>This is not a numerical curiosity, it is a fact about linear algebra, and it is worth stating
+precisely. The fitted values <span class="math notranslate nohighlight">\(\boldsymbol{X}\boldsymbol{\beta}\)</span> can be any vector in the <em>column
+space</em> of <span class="math notranslate nohighlight">\(\boldsymbol{X}\)</span> — the set of all weighted sums of its columns. With <span class="math notranslate nohighlight">\(n\)</span> observations,
+<span class="math notranslate nohighlight">\(\boldsymbol{y}\)</span> lives in an <span class="math notranslate nohighlight">\(n\)</span>-dimensional space. Once <span class="math notranslate nohighlight">\(\boldsymbol{X}\)</span> has <span class="math notranslate nohighlight">\(n\)</span> linearly
+independent columns, that column space <em>is</em> the whole space, so it contains <span class="math notranslate nohighlight">\(\boldsymbol{y}\)</span> —
+and a <span class="math notranslate nohighlight">\(\boldsymbol{\beta}\)</span> reproducing <span class="math notranslate nohighlight">\(\boldsymbol{y}\)</span> exactly is guaranteed to exist.</p>
+<p>Note what that argument never mentions: the data. It holds for <em>any</em> target vector and <em>any</em>
+predictors. Age, shoe size, lottery numbers; cortical volumes, random noise, the digits of π. A
+model with as many parameters as observations fits everything perfectly, and therefore its
+perfect fit tells you nothing whatsoever.</p>
+<aside class="margin sidebar">
+<p class="sidebar-title">Where inference gives up</p>
+<p>Classical statistics sees this coming. The residual degrees of freedom, <span class="math notranslate nohighlight">\(n - p - 1\)</span>, hit zero at
+exactly the same point: there is no residual variance left to estimate, so standard errors,
+t-values, p-values and F-tests are all undefined. Your software may still print numbers — this is
+one of the places where it is politely lying to you.</p>
+</aside>
+<p>We stopped the curve at 69 predictors, because past that point the perfect fit stops being a
+single answer: with more columns than observations there are <em>infinitely many</em> coefficient
+vectors that reproduce the data exactly, and which one you get depends on the numerical method
+rather than on anything in the data. Software will usually warn you about a rank-deficient design
+matrix here. That regime — far more parameters than observations — is the everyday situation in
+neuroimaging and genomics, and <a class="reference internal" href="../4_reducing_complexity/index.html"><span class="std std-doc">chapter 4</span></a> is about how to
+work in it without pretending the problem away.</p>
+<p>The extreme case is clarifying, but it is not a special case. Every model in the region
+approaching it is doing a milder version of the same thing: spending degrees of freedom to bend
+through the particular points in front of it. The fit gets better, smoothly, all the way up — and
+at no point along that curve does the improvement mean the model has learned anything.</p>
+</section>
+<section id="overfitting">
+<h2>Overfitting<a class="headerlink" href="#overfitting" title="Link to this heading">#</a></h2>
+<p><strong>Overfitting</strong> is what we are looking at: the model is using random variation in the predictors
+to reproduce the particular quirks of the participants in front of it, rather than any
+relationship that holds in general. The more predictors a model has — the more <em>complex</em> it is —
+the more capacity it has to do this, and the smaller the dataset, the less it has to work with
+except quirks.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A helpful, if imperfect, metaphor: the model is <em>memorizing the data</em> rather than <em>learning the
+relationship</em>. A student who has memorized last year’s exam paper will score brilliantly on last
+year’s exam paper.</p>
+</div>
+<p>The more predictors a model has, the more capacity it has to do this — and as we have just seen,
+that capacity reaches its absolute limit when the number of parameters reaches the number of
+observations. What makes overfitting dangerous is not that limit, which is obvious once you have
+seen it, but everything on the way there, which is not.</p>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Exercise 2.2</p>
+<p>The two curves both fall, but the noise curve falls more slowly, and at 68 predictors it stops
+at about 2.5 years while the real one reaches zero. Given that neither number reflects any
+ability to predict, what explains the difference?</p>
+<div class="note dropdown admonition">
+<p class="admonition-title">Solution</p>
+<p>Two things pull in opposite directions.</p>
+<p>The real features genuinely carry information about age, which lowers their curve everywhere —
+that is the effect we <em>want</em>. But they are also highly redundant: regional volumes correlate
+strongly with each other, largely because people differ in overall head size (Exercise 1.5).
+Twenty correlated volumes span far fewer than twenty independent directions, so they give the
+model <em>less</em> freedom to chase noise than twenty independent random variables do.</p>
+<p>You can see the redundancy directly:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">ORDERED_FEATURES</span><span class="p">[:</span><span class="mi">20</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">rowvar</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">random_features</span><span class="p">[</span><span class="n">random_features</span><span class="o">.</span><span class="n">columns</span><span class="p">[:</span><span class="mi">20</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">rowvar</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>So the gap between the curves <em>understates</em> the real information content, because collinearity
+is handicapping the real features in this particular race. That handicap is a nuisance for
+interpreting coefficients — but in <a class="reference internal" href="../4_reducing_complexity/index.html"><span class="std std-doc">chapter 4</span></a> we will turn it
+into an advantage on purpose.</p>
+</div>
+</div>
+<div class="docutils">
+<div class="tip dropdown admonition">
+<p class="admonition-title">Exercise 2.3</p>
+<p>Re-run this notebook with <code class="docutils literal notranslate"><span class="pre">df</span> <span class="pre">=</span> <span class="pre">ixi.iloc[:400]</span></code> instead of the first 70 participants. How far do
+the curves fall now, and where does the “random predictors” curve end up? What does that tell you
+about the relationship between sample size and overfitting?</p>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>One traditional escape from having many predictors is to avoid multivariate modelling entirely:
+fit a separate model per predictor, with target and predictor swapped. This <em>mass univariate</em>
+approach is ubiquitous in, for example, task fMRI. It trades the overfitting problem for a
+<a class="reference external" href="https://en.wikipedia.org/wiki/Multiple_comparisons_problem">multiple comparisons</a> problem, and
+it gives up on combining weak predictors into a strong one — which is precisely what we are
+trying to do.</p>
+</div>
+</section>
+<section id="where-this-leaves-us">
+<h2>Where this leaves us<a class="headerlink" href="#where-this-leaves-us" title="Link to this heading">#</a></h2>
+<p>We cannot judge a model by the error it makes on the data it was fitted to. That number can
+always be driven to zero, and it tells us nothing about whether the model has learned anything.</p>
+<p>On <a class="reference internal" href="overfitting_ex.html"><span class="std std-doc">the next page</span></a> we look at overfitting in some other disguises, so that
+you recognize it in the wild. Then, in <a class="reference internal" href="../3_cross_validation/index.html"><span class="std std-doc">chapter 3</span></a>, we fix the
+measurement problem: how to estimate predictive performance in a way that overfitting cannot
+inflate. <a class="reference internal" href="../4_reducing_complexity/index.html"><span class="std std-doc">Chapter 4</span></a> and
+<a class="reference internal" href="../5_hyperparameter_optimization/index.html"><span class="std std-doc">chapter 5</span></a> then tackle the disease itself, by tuning
+model complexity to the sweet spot between oversimplification and memorization — which is, in
+one sentence, what machine learning is.</p>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Exercise 2.4</p>
+<p>Open this notebook in Colab, load your own dataset, and fit a model with many predictors. Compute
+the error on the data you fitted. Do you believe it?</p>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "pni-lab/predmod_lecture",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./2_linear_models"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="theory_linear_models.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Linear Models: a Brief Theory</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="overfitting_ex.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">The First Villain: Overfitting</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-baseline-the-simplest-possible-prediction">A baseline: the simplest possible prediction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#more-predictors">More predictors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-same-experiment-with-nonsense">The same experiment, with nonsense</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-far-does-this-go">How far does this go?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overfitting">Overfitting</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#where-this-leaves-us">Where this leaves us</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Tamas Spisak
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022-2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

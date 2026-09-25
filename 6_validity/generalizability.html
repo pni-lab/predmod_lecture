@@ -1,0 +1,1106 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Generalizability &#8212; A Gentle Introduction to Predictive Modelling</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-QPT1100TCY"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
+                gtag('js', new Date());
+                gtag('config', 'G-QPT1100TCY');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
+                gtag('js', new Date());
+                gtag('config', 'G-QPT1100TCY');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '6_validity/generalizability';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Validity and Specificity" href="validity.html" />
+    <link rel="prev" title="6. Generalizability, Validity, Fairness" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="A Gentle Introduction to Predictive Modelling - Home"/>
+    <img src="../_static/logo.png" class="logo__image only-dark pst-js-only" alt="A Gentle Introduction to Predictive Modelling - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    A Gentle Introduction to Predictive Modelling
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../1_python_basics/index.html">1. Python Basics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../1_python_basics/python_intro.html">Introduction to Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../1_python_basics/data_frames.html">Working with DataFrames</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../2_linear_models/index.html">2. Linear Models and Overfitting</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../2_linear_models/theory_linear_models.html">Linear Models: a Brief Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../2_linear_models/practice_linear_models.html">Linear Models in Action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../2_linear_models/overfitting_ex.html">The First Villain: Overfitting</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../3_cross_validation/index.html">3. Honest Estimates of Predictive Performance</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../3_cross_validation/train_test.html">Training and Test Sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../3_cross_validation/cv.html">Cross-validation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../4_reducing_complexity/index.html">4. Fighting Overfitting: the Advent of Machine Learning</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../4_reducing_complexity/theory_regularization.html">Reducing Complexity: a Brief Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../4_reducing_complexity/practice_regularization.html">Reducing Complexity in Action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../4_reducing_complexity/leakage.html">The Second Villain: Leakage</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../5_hyperparameter_optimization/index.html">5. Hyperparameter Optimization and Nested Cross-validation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../5_hyperparameter_optimization/cross_validation_revisited.html">Cross-validation Revisited</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../5_hyperparameter_optimization/nested_cross_validation.html">Nested Cross-validation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">6. Generalizability, Validity, Fairness</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Generalizability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="validity.html">Validity and Specificity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fairness.html">Fairness</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../7_model_explanation/index.html">7. Model Explanation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../7_model_explanation/classical.html">Explaining “Classical” Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../7_model_explanation/black_box.html">Black Boxes</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../8_complex_models/index.html">8. Complex Models: from Ensembles to Deep Learning</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../8_complex_models/ensembles.html">From Ensembles to Deep Learning</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../9_examples/index.html">9. Scientific Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../9_examples/pain_signature.html">The Neurologic Pain Signature</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../9_examples/registered_model.html">A Pre-registered Model, and the Price of Honesty</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../9_examples/wrong_target.html">The Model That Was Accurate and Wrong</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/pni-lab/predmod_lecture/master?urlpath=tree/contents/6_validity/generalizability.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/pni-lab/predmod_lecture/blob/master/contents/6_validity/generalizability.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="initThebeSBT()"
+  class="btn btn-sm btn-launch-thebe dropdown-item"
+  title="Launch Thebe"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="btn__text-container">Live Code</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/pni-lab/predmod_lecture" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pni-lab/predmod_lecture/edit/master/contents/6_validity/generalizability.ipynb" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pni-lab/predmod_lecture/issues/new?title=Issue%20on%20page%20%2F6_validity/generalizability.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/6_validity/generalizability.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Generalizability</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#internal-and-external-validation">Internal and external validation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-worked-example-how-large-is-the-gap">A worked example: how large is the gap?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-generalization-fails-a-taxonomy">Why generalization fails: a taxonomy</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#seeing-it-happen">Seeing it happen</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-to-do-about-it">What to do about it</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="generalizability">
+<h1>Generalizability<a class="headerlink" href="#generalizability" title="Link to this heading">#</a></h1>
+<p>By the end of <a class="reference internal" href="../5_hyperparameter_optimization/index.html"><span class="std std-doc">chapter 5</span></a> we had an honest recipe: put
+everything in a pipeline, tune by inner cross-validation, estimate performance by an outer one,
+compare against a baseline. Follow it and the number you report is not inflated by overfitting or
+by leakage.</p>
+<p>It is still not the number you actually care about.</p>
+<p>Cross-validation estimates how well your model predicts <strong>new participants drawn like yours</strong> —
+same scanner, same recruitment, same preprocessing, same decade. The question a clinician asks is
+how well it predicts <em>their</em> patients, in <em>their</em> hospital, next year. That is a different
+question, and the gap between the two is the subject of this chapter.</p>
+<section id="internal-and-external-validation">
+<h2>Internal and external validation<a class="headerlink" href="#internal-and-external-validation" title="Link to this heading">#</a></h2>
+<p>The vocabulary is worth fixing.</p>
+<ul class="simple">
+<li><p><strong>Internal validation</strong> re-uses one dataset: train-test splits, cross-validation, the bootstrap.
+It answers: <em>given data from this distribution, does my procedure produce a model that works on
+more data from this distribution?</em></p></li>
+<li><p><strong>External validation</strong> applies the frozen model to data collected separately — another site,
+another cohort, another time — and answers: <em>does it work over there?</em></p></li>
+</ul>
+<p>Internal validation is cheap and answers a narrow question. External validation is expensive and
+answers the question you actually asked. They are not interchangeable, and — this is the part that
+surprises people — a perfectly executed internal validation does not put an upper bound on how
+badly external validation can go.</p>
+</section>
+<section id="a-worked-example-how-large-is-the-gap">
+<h2>A worked example: how large is the gap?<a class="headerlink" href="#a-worked-example-how-large-is-the-gap" title="Link to this heading">#</a></h2>
+<p>It is rare for a single paper to report both numbers honestly, which is what makes
+<span class="bibtex-citation" id="id1">[<a class="reference internal" href="../references.html#id86" title="Balint Kincses, Katarina Forkmann, Frederik Schlitt, Robert Jan Pawlik, Katharina Schmidt, Dagmar Timmann, Sigrid Elsenbruch, Katja Wiech, Ulrike Bingel, and Tamas Spisak. An externally validated resting-state brain connectivity signature of pain-related learning. Communications Biology, 7(1):875, 2024. doi:10.1038/s42003-024-06574-y.">12</a>]</span> such a useful teaching case. The study asks whether resting-state
+functional connectivity — a five-minute scan in which the participant does nothing — can predict
+how strongly that person learns from pain.</p>
+<p>The methodology is close to the recipe of this book, and in one respect goes beyond it:</p>
+<ul class="simple">
+<li><p>feature selection and hyperparameter tuning inside a <strong>nested</strong> leave-one-participant-out
+cross-validation, so no leakage through the tuning;</p></li>
+<li><p>the final model — ten connections, a fixed regularization strength, and every preprocessing
+parameter — <strong>frozen and publicly pre-registered</strong> before the validation data were analyzed;</p></li>
+<li><p><strong>two independent validation cohorts</strong>, one of which used a different paradigm, different
+personnel and a different pain modality (visceral rather than heat).</p></li>
+</ul>
+<p>The results:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p>correlation between predicted and observed</p></th>
+<th class="head"><p>variance explained</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>discovery sample (n = 25), nested cross-validation</p></td>
+<td><p><strong>r = 0.72</strong></p></td>
+<td><p>~52%</p></td>
+</tr>
+<tr class="row-odd"><td><p>external validation (n = 49, two cohorts)</p></td>
+<td><p><strong>r = 0.34</strong></p></td>
+<td><p><strong>8–12%</strong></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Same model. Same lab. Same scanner. Cross-validated exactly as this book recommends. And roughly
+<strong>five-sixths of the explained variance evaporated</strong> on contact with new data.</p>
+<aside class="margin sidebar">
+<p class="sidebar-title">Which number is in the abstract?</p>
+<p>The external one. The paper leads with 8–12% variance explained rather than with r = 0.72, and
+calls the discrepancy “remarkable” in the discussion. That is the behaviour to imitate: if you
+have both numbers, the honest headline is the one from the data that did not shape the model.</p>
+</aside>
+<p>The authors’ own explanation has two parts, and neither is misconduct. First, cross-validation in
+a small sample is <em>unbiased but highly variable</em>: the estimate is right on average over many
+hypothetical studies, and any one study can land far above the truth by luck — with n = 25, far
+above. Second, even a pre-registered pipeline leaves some analytic flexibility during the
+discovery phase, and flexibility inflates whatever is measured on the data it was exercised on.</p>
+</section>
+<section id="why-generalization-fails-a-taxonomy">
+<h2>Why generalization fails: a taxonomy<a class="headerlink" href="#why-generalization-fails-a-taxonomy" title="Link to this heading">#</a></h2>
+<p>It helps to be specific about <em>what</em> differs between your data and the new data. Write the joint
+distribution as <span class="math notranslate nohighlight">\(P(X, y)\)</span>, and there are three canonical ways for it to move.</p>
+<p><strong>Covariate shift</strong>: <span class="math notranslate nohighlight">\(P(X)\)</span> changes, <span class="math notranslate nohighlight">\(P(y \mid X)\)</span> stays. Your new site scans older participants,
+or uses a different sequence that changes the intensity distribution, but the relationship between
+brain structure and age is the same. This is the mildest case and sometimes correctable.</p>
+<p><strong>Label shift</strong>: <span class="math notranslate nohighlight">\(P(y)\)</span> changes while <span class="math notranslate nohighlight">\(P(X \mid y)\)</span> stays. Your model was developed in a cohort
+where 50% of participants had the disorder, and is deployed where 2% do. People with the disorder
+look the same in both places — but every probability the model outputs is now miscalibrated, and
+the positive predictive value collapses.</p>
+<p><strong>Concept drift</strong>: <span class="math notranslate nohighlight">\(P(y \mid X)\)</span> itself changes. Diagnostic criteria are revised; treatment
+practice changes what the measurement means; a proxy that used to track the target stops tracking
+it. This is the one that no amount of reweighting can fix.</p>
+<p>To these, biomedical data adds a fourth that cuts across all three: <strong>site and scanner effects</strong>.
+Different hardware, sequences and preprocessing produce systematic differences in the features
+themselves, large enough that a model can learn to identify the <em>site</em> and ride that signal — which
+works beautifully until it meets a site it has never seen.</p>
+</section>
+<section id="seeing-it-happen">
+<h2>Seeing it happen<a class="headerlink" href="#seeing-it-happen" title="Link to this heading">#</a></h2>
+<p>We can produce a distribution shift on the IXI data without simulating anything, because the file
+comes with one built in. As we saw in <a class="reference internal" href="../1_python_basics/data_frames.html"><span class="std std-doc">chapter 1</span></a>, the rows
+are ordered such that mean age drifts substantially across the file. Splitting by position rather
+than at random therefore gives us two genuinely different populations — which is exactly what we
+have been carefully avoiding all book, and exactly what we now want.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ridge</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">cross_val_predict</span><span class="p">,</span> <span class="n">KFold</span><span class="p">,</span> <span class="n">learning_curve</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">mean_absolute_error</span>
+
+<span class="n">DATA_URL</span> <span class="o">=</span> <span class="s2">"https://raw.githubusercontent.com/pni-lab/predmod_lecture/master/ex_data/IXI/ixi.csv"</span>
+
+<span class="n">ixi_ordered</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_URL</span><span class="p">)</span>                      <span class="c1"># deliberately NOT shuffled here</span>
+<span class="n">TARGET</span> <span class="o">=</span> <span class="s1">'Age'</span>
+<span class="n">FEATURES</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ixi_ordered</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">'_volume'</span><span class="p">)]</span>
+
+<span class="c1"># two "sites": the first and the last third of the file. Within each site we shuffle, so that the</span>
+<span class="c1"># only thing distinguishing them is which part of the file they came from</span>
+<span class="n">site_a</span> <span class="o">=</span> <span class="n">ixi_ordered</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">210</span><span class="p">]</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">site_b</span> <span class="o">=</span> <span class="n">ixi_ordered</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">210</span><span class="p">:]</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'site A: n=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">site_a</span><span class="p">)</span><span class="si">}</span><span class="s1">, mean age </span><span class="si">{</span><span class="n">site_a</span><span class="p">[</span><span class="n">TARGET</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1"> '</span>
+      <span class="sa">f</span><span class="s1">'(range </span><span class="si">{</span><span class="n">site_a</span><span class="p">[</span><span class="n">TARGET</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">:</span><span class="s1">.0f</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">site_a</span><span class="p">[</span><span class="n">TARGET</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">:</span><span class="s1">.0f</span><span class="si">}</span><span class="s1">)'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'site B: n=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">site_b</span><span class="p">)</span><span class="si">}</span><span class="s1">, mean age </span><span class="si">{</span><span class="n">site_b</span><span class="p">[</span><span class="n">TARGET</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1"> '</span>
+      <span class="sa">f</span><span class="s1">'(range </span><span class="si">{</span><span class="n">site_b</span><span class="p">[</span><span class="n">TARGET</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">:</span><span class="s1">.0f</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">site_b</span><span class="p">[</span><span class="n">TARGET</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">:</span><span class="s1">.0f</span><span class="si">}</span><span class="s1">)'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>site A: n=210, mean age 40.8 (range 20-83)
+site B: n=210, mean age 57.6 (range 25-86)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([(</span><span class="s1">'standardize'</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">()),</span> <span class="p">(</span><span class="s1">'regression'</span><span class="p">,</span> <span class="n">Ridge</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mi">100</span><span class="p">))])</span>
+
+<span class="c1"># internal validation on site A</span>
+<span class="n">internal</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="n">site_a</span><span class="p">[</span><span class="n">FEATURES</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">site_a</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span> <span class="n">cv</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">internal_mae</span> <span class="o">=</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">site_a</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span> <span class="n">internal</span><span class="p">)</span>
+
+<span class="c1"># external validation: freeze the model trained on site A, apply it to site B</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">site_a</span><span class="p">[</span><span class="n">FEATURES</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">site_a</span><span class="p">[</span><span class="n">TARGET</span><span class="p">])</span>
+<span class="n">external</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">site_b</span><span class="p">[</span><span class="n">FEATURES</span><span class="p">])</span>
+<span class="n">external_mae</span> <span class="o">=</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">site_b</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span> <span class="n">external</span><span class="p">)</span>
+
+<span class="n">baseline_a</span> <span class="o">=</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">site_a</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">site_a</span><span class="p">),</span> <span class="n">site_a</span><span class="p">[</span><span class="n">TARGET</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()))</span>
+<span class="n">baseline_b</span> <span class="o">=</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">site_b</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">site_b</span><span class="p">),</span> <span class="n">site_a</span><span class="p">[</span><span class="n">TARGET</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">report</span><span class="p">(</span><span class="n">true</span><span class="p">,</span> <span class="n">predicted</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">baseline</span><span class="p">):</span>
+    <span class="n">true</span><span class="p">,</span> <span class="n">predicted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">true</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">predicted</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">'validation'</span><span class="p">:</span> <span class="n">label</span><span class="p">,</span>
+            <span class="s1">'MAE (years)'</span><span class="p">:</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">true</span><span class="p">,</span> <span class="n">predicted</span><span class="p">),</span>
+            <span class="s1">'baseline MAE'</span><span class="p">:</span> <span class="n">baseline</span><span class="p">,</span>
+            <span class="s1">'correlation r'</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">true</span><span class="p">,</span> <span class="n">predicted</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="s1">'mean signed error'</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">predicted</span> <span class="o">-</span> <span class="n">true</span><span class="p">)}</span>
+
+
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">report</span><span class="p">(</span><span class="n">site_a</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span> <span class="n">internal</span><span class="p">,</span> <span class="s1">'internal (within site A)'</span><span class="p">,</span> <span class="n">baseline_a</span><span class="p">),</span>
+              <span class="n">report</span><span class="p">(</span><span class="n">site_b</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span> <span class="n">external</span><span class="p">,</span> <span class="s1">'external (site A -&gt; site B)'</span><span class="p">,</span> <span class="n">baseline_b</span><span class="p">)])</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>validation</th>
+      <th>MAE (years)</th>
+      <th>baseline MAE</th>
+      <th>correlation r</th>
+      <th>mean signed error</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>internal (within site A)</td>
+      <td>9.36</td>
+      <td>12.44</td>
+      <td>0.62</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>external (site A -&gt; site B)</td>
+      <td>13.64</td>
+      <td>20.30</td>
+      <td>0.67</td>
+      <td>-10.56</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mf">4.4</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="p">(</span><span class="n">true</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+        <span class="n">axes</span><span class="p">,</span>
+        <span class="p">[(</span><span class="n">site_a</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span> <span class="n">internal</span><span class="p">,</span> <span class="s1">'internal: cross-validated within site A'</span><span class="p">),</span>
+         <span class="p">(</span><span class="n">site_b</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span> <span class="n">external</span><span class="p">,</span> <span class="s1">'external: site A model applied to site B'</span><span class="p">)]):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">true</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.45</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+    <span class="n">limits</span> <span class="o">=</span> <span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">95</span><span class="p">]</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">limits</span><span class="p">,</span> <span class="n">limits</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">'--'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'0.5'</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">limits</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">limits</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">'true age (years)'</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="se">\n</span><span class="s1">MAE </span><span class="si">{</span><span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">true</span><span class="p">,</span><span class="w"> </span><span class="n">pred</span><span class="p">)</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> years, '</span>
+                 <span class="sa">f</span><span class="s1">'r = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">true</span><span class="p">,</span><span class="w"> </span><span class="n">pred</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">'predicted age (years)'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/40ca4f9776c07bdaf9b22efc2bd104f2669c37c85f9d719de9295bfcc82939ac.png" src="../_images/40ca4f9776c07bdaf9b22efc2bd104f2669c37c85f9d719de9295bfcc82939ac.png" />
+</div>
+</div>
+<p>Look carefully, because this is not the failure you were expecting.</p>
+<p>The <strong>correlation went up</strong>, from 0.62 to 0.67. By that measure the model generalized <em>better</em> to
+the new site than it did to held-out data from its own. And yet the mean absolute error rose by
+more than four years.</p>
+<p>The mean signed error says what happened: in site A the model is unbiased (0.00 years), and in
+site B it is <strong>10.6 years too low, on average</strong>. It was fitted in a population with a mean age of
+41 and applied to one with a mean age of 58, and it brought its training population’s centre of
+gravity with it. The ordering of participants is preserved — hence the correlation — while every
+individual prediction is wrong in the same direction.</p>
+<p>This is <strong>label shift</strong> in its purest form: <span class="math notranslate nohighlight">\(P(y)\)</span> moved, the age–brain relationship did not. And
+it makes concrete the warning from <a class="reference internal" href="../2_linear_models/theory_linear_models.html"><span class="std std-doc">chapter 2</span></a>: a
+model that is systematically ten years off can still correlate beautifully with the truth. A paper
+reporting only <span class="math notranslate nohighlight">\(r\)</span> would present this as a successful external validation.</p>
+<aside class="margin sidebar">
+<p class="sidebar-title">Report both, always</p>
+<p>Correlation measures whether you ranked people correctly; error measures whether you got their
+values right. Shifts of this kind destroy the second while leaving the first intact. This is also
+why the two baselines differ so much (12.4 versus 20.3 years): site B simply spans a wider spread
+of ages around site A’s mean, so the trivial predictor is worse there too.</p>
+</aside>
+<p>The good news about label shift is that it is the most tractable of the three. Because the <em>shape</em>
+of the relationship survived, a <strong>recalibration</strong> — re-estimating an intercept, or an intercept and
+slope, on a modest number of participants from the new site — recovers most of the loss. The catch
+is that recalibration needs <em>labelled</em> data from the new site, which is precisely what you often do
+not have. And recalibration cannot rescue you from concept drift, where the relationship itself
+has changed.</p>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Exercise 6.1</p>
+<p>Reverse the experiment: train on site B and validate on site A. Is the degradation symmetric?</p>
+<div class="note dropdown admonition">
+<p class="admonition-title">Solution</p>
+<p>It is not. Extrapolation is not symmetric in general: a model trained on a wide age range and
+applied to a narrow one behaves quite differently from the reverse, and which direction hurts more
+depends on where the relationship is steep and how much data supports each region. The practical
+lesson is that “we validated across sites” is not a single property — it matters <em>which</em> site was
+the training one.</p>
+</div>
+</div>
+<div class="docutils">
+<h2 class="rubric" id="how-much-data-is-enough">How much data is enough?</h2>
+<p>One recurring reason models fail to generalize is simply that they were developed on too few
+participants — the RCPL discovery sample was 25. The tool for thinking about this is the
+<strong>learning curve</strong>: performance as a function of training set size.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ixi</span> <span class="o">=</span> <span class="n">ixi_ordered</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>   <span class="c1"># back to honest splits</span>
+
+<span class="n">sizes</span><span class="p">,</span> <span class="n">train_scores</span><span class="p">,</span> <span class="n">test_scores</span> <span class="o">=</span> <span class="n">learning_curve</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="n">ixi</span><span class="p">[</span><span class="n">FEATURES</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">ixi</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span>
+    <span class="n">train_sizes</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">12</span><span class="p">),</span> <span class="n">cv</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span>
+    <span class="n">scoring</span><span class="o">=</span><span class="s1">'neg_mean_absolute_error'</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">train_mae</span> <span class="o">=</span> <span class="o">-</span><span class="n">train_scores</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">test_mae</span> <span class="o">=</span> <span class="o">-</span><span class="n">test_scores</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">test_sd</span> <span class="o">=</span> <span class="n">test_scores</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mf">4.6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sizes</span><span class="p">,</span> <span class="n">train_mae</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">'o'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'training data'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sizes</span><span class="p">,</span> <span class="n">test_mae</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">'o'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'held-out data'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">sizes</span><span class="p">,</span> <span class="n">test_mae</span> <span class="o">-</span> <span class="n">test_sd</span><span class="p">,</span> <span class="n">test_mae</span> <span class="o">+</span> <span class="n">test_sd</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">'number of participants used for training'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">'mean absolute error (years)'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'held-out MAE at n=</span><span class="si">{</span><span class="n">sizes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1">.0f</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">test_mae</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> years'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'held-out MAE at n=</span><span class="si">{</span><span class="n">sizes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s1">.0f</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">test_mae</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> years'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/b094a59cada9d7cd72e135290af99d095da1576947d6acf0cb9eb02ac5b228c7.png" src="../_images/b094a59cada9d7cd72e135290af99d095da1576947d6acf0cb9eb02ac5b228c7.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>held-out MAE at n=25: 11.63 years
+held-out MAE at n=510: 9.76 years
+</pre></div>
+</div>
+</div>
+</div>
+<p>Two things to read off a learning curve.</p>
+<p><strong>Is it still falling?</strong> If the held-out curve has not flattened, more participants would buy more
+accuracy, and your model is data-limited rather than method-limited. Trying a fancier algorithm is
+then usually a worse investment than collecting more data.</p>
+<p><strong>How wide is the band?</strong> The shaded region is the spread across folds. At small training sizes it
+is enormous — which is the RCPL lesson in picture form. A cross-validated estimate from a small
+sample is a draw from a wide distribution, and papers are preferentially written about the lucky
+draws.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the reason behind the sample-size debate in brain-wide association studies. Reported
+brain-behaviour effects were shown to be substantially inflated at the sample sizes typical of the
+field, with replicable effects requiring far larger samples than were customary
+<span class="bibtex-citation" id="id2">[<a class="reference internal" href="../references.html#id87" title="Tamas Spisak, Ulrike Bingel, and Tor D Wager. Multivariate bwas can be replicable with moderate sample sizes. Nature, 615(7951):E4–E7, 2023. doi:10.1038/s41586-023-05745-x.">13</a>]</span>. The argument is not that small studies are dishonest; it is that
+small-sample estimates are <em>variable</em>, and publication selects from the top of a variable
+distribution.</p>
+</div>
+</section>
+<section id="what-to-do-about-it">
+<h2>What to do about it<a class="headerlink" href="#what-to-do-about-it" title="Link to this heading">#</a></h2>
+<p><strong>Validate externally, and say so plainly.</strong> If you have only internal validation, report it as
+internal validation. A model that has never met independent data is a hypothesis. The literature is
+full of what happens when this step is skipped: a widely deployed commercial sepsis-prediction model
+scored an area under the curve of 0.63 at an independent hospital against the 0.76-0.83 claimed by
+its vendor, missing two-thirds of sepsis cases <span class="bibtex-citation" id="id3">[<a class="reference internal" href="../references.html#id96" title="Andrew Wong, Erkin Otles, John P Donnelly, Andrew Krumm, Jeffrey McCullough, Olivia DeTroyer-Cooley, Justin Pestrue, Marie Phillips, Judy Konye, Carleen Penoza, and others. External validation of a widely implemented proprietary sepsis prediction model in hospitalized patients. JAMA Internal Medicine, 181(8):1065–1070, 2021. doi:10.1001/jamainternmed.2021.2626.">14</a>]</span>; and of 62 machine
+learning models for COVID-19 imaging published in the first nine months of the pandemic, a
+systematic review judged that none was fit for clinical use, most often for exactly the
+methodological reasons of chapters 3 to 5 <span class="bibtex-citation" id="id4">[<a class="reference internal" href="../references.html#id95" title="Michael Roberts, Derek Driggs, Matthew Thorpe, Julian Gilbey, Michael Yeung, Stephan Ursprung, Angelica I Aviles-Rivero, Christian Etmann, Cathal McCague, Lucian Beer, and others. Common pitfalls and recommendations for using machine learning to detect and prognosticate for covid-19 using chest radiographs and ct scans. Nature Machine Intelligence, 3(3):199–217, 2021. doi:10.1038/s42256-021-00307-0.">15</a>]</span>.</p>
+<p><strong>Freeze and pre-register the model.</strong> The RCPL “registered model” design — fix every parameter,
+publish it, <em>then</em> collect or unlock the validation data — makes leakage and flexible analysis
+arithmetically impossible rather than merely unlikely.</p>
+<p><strong>Design the splits to match the deployment question.</strong> If your model will be used at a new
+hospital, leave-one-<em>site</em>-out cross-validation estimates the thing you care about, and a random
+split does not. Scikit-learn’s <code class="docutils literal notranslate"><span class="pre">GroupKFold</span></code> and <code class="docutils literal notranslate"><span class="pre">LeaveOneGroupOut</span></code> exist for this.</p>
+<p><strong>Harmonize, then check.</strong> Methods such as ComBat can reduce site effects in the features. They do
+not reliably remove them, and you must verify rather than assume — which is the subject of
+<a class="reference internal" href="validity.html"><span class="std std-doc">the next page</span></a>.</p>
+<p><strong>Report the population, not just the performance.</strong> Age range, sex distribution, scanner,
+sequence, recruitment, inclusion criteria. An MAE without a described population is not
+interpretable, because someone else’s MAE on a narrower cohort will look better for no good
+reason.</p>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Exercise 6.2</p>
+<p>Our site A/site B split confounds two things: the age distribution differs, <em>and</em> the
+participants may have been scanned differently. With the data at hand, can you tell these apart?
+What would you need in order to?</p>
+<div class="note dropdown admonition">
+<p class="admonition-title">Solution</p>
+<p>You cannot, and that is the point. The CSV has no site variable, so scanner differences and age
+differences are perfectly entangled in this split. To separate them you would need the site labels,
+and then either a site-stratified split (equal age distributions across sites) or the conditional
+tests of <a class="reference internal" href="validity.html"><span class="std std-doc">the next page</span></a>. The general lesson: when two explanations for a
+performance drop are confounded by design, no analysis of that dataset can adjudicate between them
+— you need the metadata, and you need it recorded before the fact.</p>
+</div>
+</div>
+<div class="docutils">
+<div class="tip dropdown admonition">
+<p class="admonition-title">Exercise 6.3</p>
+<p>Plot the learning curve for the unregularized <code class="docutils literal notranslate"><span class="pre">LinearRegression</span></code> instead of <code class="docutils literal notranslate"><span class="pre">Ridge(alpha=100)</span></code>.
+At which sample size does the difference between them stop mattering?</p>
+</div>
+</div>
+<p>Generalization asks whether the model still works elsewhere. <a class="reference internal" href="validity.html"><span class="std std-doc">The next page</span></a> asks
+a harder question: whether what it learned was ever the thing you thought it was.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "pni-lab/predmod_lecture",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./6_validity"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">6. Generalizability, Validity, Fairness</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="validity.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Validity and Specificity</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#internal-and-external-validation">Internal and external validation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-worked-example-how-large-is-the-gap">A worked example: how large is the gap?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-generalization-fails-a-taxonomy">Why generalization fails: a taxonomy</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#seeing-it-happen">Seeing it happen</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-to-do-about-it">What to do about it</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Tamas Spisak
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022-2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

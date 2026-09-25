@@ -1,0 +1,1052 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Validity and Specificity &#8212; A Gentle Introduction to Predictive Modelling</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-QPT1100TCY"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
+                gtag('js', new Date());
+                gtag('config', 'G-QPT1100TCY');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
+                gtag('js', new Date());
+                gtag('config', 'G-QPT1100TCY');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '6_validity/validity';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Fairness" href="fairness.html" />
+    <link rel="prev" title="Generalizability" href="generalizability.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="A Gentle Introduction to Predictive Modelling - Home"/>
+    <img src="../_static/logo.png" class="logo__image only-dark pst-js-only" alt="A Gentle Introduction to Predictive Modelling - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    A Gentle Introduction to Predictive Modelling
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../1_python_basics/index.html">1. Python Basics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../1_python_basics/python_intro.html">Introduction to Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../1_python_basics/data_frames.html">Working with DataFrames</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../2_linear_models/index.html">2. Linear Models and Overfitting</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../2_linear_models/theory_linear_models.html">Linear Models: a Brief Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../2_linear_models/practice_linear_models.html">Linear Models in Action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../2_linear_models/overfitting_ex.html">The First Villain: Overfitting</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../3_cross_validation/index.html">3. Honest Estimates of Predictive Performance</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../3_cross_validation/train_test.html">Training and Test Sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../3_cross_validation/cv.html">Cross-validation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../4_reducing_complexity/index.html">4. Fighting Overfitting: the Advent of Machine Learning</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../4_reducing_complexity/theory_regularization.html">Reducing Complexity: a Brief Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../4_reducing_complexity/practice_regularization.html">Reducing Complexity in Action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../4_reducing_complexity/leakage.html">The Second Villain: Leakage</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../5_hyperparameter_optimization/index.html">5. Hyperparameter Optimization and Nested Cross-validation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../5_hyperparameter_optimization/cross_validation_revisited.html">Cross-validation Revisited</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../5_hyperparameter_optimization/nested_cross_validation.html">Nested Cross-validation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">6. Generalizability, Validity, Fairness</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="generalizability.html">Generalizability</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Validity and Specificity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fairness.html">Fairness</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../7_model_explanation/index.html">7. Model Explanation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../7_model_explanation/classical.html">Explaining “Classical” Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../7_model_explanation/black_box.html">Black Boxes</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../8_complex_models/index.html">8. Complex Models: from Ensembles to Deep Learning</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../8_complex_models/ensembles.html">From Ensembles to Deep Learning</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../9_examples/index.html">9. Scientific Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../9_examples/pain_signature.html">The Neurologic Pain Signature</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../9_examples/registered_model.html">A Pre-registered Model, and the Price of Honesty</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../9_examples/wrong_target.html">The Model That Was Accurate and Wrong</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/pni-lab/predmod_lecture/master?urlpath=tree/contents/6_validity/validity.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/pni-lab/predmod_lecture/blob/master/contents/6_validity/validity.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="initThebeSBT()"
+  class="btn btn-sm btn-launch-thebe dropdown-item"
+  title="Launch Thebe"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="btn__text-container">Live Code</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/pni-lab/predmod_lecture" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pni-lab/predmod_lecture/edit/master/contents/6_validity/validity.ipynb" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pni-lab/predmod_lecture/issues/new?title=Issue%20on%20page%20%2F6_validity/validity.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/6_validity/validity.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Validity and Specificity</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#confounding-is-different-here">Confounding is different here</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-partial-confounder-test">The partial confounder test</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#is-our-brain-age-model-measuring-ageing">Is our brain-age model measuring ageing?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#confounder-is-a-scientific-judgement-not-a-statistical-one">“Confounder” is a scientific judgement, not a statistical one</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#turning-the-test-around-positive-validators">Turning the test around: positive validators</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mitigation-is-not-verification">Mitigation is not verification</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specificity-what-does-the-model-not-respond-to">Specificity: what does the model <em>not</em> respond to?</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="validity-and-specificity">
+<h1>Validity and Specificity<a class="headerlink" href="#validity-and-specificity" title="Link to this heading">#</a></h1>
+<p><a class="reference internal" href="generalizability.html"><span class="std std-doc">The previous page</span></a> asked whether a model still works somewhere else. This
+page asks a question that is prior to it, and more uncomfortable: <strong>is the model measuring what you
+think it is measuring?</strong></p>
+<p>A model can cross-validate well, survive external validation, and still be useless — or worse,
+misleading — because the signal it exploits is not the one you meant to study. The classic version
+of this is the horse Clever Hans, who appeared to do arithmetic and was in fact reading his
+questioner’s posture. Clever Hans generalized: he got the right answer with many different
+questioners. He just was not doing arithmetic.</p>
+<p>The machine learning literature calls this <em>shortcut learning</em>, and biomedical data is unusually
+rich in shortcuts: scanner differences, head motion, medication, the time of day patients are
+scanned, the tape marking a wound in a dermatology photograph.</p>
+<section id="confounding-is-different-here">
+<h2>Confounding is different here<a class="headerlink" href="#confounding-is-different-here" title="Link to this heading">#</a></h2>
+<p>You already know what a confounder is from classical statistics: a variable associated with both
+the predictor and the outcome, which can generate a spurious association between them. In
+predictive modelling the problem changes shape, and the change is easy to get wrong.</p>
+<p>The object of interest is no longer a feature–target association but the <strong>model’s output</strong>
+<span class="math notranslate nohighlight">\(\hat{y}\)</span>. And here is the trap: if the confounder <span class="math notranslate nohighlight">\(c\)</span> is genuinely associated with the target
+<span class="math notranslate nohighlight">\(y\)</span> — and confounders usually are, that is what makes them confounders — then a model that is
+<em>completely blind</em> to <span class="math notranslate nohighlight">\(c\)</span> will still produce predictions that correlate with <span class="math notranslate nohighlight">\(c\)</span>, simply because
+the predictions correlate with <span class="math notranslate nohighlight">\(y\)</span> and <span class="math notranslate nohighlight">\(y\)</span> correlates with <span class="math notranslate nohighlight">\(c\)</span> <span class="bibtex-citation" id="id1">[<a class="reference internal" href="../references.html#id85" title="Tamas Spisak. Statistical quantification of confounding bias in machine learning models. GigaScience, 11:giac082, 2022. doi:10.1093/gigascience/giac082.">16</a>]</span>.</p>
+<p>So the obvious check is worthless. Correlating your predictions with the confounder tells you
+almost nothing, because you have no idea how large that correlation <em>should</em> be under a clean
+model. Some association is expected. The question is whether there is <strong>more</strong> association than the
+<span class="math notranslate nohighlight">\(c\)</span>–<span class="math notranslate nohighlight">\(y\)</span> relationship can account for — that is, whether a path from <span class="math notranslate nohighlight">\(c\)</span> to <span class="math notranslate nohighlight">\(\hat{y}\)</span> exists that
+does not go through <span class="math notranslate nohighlight">\(y\)</span>.</p>
+<p>Stated properly, the null hypothesis of “my model is not confounded” is a <strong>conditional
+independence</strong>:</p>
+<div class="math notranslate nohighlight">
+\[
+H_0: \quad \hat{y} \perp\!\!\!\perp c \mid y
+\]</div>
+<aside class="margin sidebar">
+<p class="sidebar-title">Why not partial correlation?</p>
+<p>The natural next thought is to use a conditional analogue of a familiar test — partial correlation,
+or partial Spearman. <span class="bibtex-citation" id="id2">Spisak [<a class="reference internal" href="../references.html#id85" title="Tamas Spisak. Statistical quantification of confounding bias in machine learning models. GigaScience, 11:giac082, 2022. doi:10.1093/gigascience/giac082.">16</a>]</span> shows that these do not provide valid type I
+error control as soon as the conditional distributions involved are slightly non-normal or
+non-linear, which is the normal state of affairs for machine learning predictions.</p>
+</aside>
+</section>
+<section id="the-partial-confounder-test">
+<h2>The partial confounder test<a class="headerlink" href="#the-partial-confounder-test" title="Link to this heading">#</a></h2>
+<p>Testing conditional independence properly is the job of the <code class="docutils literal notranslate"><span class="pre">mlconfound</span></code> package
+<span class="bibtex-citation" id="id3">[<a class="reference internal" href="../references.html#id85" title="Tamas Spisak. Statistical quantification of confounding bias in machine learning models. GigaScience, 11:giac082, 2022. doi:10.1093/gigascience/giac082.">16</a>]</span>. The idea is a <strong>conditional permutation test</strong>
+<span class="bibtex-citation" id="id4">[<a class="reference internal" href="../references.html#id28" title="Thomas B Berrett, Yi Wang, Rina Foygel Barber, and Richard J Samworth. The conditional permutation test for independence while controlling for confounders. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 82(1):175–197, 2020.">17</a>]</span>.</p>
+<p>An ordinary permutation test would shuffle <span class="math notranslate nohighlight">\(c\)</span> freely, which destroys <em>all</em> of its dependencies —
+including its legitimate relationship with <span class="math notranslate nohighlight">\(y\)</span>. That builds the wrong null: “a confounder unrelated
+to anything”. Instead, the conditional permutation test draws permutations of <span class="math notranslate nohighlight">\(c\)</span> that <strong>preserve
+the estimated conditional distribution</strong> <span class="math notranslate nohighlight">\(Q(c \mid y)\)</span>. Each permuted copy is therefore a variable
+with the same relationship to the target as the real confounder, but with no direct path to the
+predictions — which is exactly the null we want. The test statistic is <span class="math notranslate nohighlight">\(R^2(\hat{y}, c)\)</span>, and the
+p-value is the proportion of permuted copies achieving an <span class="math notranslate nohighlight">\(R^2\)</span> at least as extreme as the real one.</p>
+<p>The conditional distribution <span class="math notranslate nohighlight">\(Q(c \mid y)\)</span> is modelled with a generalized additive model
+<span class="bibtex-citation" id="id5">[<a class="reference internal" href="../references.html#id67" title="Trevor Hastie and Robert Tibshirani. Generalized additive models: some applications. Journal of the American Statistical Association, 82(398):371–386, 1987.">18</a>]</span>, so the mean structure can be non-linear. The crucial design decision is what is <em>not</em> modelled: no
+assumption whatsoever is made about the distribution of <span class="math notranslate nohighlight">\(\hat{y}\)</span>, or about how <span class="math notranslate nohighlight">\(\hat{y}\)</span> depends
+on <span class="math notranslate nohighlight">\(y\)</span> and <span class="math notranslate nohighlight">\(c\)</span>. That is what makes the test usable on machine learning output, which is routinely
+non-normal, heteroscedastic and strangely shaped.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Assumptions cannot be avoided entirely — conditional independence testing is provably impossible
+without some <span class="bibtex-citation" id="id6">[<a class="reference internal" href="../references.html#id29" title="Rajen D Shah and Jonas Peters. The hardness of conditional independence testing and the generalised covariance measure. The Annals of Statistics, 48(3):1514–1538, 2020.">19</a>]</span>. The contribution is <em>where they are placed</em>: on the relationship between two observed,
+well-understood variables (<span class="math notranslate nohighlight">\(y\)</span> and <span class="math notranslate nohighlight">\(c\)</span>), rather than on the output of a black box.</p>
+</div>
+</section>
+<section id="is-our-brain-age-model-measuring-ageing">
+<h2>Is our brain-age model measuring ageing?<a class="headerlink" href="#is-our-brain-age-model-measuring-ageing" title="Link to this heading">#</a></h2>
+<p>Let us put our own model on the stand. Throughout this book we have predicted age from 68 regional
+cortical volumes. An obvious candidate confounder is <strong>total cortical volume</strong> — overall brain
+size. People differ in head size for reasons that have nothing to do with ageing, and the cortex
+also shrinks globally with age. If our model is largely reading off “how much cortex is there in
+total”, it is a global atrophy detector wearing a regional-pattern costume.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ridge</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">cross_val_predict</span><span class="p">,</span> <span class="n">KFold</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">mean_absolute_error</span>
+
+<span class="c1"># mlconfound pins an old version of pygam, which calls a SciPy sparse-matrix alias that has since</span>
+<span class="c1"># been removed; restoring it keeps the recommended GAM-based test working on modern SciPy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.sparse</span>
+
+<span class="k">for</span> <span class="n">_matrix_class</span> <span class="ow">in</span> <span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">,</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csc_matrix</span><span class="p">,</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_matrix_class</span><span class="p">,</span> <span class="s1">'A'</span><span class="p">):</span>
+        <span class="n">_matrix_class</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">toarray</span><span class="p">())</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlconfound.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial_confound_test</span><span class="p">,</span> <span class="n">full_confound_test</span>
+
+<span class="n">DATA_URL</span> <span class="o">=</span> <span class="s2">"https://raw.githubusercontent.com/pni-lab/predmod_lecture/master/ex_data/IXI/ixi.csv"</span>
+
+<span class="n">ixi</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_URL</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">TARGET</span> <span class="o">=</span> <span class="s1">'Age'</span>
+<span class="n">FEATURES</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ixi</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">'_volume'</span><span class="p">)]</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([(</span><span class="s1">'standardize'</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">()),</span> <span class="p">(</span><span class="s1">'regression'</span><span class="p">,</span> <span class="n">Ridge</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mi">100</span><span class="p">))])</span>
+<span class="n">predictions</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="n">ixi</span><span class="p">[</span><span class="n">FEATURES</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">ixi</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span> <span class="n">cv</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+
+<span class="n">age</span> <span class="o">=</span> <span class="n">ixi</span><span class="p">[</span><span class="n">TARGET</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">total_volume</span> <span class="o">=</span> <span class="n">ixi</span><span class="p">[</span><span class="n">FEATURES</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>      <span class="c1"># the candidate confounder</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'cross-validated MAE            : </span><span class="si">{</span><span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="w"> </span><span class="n">predictions</span><span class="p">)</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> years'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'correlation predicted vs. true : </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="w"> </span><span class="n">predictions</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'correlation confounder vs. true: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="w"> </span><span class="n">total_volume</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'correlation confounder vs. pred: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">predictions</span><span class="p">,</span><span class="w"> </span><span class="n">total_volume</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>cross-validated MAE            : 9.76 years
+correlation predicted vs. true : 0.713
+correlation confounder vs. true: -0.556
+correlation confounder vs. pred: -0.777
+</pre></div>
+</div>
+</div>
+</div>
+<p>The predictions correlate <strong>−0.78</strong> with total cortical volume — higher, in absolute value, than
+their correlation with age itself (0.71). That looks alarming. But remember the trap: age and
+total volume are themselves correlated at −0.56, so <em>some</em> association between predictions and
+total volume is exactly what an honest model should produce. Is −0.78 more than that?</p>
+<p>This is the question the partial confounder test answers, and it is not one you can answer by
+staring at correlation coefficients.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">partial</span> <span class="o">=</span> <span class="n">partial_confound_test</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">age</span><span class="p">,</span> <span class="n">yhat</span><span class="o">=</span><span class="n">predictions</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">total_volume</span><span class="p">,</span>
+                                <span class="n">num_perms</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">cond_dist_method</span><span class="o">=</span><span class="s1">'gam'</span><span class="p">,</span>
+                                <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'observed  R2(yhat, c) : </span><span class="si">{</span><span class="n">partial</span><span class="o">.</span><span class="n">r2_yhat_c</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'expected under H0     : </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">partial</span><span class="o">.</span><span class="n">expected_r2_yhat_c</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s1">   (5%, 50%, 95% quantiles)'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'p-value               : </span><span class="si">{</span><span class="n">partial</span><span class="o">.</span><span class="n">p</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">   95% CI </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">partial</span><span class="o">.</span><span class="n">p_ci</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>observed  R2(yhat, c) : 0.603
+expected under H0     : [0.123 0.161 0.2  ]   (5%, 50%, 95% quantiles)
+p-value               : 0.0000   95% CI [0.     0.0037]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Under the null hypothesis of an unconfounded model, the expected <span class="math notranslate nohighlight">\(R^2\)</span> between predictions and
+total cortical volume is about <strong>0.16</strong>, and under that null it would very rarely exceed 0.20.
+What we observe is <strong>0.60</strong> — close to four times the expected value — and not one permutation out
+of a thousand came near it. The model’s dependence on total cortical volume
+cannot be explained away by the fact that total volume declines with age.</p>
+<aside class="margin sidebar">
+<p class="sidebar-title">On p = 0</p>
+<p>The p-value is computed as the proportion of permutations at least as extreme as the observation,
+with no continuity correction, so it can come out as exactly zero. Report the confidence interval
+alongside it, or state it as p &lt; 1/1000. And do not mistake a very small p-value for a large
+effect: the effect size here is the gap between 0.60 and 0.16, not the p-value.</p>
+</aside>
+<p>Our brain-age model, in other words, is substantially driven by global brain size. That is a real
+finding about the running example of this entire book, and it took three lines of code.</p>
+</section>
+<section id="confounder-is-a-scientific-judgement-not-a-statistical-one">
+<h2>“Confounder” is a scientific judgement, not a statistical one<a class="headerlink" href="#confounder-is-a-scientific-judgement-not-a-statistical-one" title="Link to this heading">#</a></h2>
+<p>Before we treat this as a disaster, an important qualification. The test tells us that the model’s
+output depends on total cortical volume beyond what the age–volume relationship implies. It does
+<strong>not</strong> tell us whether that is a problem. That depends entirely on what the model is <em>for</em>:</p>
+<ul class="simple">
+<li><p>As a <strong>measure of brain ageing</strong>, global atrophy is not a nuisance — it is arguably the single
+best-established biological correlate of ageing in the brain. A model that uses it is using real
+signal.</p></li>
+<li><p>As a claim that <strong>specific regional patterns</strong> carry information about ageing beyond global
+size, the result is damaging: most of what looks like regional specificity may be global size
+in disguise.</p></li>
+<li><p>As a <strong>clinical biomarker</strong> applied across scanners, it is a warning: head size interacts with
+acquisition and segmentation in ways that differ between sites, so a model leaning this heavily
+on it will be fragile.</p></li>
+</ul>
+<p>Statistics can tell you that a dependence exists and how strong it is. Whether the variable is a
+confounder, a mechanism, or the thing you meant to measure all along is a question about your
+scientific claim, and only you can answer it.</p>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Exercise 6.4</p>
+<p>Test the claim directly: build a model that predicts age from <strong>total cortical volume alone</strong>, and
+compare its cross-validated error with the 68-feature model.</p>
+<div class="note dropdown admonition">
+<p class="admonition-title">Solution</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LinearRegression</span>
+<span class="n">single</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">LinearRegression</span><span class="p">(),</span> <span class="n">X</span><span class="o">=</span><span class="n">total_volume</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="n">age</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">age</span><span class="p">,</span> <span class="n">single</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>One number per participant gets you a surprising distance towards the full model’s performance.
+Whatever the 68 regions add, it is less than the headline error suggests — and the partial
+confounder test told you to expect that before you ran the comparison.</p>
+</div>
+</div>
+<div class="docutils">
+<h2 class="rubric" id="the-full-confounder-test">The full confounder test</h2>
+<p>There is a second question, and it is not the negation of the first: is the model driven
+<strong>exclusively</strong> by the confounder? The <strong>full confounder test</strong> has the complementary null
+hypothesis</p>
+<div class="math notranslate nohighlight">
+\[
+H_0: \quad \hat{y} \perp\!\!\!\perp y \mid c
+\]</div>
+<p>— “the predictions carry nothing about the target that the confounder does not already carry”.
+Here, unusually, <strong>rejecting the null is the good outcome</strong>. A small p-value means your model knows
+something beyond the confounder. Mixing up the direction of these two tests is the single easiest
+mistake to make with this tool.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">full</span> <span class="o">=</span> <span class="n">full_confound_test</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">age</span><span class="p">,</span> <span class="n">yhat</span><span class="o">=</span><span class="n">predictions</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">total_volume</span><span class="p">,</span>
+                          <span class="n">num_perms</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">cond_dist_method</span><span class="o">=</span><span class="s1">'gam'</span><span class="p">,</span>
+                          <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'observed  R2(y, yhat): </span><span class="si">{</span><span class="n">full</span><span class="o">.</span><span class="n">r2_y_yhat</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'expected under H0    : </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">full</span><span class="o">.</span><span class="n">expected_r2_y_yhat</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'p-value              : </span><span class="si">{</span><span class="n">full</span><span class="o">.</span><span class="n">p</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">   (small p = NOT fully explained by the confounder)'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>observed  R2(y, yhat): 0.508
+expected under H0    : [0.152 0.19  0.229]
+p-value              : 0.0000   (small p = NOT fully explained by the confounder)
+</pre></div>
+</div>
+</div>
+</div>
+<p>So the honest summary of our model is: <em>significantly biased by total cortical volume, but not
+reducible to it.</em> Both tests were needed to say that, and neither alone would have.</p>
+</section>
+<section id="turning-the-test-around-positive-validators">
+<h2>Turning the test around: positive validators<a class="headerlink" href="#turning-the-test-around-positive-validators" title="Link to this heading">#</a></h2>
+<p>The same machinery answers a question with the opposite sign. Suppose there is a variable your
+model <strong>should</strong> be related to if it is measuring what you claim — a “positive validator”. In the
+<code class="docutils literal notranslate"><span class="pre">mlconfound</span></code> package this is <code class="docutils literal notranslate"><span class="pre">generalization_test</span></code>, which is the partial confounder test with the
+intent inverted: a small p-value now means the predictions carry information about the validator
+<em>directly</em>, not merely through the target.</p>
+<p>This is how you would test a claim like “our brain-age model is picking up something about
+cognitive decline, not just chronological age” — if you had the cognitive measure. Our dataset has
+no such variable, which is itself a lesson: <strong>the confounders and validators you can test are the
+ones you thought to measure.</strong> Deciding what to record is a study-design decision that no analysis
+can undo afterwards.</p>
+</section>
+<section id="mitigation-is-not-verification">
+<h2>Mitigation is not verification<a class="headerlink" href="#mitigation-is-not-verification" title="Link to this heading">#</a></h2>
+<p>The standard responses to a confounder are to regress it out of the features, or to harmonize
+across sites with a method such as ComBat <span class="bibtex-citation" id="id7">[<a class="reference internal" href="../references.html#id22" title="W Evan Johnson, Cheng Li, and Ariel Rabinovic. Adjusting batch effects in microarray expression data using empirical bayes methods. Biostatistics, 8(1):118–127, 2007.">20</a>, <a class="reference internal" href="../references.html#id48" title="Jean-Philippe Fortin, Nicholas Cullen, Yvette I Sheline, Warren D Taylor, Irem Aselcioglu, Philip A Cook, Phil Adams, Crystal Cooper, Maurizio Fava, Patrick J McGrath, and others. Harmonization of cortical thickness measurements across scanners and sites. Neuroimage, 167:104–120, 2018.">21</a>]</span>. Both are reasonable, both are widely used — and both
+are frequently assumed to have worked rather than checked.</p>
+<p><span class="bibtex-citation" id="id8">Spisak [<a class="reference internal" href="../references.html#id85" title="Tamas Spisak. Statistical quantification of confounding bias in machine learning models. GigaScience, 11:giac082, 2022. doi:10.1093/gigascience/giac082.">16</a>]</span> applies the partial confounder test <em>after</em> mitigation on two
+large neuroimaging datasets, and finds that state-of-the-art approaches can fail: in the ABIDE
+data <span class="bibtex-citation" id="id9">[<a class="reference internal" href="../references.html#id30" title="Adriana Di Martino, Chao-Gan Yan, Qingyang Li, Erin Denio, Francisco X Castellanos, Kaat Alaerts, Jeffrey S Anderson, Michal Assaf, Susan Y Bookheimer, Mirella Dapretto, and others. The autism brain imaging data exchange: towards a large-scale evaluation of the intrinsic brain architecture in autism. Molecular psychiatry, 19(6):659–667, 2014.">22</a>]</span>, imaging-centre bias survived ComBat harmonization (p = 0.009) even though the naive
+correlation looked much improved. In another case, regressing the confounder out of the features
+reduced the model’s actual predictive performance — the mitigation cost real signal.</p>
+<p>The workflow this implies is simple and worth adopting: <strong>mitigate, then test.</strong> Not because
+mitigation is unsound, but because “we applied ComBat” is a description of what you did, not
+evidence of what it achieved.</p>
+</section>
+<section id="specificity-what-does-the-model-not-respond-to">
+<h2>Specificity: what does the model <em>not</em> respond to?<a class="headerlink" href="#specificity-what-does-the-model-not-respond-to" title="Link to this heading">#</a></h2>
+<p>Confounder tests ask whether some known nuisance is driving the model. Specificity asks the
+broader question: does the model respond to the construct you care about, and <em>not</em> to related
+things you do not?</p>
+<p>The best-developed example in neuroimaging is the Neurologic Pain Signature (NPS)
+<span class="bibtex-citation" id="id10">[<a class="reference internal" href="../references.html#id42" title="Tor D Wager, Lauren Y Atlas, Martin A Lindquist, Mathieu Roy, Choong-Wan Woo, and Ethan Kross. An fmri-based neurologic signature of physical pain. New England Journal of Medicine, 368(15):1388–1397, 2013.">23</a>]</span>, a brain pattern trained to predict the intensity of experimentally
+induced pain, which we look at in detail in
+<a class="reference internal" href="../9_examples/pain_signature.html"><span class="std std-doc">chapter 9</span></a>. Its authors did something unusual: having shown it
+predicted pain in independent samples, they went looking for things it should <em>not</em> respond to.</p>
+<ul class="simple">
+<li><p>In the original paper, participants who had recently been through an unwanted breakup viewed
+photographs of the ex-partner. The signature distinguished physical pain from this social pain
+well — and could not distinguish looking at the ex-partner from looking at a friend at better
+than chance.</p></li>
+<li><p>Trained pattern classifiers for physical pain and for social rejection turned out to be
+<strong>uncorrelated</strong> and each performed at chance on the other’s task, even within the very regions
+that had been claimed to represent both <span class="bibtex-citation" id="id11">[<a class="reference internal" href="../references.html#id88" title="Choong-Wan Woo, Leonie Koban, Ethan Kross, Martin A Lindquist, Marie T Banich, Luka Ruzic, Jessica R Andrews-Hanna, and Tor D Wager. Separate neural representations for physical pain and social rejection. Nature Communications, 5:5380, 2014. doi:10.1038/ncomms6380.">24</a>]</span>.</p></li>
+<li><p>The signature does not track <strong>observed</strong> pain in someone else <span class="bibtex-citation" id="id12">[<a class="reference internal" href="../references.html#id89" title="Anjali Krishnan, Choong-Wan Woo, Luke J Chang, Luka Ruzic, Xiaosi Gu, Marina López-Solà, Philip L Jackson, Jesus Pujol, Jin Fan, and Tor D Wager. Somatic and vicarious pain are represented by dissociable multivariate brain patterns. eLife, 5:e15166, 2016. doi:10.7554/eLife.15166.">25</a>]</span>,
+nor picture-induced negative emotion <span class="bibtex-citation" id="id13">[<a class="reference internal" href="../references.html#id90" title="Luke J Chang, Peter J Gianaros, Stephen B Manuck, Anjali Krishnan, and Tor D Wager. A sensitive and specific neural signature for picture-induced negative affect. PLoS Biology, 13(6):e1002180, 2015. doi:10.1371/journal.pbio.1002180.">26</a>]</span>.</p></li>
+</ul>
+<p>That is a serious discriminant-validity programme, of a kind almost no predictive model in the
+biomedical literature receives. And then:</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><span class="bibtex-citation" id="id14">Harrison <em>et al.</em> [<a class="reference internal" href="../references.html#id91" title="Olivia K Harrison, Anja Hayen, Tor D Wager, and Kyle T S Pattinson. Investigating the specificity of the neurologic pain signature against breathlessness and finger opposition. Pain, 162(12):2933–2944, 2021. doi:10.1097/j.pain.0000000000002327.">27</a>]</span> tested the NPS against two conditions nobody had tried:
+breathlessness, and a <strong>finger-opposition motor task</strong>. Breathlessness activated the signature
+(d = 0.90), and the non-aversive motor task activated it more strongly still (d = 1.44) — though
+the study included no painful condition, so no direct comparison against pain was possible. The
+authors — including the signature’s first author — conclude that significant global NPS activity
+alone is not specific to pain.</p>
+</div>
+<p>Read that carefully, because it generalizes far beyond pain. Every specificity test before 2021 had
+compared pain against other <em>aversive or emotional</em> states. Within that set, the specificity was
+real. Nobody had asked whether a person simply moving their fingers would set it off.</p>
+<p><strong>Discriminant validity is only ever as good as the set of alternatives you actually tested
+against.</strong> A model is not “specific”; it is specific <em>relative to the comparisons you ran</em>. When
+you report specificity, report the list — and when you read someone else’s specificity claim, ask
+what is missing from theirs.</p>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Exercise 6.5</p>
+<p>Our model is biased by total cortical volume. Try to fix it: regress total volume out of every
+feature first (fit the regression inside the cross-validation, not outside it), then re-run the
+partial confounder test. Does the bias disappear? What happens to the predictive performance?</p>
+<div class="note dropdown admonition">
+<p class="admonition-title">Solution</p>
+<p>The dependence drops sharply — and so does the model’s accuracy, because a large part of what it
+was using to predict age was global atrophy, which is real signal about ageing. This is the
+“difficult compromise” at the heart of confound mitigation: removing a confounder removes
+everything it shares with the target, including the parts you wanted. There is no setting of this
+dial that is correct for all purposes; there is only a choice that you should make explicitly and
+report.</p>
+</div>
+</div>
+<div class="docutils">
+<div class="tip dropdown admonition">
+<p class="admonition-title">Exercise 6.6</p>
+<p>Write down, for a model you are working on, every variable you would want to run a confounder test
+against. Now mark the ones you actually have recorded. The gap is the honest limit of what you can
+claim.</p>
+</div>
+</div>
+<p>Validity asks whether the model measures the construct. <a class="reference internal" href="fairness.html"><span class="std std-doc">The next page</span></a> asks who it
+works for — and what happens when the construct itself was chosen badly.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "pni-lab/predmod_lecture",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./6_validity"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="generalizability.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Generalizability</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="fairness.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Fairness</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#confounding-is-different-here">Confounding is different here</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-partial-confounder-test">The partial confounder test</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#is-our-brain-age-model-measuring-ageing">Is our brain-age model measuring ageing?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#confounder-is-a-scientific-judgement-not-a-statistical-one">“Confounder” is a scientific judgement, not a statistical one</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#turning-the-test-around-positive-validators">Turning the test around: positive validators</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mitigation-is-not-verification">Mitigation is not verification</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specificity-what-does-the-model-not-respond-to">Specificity: what does the model <em>not</em> respond to?</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Tamas Spisak
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022-2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

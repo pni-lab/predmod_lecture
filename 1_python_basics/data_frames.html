@@ -1,0 +1,1892 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Working with DataFrames &#8212; A Gentle Introduction to Predictive Modelling</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-QPT1100TCY"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
+                gtag('js', new Date());
+                gtag('config', 'G-QPT1100TCY');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
+                gtag('js', new Date());
+                gtag('config', 'G-QPT1100TCY');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '1_python_basics/data_frames';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2. Linear Models and Overfitting" href="../2_linear_models/index.html" />
+    <link rel="prev" title="Introduction to Python" href="python_intro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="A Gentle Introduction to Predictive Modelling - Home"/>
+    <img src="../_static/logo.png" class="logo__image only-dark pst-js-only" alt="A Gentle Introduction to Predictive Modelling - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    A Gentle Introduction to Predictive Modelling
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">1. Python Basics</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="python_intro.html">Introduction to Python</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Working with DataFrames</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../2_linear_models/index.html">2. Linear Models and Overfitting</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../2_linear_models/theory_linear_models.html">Linear Models: a Brief Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../2_linear_models/practice_linear_models.html">Linear Models in Action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../2_linear_models/overfitting_ex.html">The First Villain: Overfitting</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../3_cross_validation/index.html">3. Honest Estimates of Predictive Performance</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../3_cross_validation/train_test.html">Training and Test Sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../3_cross_validation/cv.html">Cross-validation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../4_reducing_complexity/index.html">4. Fighting Overfitting: the Advent of Machine Learning</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../4_reducing_complexity/theory_regularization.html">Reducing Complexity: a Brief Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../4_reducing_complexity/practice_regularization.html">Reducing Complexity in Action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../4_reducing_complexity/leakage.html">The Second Villain: Leakage</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../5_hyperparameter_optimization/index.html">5. Hyperparameter Optimization and Nested Cross-validation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../5_hyperparameter_optimization/cross_validation_revisited.html">Cross-validation Revisited</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../5_hyperparameter_optimization/nested_cross_validation.html">Nested Cross-validation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../6_validity/index.html">6. Generalizability, Validity, Fairness</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../6_validity/generalizability.html">Generalizability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../6_validity/validity.html">Validity and Specificity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../6_validity/fairness.html">Fairness</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../7_model_explanation/index.html">7. Model Explanation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../7_model_explanation/classical.html">Explaining “Classical” Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../7_model_explanation/black_box.html">Black Boxes</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../8_complex_models/index.html">8. Complex Models: from Ensembles to Deep Learning</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../8_complex_models/ensembles.html">From Ensembles to Deep Learning</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../9_examples/index.html">9. Scientific Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../9_examples/pain_signature.html">The Neurologic Pain Signature</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../9_examples/registered_model.html">A Pre-registered Model, and the Price of Honesty</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../9_examples/wrong_target.html">The Model That Was Accurate and Wrong</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/pni-lab/predmod_lecture/master?urlpath=tree/contents/1_python_basics/data_frames.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/pni-lab/predmod_lecture/blob/master/contents/1_python_basics/data_frames.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="initThebeSBT()"
+  class="btn btn-sm btn-launch-thebe dropdown-item"
+  title="Launch Thebe"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="btn__text-container">Live Code</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/pni-lab/predmod_lecture" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pni-lab/predmod_lecture/edit/master/contents/1_python_basics/data_frames.ipynb" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pni-lab/predmod_lecture/issues/new?title=Issue%20on%20page%20%2F1_python_basics/data_frames.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/1_python_basics/data_frames.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Working with DataFrames</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importing-packages">Importing packages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-example-dataset">The example dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#one-thing-to-do-before-anything-else-shuffle">One thing to do before anything else: shuffle</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#slicing-a-data-frame">Slicing a data frame</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting">Plotting</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="working-with-dataframes">
+<h1>Working with DataFrames<a class="headerlink" href="#working-with-dataframes" title="Link to this heading">#</a></h1>
+<p>Now we move onto territory that will feel familiar if you have used R: we import a package, read
+a file, and store its contents in a <em>data frame</em>.</p>
+<section id="importing-packages">
+<h2>Importing packages<a class="headerlink" href="#importing-packages" title="Link to this heading">#</a></h2>
+<p>We import <a class="reference external" href="https://pandas.pydata.org/">pandas</a>, which provides R-like data frames, and give it
+its conventional alias <code class="docutils literal notranslate"><span class="pre">pd</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="the-example-dataset">
+<h2>The example dataset<a class="headerlink" href="#the-example-dataset" title="Link to this heading">#</a></h2>
+<p>Throughout the book we use cortical volume data derived from the publicly available
+<a class="reference external" href="https://brain-development.org/ixi-dataset/">“Information eXtraction from Images” (IXI) dataset</a>.
+The task we set ourselves is a simple and well studied one: <strong>predict a person’s age from the
+shape of their cortex</strong>.</p>
+<aside class="margin sidebar">
+<p class="sidebar-title">License info</p>
+<p>The IXI dataset is made available under the Creative Commons
+<a class="reference external" href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a> license. If you use the IXI data,
+please acknowledge the source.</p>
+</aside>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The anatomical MRI images were processed with <a class="reference external" href="https://surfer.nmr.mgh.harvard.edu/">Freesurfer</a>,
+which segments the cortex into anatomically defined regions and measures each one. For an
+introduction to anatomical MRI analysis, see
+<a class="reference external" href="https://andysbrainbook.readthedocs.io/en/latest/">Andy’s Brain Book</a>.</p>
+</div>
+<p>The table lives in the repository of this book and can be read straight from the web:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DATA_URL</span> <span class="o">=</span> <span class="s2">"https://raw.githubusercontent.com/pni-lab/predmod_lecture/master/ex_data/IXI/ixi.csv"</span>
+
+<span class="n">ixi_as_stored</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_URL</span><span class="p">)</span>
+<span class="n">ixi_as_stored</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ID</th>
+      <th>Age</th>
+      <th>lh_bankssts_volume</th>
+      <th>lh_caudalanteriorcingulate_volume</th>
+      <th>lh_caudalmiddlefrontal_volume</th>
+      <th>lh_cuneus_volume</th>
+      <th>lh_entorhinal_volume</th>
+      <th>lh_fusiform_volume</th>
+      <th>lh_inferiorparietal_volume</th>
+      <th>lh_inferiortemporal_volume</th>
+      <th>...</th>
+      <th>rh_rostralanteriorcingulate_volume</th>
+      <th>rh_rostralmiddlefrontal_volume</th>
+      <th>rh_superiorfrontal_volume</th>
+      <th>rh_superiorparietal_volume</th>
+      <th>rh_superiortemporal_volume</th>
+      <th>rh_supramarginal_volume</th>
+      <th>rh_frontalpole_volume</th>
+      <th>rh_temporalpole_volume</th>
+      <th>rh_transversetemporal_volume</th>
+      <th>rh_insula_volume</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2</td>
+      <td>35.800137</td>
+      <td>2188</td>
+      <td>2368</td>
+      <td>6562</td>
+      <td>2459</td>
+      <td>1561</td>
+      <td>9281</td>
+      <td>14136</td>
+      <td>10797</td>
+      <td>...</td>
+      <td>2555</td>
+      <td>17309</td>
+      <td>21210</td>
+      <td>12291</td>
+      <td>12287</td>
+      <td>10848</td>
+      <td>1033</td>
+      <td>2269</td>
+      <td>1170</td>
+      <td>6915</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>12</td>
+      <td>38.781656</td>
+      <td>2717</td>
+      <td>2626</td>
+      <td>6621</td>
+      <td>3170</td>
+      <td>2835</td>
+      <td>8870</td>
+      <td>14813</td>
+      <td>11961</td>
+      <td>...</td>
+      <td>3260</td>
+      <td>19044</td>
+      <td>24651</td>
+      <td>13871</td>
+      <td>13948</td>
+      <td>11975</td>
+      <td>1100</td>
+      <td>2865</td>
+      <td>1167</td>
+      <td>6941</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>13</td>
+      <td>46.710472</td>
+      <td>2101</td>
+      <td>2488</td>
+      <td>5437</td>
+      <td>2347</td>
+      <td>1859</td>
+      <td>9200</td>
+      <td>16900</td>
+      <td>11675</td>
+      <td>...</td>
+      <td>2682</td>
+      <td>17653</td>
+      <td>23804</td>
+      <td>10977</td>
+      <td>12931</td>
+      <td>15127</td>
+      <td>975</td>
+      <td>2099</td>
+      <td>1032</td>
+      <td>7395</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>14</td>
+      <td>34.236824</td>
+      <td>1925</td>
+      <td>1983</td>
+      <td>5153</td>
+      <td>2497</td>
+      <td>2207</td>
+      <td>7686</td>
+      <td>12786</td>
+      <td>8433</td>
+      <td>...</td>
+      <td>2120</td>
+      <td>15070</td>
+      <td>21001</td>
+      <td>10993</td>
+      <td>10890</td>
+      <td>10453</td>
+      <td>891</td>
+      <td>2122</td>
+      <td>958</td>
+      <td>6063</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>15</td>
+      <td>24.284736</td>
+      <td>2535</td>
+      <td>1802</td>
+      <td>5461</td>
+      <td>2496</td>
+      <td>1875</td>
+      <td>6859</td>
+      <td>14187</td>
+      <td>7897</td>
+      <td>...</td>
+      <td>2825</td>
+      <td>13027</td>
+      <td>21865</td>
+      <td>10651</td>
+      <td>12686</td>
+      <td>11400</td>
+      <td>1185</td>
+      <td>2207</td>
+      <td>1344</td>
+      <td>8218</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>633</th>
+      <td>648</td>
+      <td>47.723477</td>
+      <td>2009</td>
+      <td>2270</td>
+      <td>5439</td>
+      <td>2684</td>
+      <td>1729</td>
+      <td>9029</td>
+      <td>13407</td>
+      <td>10971</td>
+      <td>...</td>
+      <td>3236</td>
+      <td>15464</td>
+      <td>21427</td>
+      <td>11524</td>
+      <td>12869</td>
+      <td>11373</td>
+      <td>814</td>
+      <td>2419</td>
+      <td>1360</td>
+      <td>7423</td>
+    </tr>
+    <tr>
+      <th>634</th>
+      <td>651</td>
+      <td>50.395619</td>
+      <td>1776</td>
+      <td>1532</td>
+      <td>5797</td>
+      <td>2954</td>
+      <td>1992</td>
+      <td>9131</td>
+      <td>13201</td>
+      <td>9005</td>
+      <td>...</td>
+      <td>2146</td>
+      <td>11883</td>
+      <td>18137</td>
+      <td>13668</td>
+      <td>10833</td>
+      <td>8420</td>
+      <td>751</td>
+      <td>2304</td>
+      <td>1010</td>
+      <td>6032</td>
+    </tr>
+    <tr>
+      <th>635</th>
+      <td>652</td>
+      <td>42.989733</td>
+      <td>2315</td>
+      <td>1898</td>
+      <td>6234</td>
+      <td>3285</td>
+      <td>1857</td>
+      <td>10453</td>
+      <td>15412</td>
+      <td>10639</td>
+      <td>...</td>
+      <td>2931</td>
+      <td>16905</td>
+      <td>25113</td>
+      <td>13148</td>
+      <td>14489</td>
+      <td>13440</td>
+      <td>731</td>
+      <td>2725</td>
+      <td>1525</td>
+      <td>7481</td>
+    </tr>
+    <tr>
+      <th>636</th>
+      <td>653</td>
+      <td>46.220397</td>
+      <td>2411</td>
+      <td>2033</td>
+      <td>5808</td>
+      <td>4012</td>
+      <td>2854</td>
+      <td>9723</td>
+      <td>16169</td>
+      <td>12070</td>
+      <td>...</td>
+      <td>2637</td>
+      <td>15636</td>
+      <td>19449</td>
+      <td>13207</td>
+      <td>13480</td>
+      <td>11459</td>
+      <td>1049</td>
+      <td>2855</td>
+      <td>1078</td>
+      <td>7186</td>
+    </tr>
+    <tr>
+      <th>637</th>
+      <td>662</td>
+      <td>41.741273</td>
+      <td>2482</td>
+      <td>1923</td>
+      <td>4686</td>
+      <td>3738</td>
+      <td>1910</td>
+      <td>10996</td>
+      <td>16778</td>
+      <td>10390</td>
+      <td>...</td>
+      <td>3492</td>
+      <td>16781</td>
+      <td>20968</td>
+      <td>13379</td>
+      <td>15787</td>
+      <td>12850</td>
+      <td>1069</td>
+      <td>2521</td>
+      <td>1062</td>
+      <td>7931</td>
+    </tr>
+  </tbody>
+</table>
+<p>638 rows × 70 columns</p>
+</div></div></div>
+</div>
+<p>Each row is a participant and each column is a variable. After the participant <code class="docutils literal notranslate"><span class="pre">ID</span></code> and <code class="docutils literal notranslate"><span class="pre">Age</span></code>
+(in years), there are 68 columns of cortical grey matter volume in mm³: the cortex of each
+hemisphere is divided into 34 regions by the
+<a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2006.01.021">Desikan-Killiany atlas</a>
+<span class="bibtex-citation" id="id1">[<a class="reference internal" href="../references.html#id78" title="Rahul S Desikan, Florent Ségonne, Bruce Fischl, Brian T Quinn, Bradford C Dickerson, Deborah Blacker, Randy L Buckner, Anders M Dale, R Paul Maguire, Bradley T Hyman, Marilyn S Albert, and Ronald J Killiany. An automated labeling system for subdividing the human cerebral cortex on mri scans into gyral based regions of interest. NeuroImage, 31(3):968–980, 2006.">5</a>]</span>, and 34 regions × 2 hemispheres = 68 features. Column names are
+prefixed <code class="docutils literal notranslate"><span class="pre">lh_</span></code> and <code class="docutils literal notranslate"><span class="pre">rh_</span></code> for the left and right hemisphere.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">'participants :'</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ixi_as_stored</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'columns      :'</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ixi_as_stored</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'first four   :'</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">ixi_as_stored</span><span class="o">.</span><span class="n">columns</span><span class="p">[:</span><span class="mi">4</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'last two     :'</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">ixi_as_stored</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>participants : 638
+columns      : 70
+first four   : ['ID', 'Age', 'lh_bankssts_volume', 'lh_caudalanteriorcingulate_volume']
+last two     : ['rh_transversetemporal_volume', 'rh_insula_volume']
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="one-thing-to-do-before-anything-else-shuffle">
+<h2>One thing to do before anything else: shuffle<a class="headerlink" href="#one-thing-to-do-before-anything-else-shuffle" title="Link to this heading">#</a></h2>
+<p>Datasets arrive in some order, and that order is rarely random. Ours is a good example. If we cut
+the table into consecutive blocks of rows and look at each block separately, a pattern appears:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">block</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ixi_as_stored</span><span class="p">))</span> <span class="o">//</span> <span class="mi">80</span>          <span class="c1"># 0, 0, ..., 1, 1, ..., 2, ...</span>
+<span class="n">summary</span> <span class="o">=</span> <span class="n">ixi_as_stored</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">block</span><span class="p">)[</span><span class="s1">'Age'</span><span class="p">]</span><span class="o">.</span><span class="n">agg</span><span class="p">([</span><span class="s1">'count'</span><span class="p">,</span> <span class="s1">'mean'</span><span class="p">,</span> <span class="s1">'std'</span><span class="p">])</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">summary</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">'block of 80 consecutive rows'</span>
+<span class="n">summary</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>count</th>
+      <th>mean</th>
+      <th>std</th>
+    </tr>
+    <tr>
+      <th>block of 80 consecutive rows</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>80</td>
+      <td>35.6</td>
+      <td>12.1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>80</td>
+      <td>41.2</td>
+      <td>15.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>80</td>
+      <td>48.7</td>
+      <td>18.1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>80</td>
+      <td>50.4</td>
+      <td>14.8</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>80</td>
+      <td>56.5</td>
+      <td>12.9</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>80</td>
+      <td>64.4</td>
+      <td>11.9</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>80</td>
+      <td>60.8</td>
+      <td>15.0</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>78</td>
+      <td>48.7</td>
+      <td>15.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>The blocks are not comparable at all. Mean age rises from 36 in the first block to 64 by the
+sixth — a difference of nearly thirty years — before dropping back in the last two. The rows are
+ordered by participant ID rather than at random, and whatever that ordering reflects, it is
+clearly not independent of age. Consecutive rows are therefore not exchangeable.</p>
+<p>This matters enormously for everything we do from <a class="reference internal" href="../3_cross_validation/index.html"><span class="std std-doc">chapter 3</span></a>
+onwards, where we will repeatedly split the data into one part used for building a model and
+another part used for testing it. If we split this file at row 80, we would not be comparing a
+model against <em>fresh data from the same population</em> — we would be comparing it against an older
+population scanned elsewhere. Any drop in performance would then mix two completely different
+phenomena: the model’s failure to generalize, and the fact that the two halves are simply not
+the same kind of data.</p>
+<p>The fix is one line, and we will use it in every notebook of this book:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ixi</span> <span class="o">=</span> <span class="n">ixi_as_stored</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">ixi</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ixi</span><span class="p">))</span> <span class="o">//</span> <span class="mi">80</span><span class="p">)[</span><span class="s1">'Age'</span><span class="p">]</span><span class="o">.</span><span class="n">agg</span><span class="p">([</span><span class="s1">'count'</span><span class="p">,</span> <span class="s1">'mean'</span><span class="p">,</span> <span class="s1">'std'</span><span class="p">])</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>count</th>
+      <th>mean</th>
+      <th>std</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>80</td>
+      <td>47.6</td>
+      <td>15.6</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>80</td>
+      <td>48.2</td>
+      <td>18.6</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>80</td>
+      <td>46.1</td>
+      <td>15.6</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>80</td>
+      <td>53.4</td>
+      <td>16.6</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>80</td>
+      <td>52.5</td>
+      <td>16.5</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>80</td>
+      <td>55.8</td>
+      <td>16.8</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>80</td>
+      <td>51.4</td>
+      <td>18.3</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>78</td>
+      <td>51.5</td>
+      <td>16.3</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">sample(frac=1)</span></code> draws 100% of the rows without replacement — that is, it shuffles them —
+and <code class="docutils literal notranslate"><span class="pre">random_state=42</span></code> fixes the random seed so that you and I get exactly the same shuffle and
+hence exactly the same numbers. <code class="docutils literal notranslate"><span class="pre">reset_index(drop=True)</span></code> renumbers the rows 0, 1, 2, … so that
+row positions and row labels agree again. After shuffling, the blocks are interchangeable.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Shuffling is not a universal cure, and it is not always the right thing to do. If your data has
+genuine group structure — repeated measurements of the same person, several scanners, several
+hospitals — then shuffling <em>hides</em> that structure rather than handling it, and a model evaluated
+on shuffled data can look far better than it will ever be in practice. We come back to this in
+<a class="reference internal" href="../6_validity/index.html"><span class="std std-doc">chapter 6</span></a>; for now, shuffling is what makes our splits honest.</p>
+</div>
+<p>Let us fix two more conventions that most notebooks in this book repeat: the name of the variable
+we want to predict, and the list of variables we predict it from.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">TARGET</span> <span class="o">=</span> <span class="s1">'Age'</span>
+<span class="n">FEATURES</span> <span class="o">=</span> <span class="p">[</span><span class="n">column</span> <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">ixi</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">column</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">'_volume'</span><span class="p">)]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">TARGET</span><span class="p">,</span> <span class="s1">'is predicted from'</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">FEATURES</span><span class="p">),</span> <span class="s1">'features, e.g.:'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">FEATURES</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="s1">'...'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Age is predicted from 68 features, e.g.:
+['lh_bankssts_volume', 'lh_caudalanteriorcingulate_volume', 'lh_caudalmiddlefrontal_volume'] ...
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="slicing-a-data-frame">
+<h2>Slicing a data frame<a class="headerlink" href="#slicing-a-data-frame" title="Link to this heading">#</a></h2>
+<p>A single column is obtained with square brackets, and behaves like a vector:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ixi</span><span class="p">[</span><span class="s1">'Age'</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0      30.688569
+1      25.582478
+2      44.851472
+3      41.327858
+4      70.332649
+         ...    
+633    25.661875
+634    57.221081
+635    59.509925
+636    68.134155
+637    53.670089
+Name: Age, Length: 638, dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+<p>Several columns at once require a <em>list</em> of column names, hence the double square brackets: the
+outer pair is the slicing, the inner pair is the list. <code class="docutils literal notranslate"><span class="pre">.head(n)</span></code> then shows the first <code class="docutils literal notranslate"><span class="pre">n</span></code> rows.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ixi</span><span class="p">[[</span><span class="s1">'ID'</span><span class="p">,</span> <span class="s1">'Age'</span><span class="p">,</span> <span class="s1">'rh_superiorfrontal_volume'</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ID</th>
+      <th>Age</th>
+      <th>rh_superiorfrontal_volume</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>291</td>
+      <td>30.688569</td>
+      <td>22345</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>254</td>
+      <td>25.582478</td>
+      <td>21640</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>44</td>
+      <td>44.851472</td>
+      <td>20431</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>584</td>
+      <td>41.327858</td>
+      <td>25683</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>605</td>
+      <td>70.332649</td>
+      <td>18197</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Rows can be filtered by a condition on any column:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ixi</span><span class="p">[</span><span class="n">ixi</span><span class="p">[</span><span class="s1">'Age'</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">60</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ID</th>
+      <th>Age</th>
+      <th>lh_bankssts_volume</th>
+      <th>lh_caudalanteriorcingulate_volume</th>
+      <th>lh_caudalmiddlefrontal_volume</th>
+      <th>lh_cuneus_volume</th>
+      <th>lh_entorhinal_volume</th>
+      <th>lh_fusiform_volume</th>
+      <th>lh_inferiorparietal_volume</th>
+      <th>lh_inferiortemporal_volume</th>
+      <th>...</th>
+      <th>rh_rostralanteriorcingulate_volume</th>
+      <th>rh_rostralmiddlefrontal_volume</th>
+      <th>rh_superiorfrontal_volume</th>
+      <th>rh_superiorparietal_volume</th>
+      <th>rh_superiortemporal_volume</th>
+      <th>rh_supramarginal_volume</th>
+      <th>rh_frontalpole_volume</th>
+      <th>rh_temporalpole_volume</th>
+      <th>rh_transversetemporal_volume</th>
+      <th>rh_insula_volume</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>4</th>
+      <td>605</td>
+      <td>70.332649</td>
+      <td>2222</td>
+      <td>1775</td>
+      <td>4055</td>
+      <td>2518</td>
+      <td>1913</td>
+      <td>7591</td>
+      <td>10842</td>
+      <td>9232</td>
+      <td>...</td>
+      <td>1885</td>
+      <td>11496</td>
+      <td>18197</td>
+      <td>10324</td>
+      <td>10384</td>
+      <td>8166</td>
+      <td>681</td>
+      <td>2289</td>
+      <td>1039</td>
+      <td>6606</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>535</td>
+      <td>65.259411</td>
+      <td>1695</td>
+      <td>1064</td>
+      <td>5910</td>
+      <td>3241</td>
+      <td>2424</td>
+      <td>9398</td>
+      <td>11270</td>
+      <td>9934</td>
+      <td>...</td>
+      <td>1985</td>
+      <td>12411</td>
+      <td>21155</td>
+      <td>14101</td>
+      <td>10178</td>
+      <td>9501</td>
+      <td>949</td>
+      <td>2636</td>
+      <td>916</td>
+      <td>7135</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>492</td>
+      <td>69.289528</td>
+      <td>1960</td>
+      <td>2024</td>
+      <td>5533</td>
+      <td>2579</td>
+      <td>2098</td>
+      <td>7164</td>
+      <td>12686</td>
+      <td>8705</td>
+      <td>...</td>
+      <td>1444</td>
+      <td>11472</td>
+      <td>19754</td>
+      <td>10417</td>
+      <td>10636</td>
+      <td>8937</td>
+      <td>811</td>
+      <td>2124</td>
+      <td>645</td>
+      <td>6304</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>447</td>
+      <td>72.826831</td>
+      <td>1737</td>
+      <td>1414</td>
+      <td>5577</td>
+      <td>3498</td>
+      <td>1446</td>
+      <td>8466</td>
+      <td>11753</td>
+      <td>8147</td>
+      <td>...</td>
+      <td>2580</td>
+      <td>11978</td>
+      <td>20022</td>
+      <td>11530</td>
+      <td>10804</td>
+      <td>8476</td>
+      <td>777</td>
+      <td>2266</td>
+      <td>1109</td>
+      <td>7024</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>551</td>
+      <td>70.502396</td>
+      <td>1962</td>
+      <td>953</td>
+      <td>5527</td>
+      <td>3084</td>
+      <td>1351</td>
+      <td>8123</td>
+      <td>12275</td>
+      <td>9554</td>
+      <td>...</td>
+      <td>1867</td>
+      <td>12712</td>
+      <td>21439</td>
+      <td>11436</td>
+      <td>12321</td>
+      <td>11370</td>
+      <td>856</td>
+      <td>2315</td>
+      <td>932</td>
+      <td>6519</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 70 columns</p>
+</div></div></div>
+</div>
+<p>To select rows <em>and</em> columns by position, use <code class="docutils literal notranslate"><span class="pre">.iloc</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ixi</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">5</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ID</th>
+      <th>Age</th>
+      <th>lh_bankssts_volume</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>291</td>
+      <td>30.688569</td>
+      <td>1992</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>254</td>
+      <td>25.582478</td>
+      <td>2145</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>44</td>
+      <td>44.851472</td>
+      <td>1722</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>584</td>
+      <td>41.327858</td>
+      <td>2464</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>605</td>
+      <td>70.332649</td>
+      <td>2222</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Pandas also offers <code class="docutils literal notranslate"><span class="pre">.loc</span></code>, which selects by <em>label</em> rather than by position. On a freshly
+shuffled and re-indexed frame the two look deceptively similar, but they are not the same:
+<code class="docutils literal notranslate"><span class="pre">.iloc[0:80]</span></code> gives you 80 rows, while <code class="docutils literal notranslate"><span class="pre">.loc[0:80]</span></code> gives you 81, because label-based slicing
+includes both endpoints. Mixing them up is an easy way to have your “independent” datasets
+quietly share a participant. Throughout this book we use <code class="docutils literal notranslate"><span class="pre">.iloc</span></code> for position-based selection.</p>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">describe()</span></code> gives the usual summary statistics of every numeric column at once:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ixi</span><span class="p">[[</span><span class="s1">'Age'</span><span class="p">,</span> <span class="s1">'rh_superiorfrontal_volume'</span><span class="p">,</span> <span class="s1">'lh_superiorfrontal_volume'</span><span class="p">]]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Age</th>
+      <th>rh_superiorfrontal_volume</th>
+      <th>lh_superiorfrontal_volume</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>638.0</td>
+      <td>638.0</td>
+      <td>638.0</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>50.8</td>
+      <td>21084.0</td>
+      <td>20313.8</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>17.0</td>
+      <td>3168.5</td>
+      <td>3200.2</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>20.0</td>
+      <td>12444.0</td>
+      <td>12118.0</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>35.2</td>
+      <td>19001.0</td>
+      <td>18153.2</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>53.5</td>
+      <td>20831.5</td>
+      <td>20067.0</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>64.6</td>
+      <td>22953.0</td>
+      <td>22151.2</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>86.3</td>
+      <td>32412.0</td>
+      <td>31393.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="plotting">
+<h2>Plotting<a class="headerlink" href="#plotting" title="Link to this heading">#</a></h2>
+<p>Data frames come with built-in plotting. Let’s look at how age is distributed in the cohort:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ixi</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="s1">'Age'</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">'age (years)'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/1b32b12edcc56c778f5a2c78e7ee64f0fbfd1c55b42b3973f24a1cf3bcdebae9.png" src="../_images/1b32b12edcc56c778f5a2c78e7ee64f0fbfd1c55b42b3973f24a1cf3bcdebae9.png" />
+</div>
+</div>
+<p>Ages run from 20 to 86, with most participants in middle age. Now
+let’s plot the volume of one region against age:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ixi</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">'Age'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">'rh_superiorfrontal_volume'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/b52320f48262df06a4564abc6dc257165a8ae6a03924fc67298b1d6e1c704867.png" src="../_images/b52320f48262df06a4564abc6dc257165a8ae6a03924fc67298b1d6e1c704867.png" />
+</div>
+</div>
+<p>That is an unmistakable downward trend: the superior frontal cortex loses volume with age. It is
+also a noisy one — at any given age, volumes differ between people by far more than the average
+decade-to-decade change. Both observations will shape everything that follows: the trend is what
+makes prediction possible at all, and the noise is what limits how good the prediction can get.</p>
+<p>It is worth seeing how widespread this trend is across the cortex. Below we correlate every one
+of the 68 regional volumes with age and paint the result onto a brain surface.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">age_correlation</span> <span class="o">=</span> <span class="n">ixi</span><span class="p">[</span><span class="n">FEATURES</span><span class="p">]</span><span class="o">.</span><span class="n">corrwith</span><span class="p">(</span><span class="n">ixi</span><span class="p">[</span><span class="n">TARGET</span><span class="p">])</span>
+
+<span class="c1"># ggseg expects labels of the form "&lt;region&gt;_&lt;hemisphere&gt;"; ours are "&lt;hemisphere&gt;_&lt;region&gt;_volume"</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">to_ggseg_label</span><span class="p">(</span><span class="n">column_name</span><span class="p">):</span>
+    <span class="n">hemisphere</span><span class="p">,</span> <span class="n">region</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">column_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">'_'</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">region</span> <span class="o">+</span> <span class="p">(</span><span class="s1">'_left'</span> <span class="k">if</span> <span class="n">hemisphere</span> <span class="o">==</span> <span class="s1">'lh'</span> <span class="k">else</span> <span class="s1">'_right'</span><span class="p">)</span>
+
+
+<span class="n">correlation_per_region</span> <span class="o">=</span> <span class="p">{</span><span class="n">to_ggseg_label</span><span class="p">(</span><span class="n">c</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">age_correlation</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+<span class="c1"># ggseg 0.1 predates matplotlib 3.9 and calls matplotlib.cm.get_cmap, which some matplotlib</span>
+<span class="c1"># versions no longer provide; restore it so the brain plot keeps working either way</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.cm</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span><span class="p">,</span> <span class="s1">'get_cmap'</span><span class="p">):</span>
+    <span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">colormaps</span><span class="o">.</span><span class="n">get_cmap</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">ggseg</span>
+    <span class="n">ggseg</span><span class="o">.</span><span class="n">plot_dk</span><span class="p">(</span><span class="n">correlation_per_region</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">'bwr'</span><span class="p">,</span> <span class="n">vminmax</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">],</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+                  <span class="n">background</span><span class="o">=</span><span class="s1">'w'</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">'gray'</span><span class="p">,</span> <span class="n">bordercolor</span><span class="o">=</span><span class="s1">'gray'</span><span class="p">,</span>
+                  <span class="n">ylabel</span><span class="o">=</span><span class="s2">"Pearson's r with age"</span><span class="p">,</span>
+                  <span class="n">title</span><span class="o">=</span><span class="s1">'Association of regional cortical volume with age'</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="c1"># ggseg is optional, and unmaintained: if it is missing or incompatible with the</span>
+    <span class="c1"># installed matplotlib, fall back to a plain ranked bar plot</span>
+    <span class="n">ordered</span> <span class="o">=</span> <span class="n">age_correlation</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">ordered</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">ordered</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'steelblue'</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"Pearson's r with age"</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Association of regional cortical volume with age'</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/fa66625e8234c27811fc0ec21b087e7f5ad97f8ed82ae30d32c0d2ee5410750e.png" src="../_images/fa66625e8234c27811fc0ec21b087e7f5ad97f8ed82ae30d32c0d2ee5410750e.png" />
+</div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Click “Click to show” above to reveal the code behind the figure. The brain rendering uses the
+optional package <a class="reference external" href="https://github.com/ggseg/python-ggseg">ggseg</a>; if it is not installed, the cell
+falls back to a bar plot and everything else in the book still works.</p>
+</div>
+<p>Almost the entire cortex is blue: volume declines with age nearly everywhere, and in most regions
+the correlation is moderate rather than strong. That is a useful thing to know before we start
+modelling. No single region is going to predict age well on its own — but there are 68 of them,
+all carrying a little bit of information. Combining many weak predictors into one good prediction
+is exactly what predictive modelling is for.</p>
+<p>It is also, as we are about to discover in <a class="reference internal" href="../2_linear_models/index.html"><span class="std std-doc">the next chapter</span></a>,
+exactly
+where things start to go wrong.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Pandas has an excellent lightweight
+<a class="reference external" href="https://pandas.pydata.org/docs/getting_started/index.html">“Getting Started”</a> tutorial, and
+seaborn’s <a class="reference external" href="https://seaborn.pydata.org/examples/index.html">gallery</a> is a good way to find the plot
+you want.</p>
+</div>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Exercise 1.4</p>
+<p>Which region’s volume correlates most strongly with age, and which least? Print the five
+strongest.</p>
+<div class="note dropdown admonition">
+<p class="admonition-title">Solution</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">age_correlation</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>     <span class="c1"># most negative</span>
+<span class="n">age_correlation</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>  <span class="c1"># weakest, regardless of direction</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="docutils">
+<div class="tip dropdown admonition">
+<p class="admonition-title">Exercise 1.5</p>
+<p>Plot <code class="docutils literal notranslate"><span class="pre">rh_superiorfrontal_volume</span></code> against <code class="docutils literal notranslate"><span class="pre">lh_superiorfrontal_volume</span></code>. What does the result tell
+you about how much <em>independent</em> information the 68 features carry?</p>
+<div class="note dropdown admonition">
+<p class="admonition-title">Solution</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ixi</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">'lh_superiorfrontal_volume'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">'rh_superiorfrontal_volume'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The two hemispheres are strongly correlated, as are most pairs of regions — partly because
+people simply differ in head size. So the 68 features are nowhere near 68 independent pieces of
+information. This redundancy (collinearity) is a recurring theme: it is why the methods of
+<a class="reference internal" href="../4_reducing_complexity/index.html"><span class="std std-doc">chapter 4</span></a> work so well.</p>
+</div>
+</div>
+</div>
+<div class="docutils">
+<div class="tip dropdown admonition">
+<p class="admonition-title">Exercise 1.6</p>
+<p>Open this notebook in Colab and load <em>your own</em> dataset instead. You can upload a file directly
+(the “Files” tab on the left) or mount your Google Drive. Is your data in Excel format? No
+problem — see
+<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_excel.html"><code class="docutils literal notranslate"><span class="pre">read_excel</span></code></a>.</p>
+<p>Working through the book with your own data is more work than following along, but it is by far
+the best way to internalize the concepts.</p>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "pni-lab/predmod_lecture",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./1_python_basics"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="python_intro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Introduction to Python</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../2_linear_models/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">2. Linear Models and Overfitting</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importing-packages">Importing packages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-example-dataset">The example dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#one-thing-to-do-before-anything-else-shuffle">One thing to do before anything else: shuffle</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#slicing-a-data-frame">Slicing a data frame</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting">Plotting</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Tamas Spisak
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022-2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

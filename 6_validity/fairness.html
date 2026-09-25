@@ -1,0 +1,1049 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Fairness &#8212; A Gentle Introduction to Predictive Modelling</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-QPT1100TCY"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
+                gtag('js', new Date());
+                gtag('config', 'G-QPT1100TCY');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
+                gtag('js', new Date());
+                gtag('config', 'G-QPT1100TCY');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '6_validity/fairness';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="7. Model Explanation" href="../7_model_explanation/index.html" />
+    <link rel="prev" title="Validity and Specificity" href="validity.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="A Gentle Introduction to Predictive Modelling - Home"/>
+    <img src="../_static/logo.png" class="logo__image only-dark pst-js-only" alt="A Gentle Introduction to Predictive Modelling - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    A Gentle Introduction to Predictive Modelling
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../1_python_basics/index.html">1. Python Basics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../1_python_basics/python_intro.html">Introduction to Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../1_python_basics/data_frames.html">Working with DataFrames</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../2_linear_models/index.html">2. Linear Models and Overfitting</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../2_linear_models/theory_linear_models.html">Linear Models: a Brief Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../2_linear_models/practice_linear_models.html">Linear Models in Action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../2_linear_models/overfitting_ex.html">The First Villain: Overfitting</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../3_cross_validation/index.html">3. Honest Estimates of Predictive Performance</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../3_cross_validation/train_test.html">Training and Test Sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../3_cross_validation/cv.html">Cross-validation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../4_reducing_complexity/index.html">4. Fighting Overfitting: the Advent of Machine Learning</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../4_reducing_complexity/theory_regularization.html">Reducing Complexity: a Brief Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../4_reducing_complexity/practice_regularization.html">Reducing Complexity in Action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../4_reducing_complexity/leakage.html">The Second Villain: Leakage</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../5_hyperparameter_optimization/index.html">5. Hyperparameter Optimization and Nested Cross-validation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../5_hyperparameter_optimization/cross_validation_revisited.html">Cross-validation Revisited</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../5_hyperparameter_optimization/nested_cross_validation.html">Nested Cross-validation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">6. Generalizability, Validity, Fairness</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="generalizability.html">Generalizability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="validity.html">Validity and Specificity</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Fairness</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../7_model_explanation/index.html">7. Model Explanation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../7_model_explanation/classical.html">Explaining “Classical” Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../7_model_explanation/black_box.html">Black Boxes</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../8_complex_models/index.html">8. Complex Models: from Ensembles to Deep Learning</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../8_complex_models/ensembles.html">From Ensembles to Deep Learning</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../9_examples/index.html">9. Scientific Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../9_examples/pain_signature.html">The Neurologic Pain Signature</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../9_examples/registered_model.html">A Pre-registered Model, and the Price of Honesty</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../9_examples/wrong_target.html">The Model That Was Accurate and Wrong</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/pni-lab/predmod_lecture/master?urlpath=tree/contents/6_validity/fairness.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/pni-lab/predmod_lecture/blob/master/contents/6_validity/fairness.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="initThebeSBT()"
+  class="btn btn-sm btn-launch-thebe dropdown-item"
+  title="Launch Thebe"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="btn__text-container">Live Code</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/pni-lab/predmod_lecture" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pni-lab/predmod_lecture/edit/master/contents/6_validity/fairness.ipynb" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pni-lab/predmod_lecture/issues/new?title=Issue%20on%20page%20%2F6_validity/fairness.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/6_validity/fairness.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Fairness</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-algorithm-that-was-accurate-and-wrong">The algorithm that was accurate and wrong</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-it-happened">Why it happened</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-fix-and-what-it-tells-us">The fix, and what it tells us</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-no-amount-of-methodological-rigour-would-have-caught-this">Why no amount of methodological rigour would have caught this</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#does-our-model-work-equally-well-for-everyone">Does our model work equally well for everyone?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-disparity-that-is-built-into-the-method">The disparity that is built into the method</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fairness-measures-and-why-you-cannot-have-all-of-them">Fairness measures, and why you cannot have all of them</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-you-can-audit-is-what-you-recorded">What you can audit is what you recorded</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="fairness">
+<h1>Fairness<a class="headerlink" href="#fairness" title="Link to this heading">#</a></h1>
+<p>Two questions hide under this word, and they need separating before anything useful can be said.</p>
+<ol class="arabic simple">
+<li><p><strong>Does the model work equally well for everyone?</strong> A model with an average error of 5 years
+might have an error of 3 in one group and 12 in another. The average is real; so is the
+disparity, and the average conceals it.</p></li>
+<li><p><strong>Was the model asked to predict the right thing?</strong> This one is not about performance at all.
+A model can be accurate, calibrated, externally validated, and still entrench a harm — because
+the quantity it was trained to predict was a poor stand-in for the quantity anyone cared about.</p></li>
+</ol>
+<p>The second question is the deeper one, and the clearest case study in the literature is not a brain
+imaging study at all.</p>
+<section id="the-algorithm-that-was-accurate-and-wrong">
+<h2>The algorithm that was accurate and wrong<a class="headerlink" href="#the-algorithm-that-was-accurate-and-wrong" title="Link to this heading">#</a></h2>
+<p><span class="bibtex-citation" id="id1">Obermeyer <em>et al.</em> [<a class="reference internal" href="../references.html#id71" title="Ziad Obermeyer, Brian Powers, Christine Vogeli, and Sendhil Mullainathan. Dissecting racial bias in an algorithm used to manage the health of populations. Science, 366(6464):447–453, 2019.">28</a>]</span> examined a commercial risk-prediction algorithm used by US
+health systems to select patients for “high-risk care management” programmes — extra nursing
+attention, extra appointment slots, coordinated care. Patients above the 97th percentile of
+predicted risk were enrolled automatically. Algorithms of this class are applied, by industry
+estimates, to around 200 million people a year.</p>
+<p>The algorithm was trained to predict <strong>total health-care costs in the coming year</strong>, from claims
+data: demographics, insurance type, diagnoses, procedures, medications. It did <strong>not</strong> use race as
+a feature.</p>
+<p>It was also, on its own terms, a good model. At every level of predicted risk, Black and White
+patients went on to incur about the same costs — the predictions were well calibrated, and
+calibrated <em>equally within each racial group</em>.</p>
+<p>And yet, <strong>at the same risk score, Black patients were considerably sicker</strong>: 26.3% more chronic
+conditions (4.8 versus 3.8), worse blood pressure, worse diabetic control. The authors calculated
+that removing the disparity would raise the share of Black patients receiving the extra help from
+<strong>17.7% to 46.5%</strong>. The finding was not a quirk of one hospital: the algorithm’s manufacturer
+repeated the analysis on its own national database of <strong>3.7 million</strong> insured patients and
+confirmed it.</p>
+<section id="why-it-happened">
+<h3>Why it happened<a class="headerlink" href="#why-it-happened" title="Link to this heading">#</a></h3>
+<p>The mechanism is worth walking through slowly, because it is entirely mundane and that is the
+point.</p>
+<p>The health system wanted to find the patients with the greatest <strong>need</strong>. Need is not recorded in
+a database. Cost is. So cost became the label.</p>
+<p>But cost does not measure need — it measures <strong>need that got treated</strong>. And for reasons ranging
+from transport and time off work to insurance, mistrust, and differential treatment by clinicians,
+less money is spent on Black patients at the same level of illness: about <strong>$1,801 less per year</strong>
+at an equal number of chronic conditions.</p>
+<p>Now put the two facts together. If the model is calibrated on cost, and cost is systematically
+lower for Black patients at equal illness, then equal predicted cost necessarily means <em>unequal
+illness</em>. The disparity is not a bug in the fitting procedure. It is an algebraic consequence of
+training a good model on a label with a group-dependent offset. The algorithm faithfully learned a
+historical pattern of unequal treatment and re-expressed it as a prediction of unequal need.</p>
+</section>
+<section id="the-fix-and-what-it-tells-us">
+<h3>The fix, and what it tells us<a class="headerlink" href="#the-fix-and-what-it-tells-us" title="Link to this heading">#</a></h3>
+<p>The authors did not change the algorithm. They changed the label — training the identical
+procedure to predict active chronic conditions instead of costs. That <strong>roughly doubled</strong> the share
+of Black patients among those auto-enrolled, from 14.1% to 26.7%. A further variant, predicting an
+index that combined health with cost, reduced their measure of bias — the excess chronic conditions
+carried by Black patients at equal risk score — by <strong>84%</strong>.</p>
+<aside class="margin sidebar">
+<p class="sidebar-title">Read the numbers carefully</p>
+<p>46.5% is a counterfactual: the composition if the health gap at a given score were closed
+completely. The retrained model achieved about 27%. Both are reported in the paper; they answer
+different questions, and they are routinely conflated.</p>
+</aside>
+</section>
+<section id="why-no-amount-of-methodological-rigour-would-have-caught-this">
+<h3>Why no amount of methodological rigour would have caught this<a class="headerlink" href="#why-no-amount-of-methodological-rigour-would-have-caught-this" title="Link to this heading">#</a></h3>
+<p>Everything this book has taught you was satisfied.</p>
+<ul class="simple">
+<li><p>Not overfitted: it held up out of sample, and was deployed at national scale.</p></li>
+<li><p>Not leaky: no implausible performance.</p></li>
+<li><p>Well calibrated on the quantity it predicted, and calibrated <em>equally</em> across racial groups.</p></li>
+<li><p>It did not even use the protected attribute.</p></li>
+<li><p>Its behaviour was reproduced in an independent national dataset of 3.7 million patients.</p></li>
+</ul>
+<p>And here is the part worth sitting with: <strong>even a textbook external validation would have passed
+it</strong>. Apply the model at a new hospital, compare predicted with actual costs, and it would predict
+costs well there too — because it does predict costs well. Every validation available to you
+validates the model against its label.</p>
+<p>Cross-validation asks whether your estimate of <span class="math notranslate nohighlight">\(f\)</span> generalizes to new draws from the same
+distribution. External validation asks whether it transports to a new site. <strong>Neither asks whether
+<span class="math notranslate nohighlight">\(y\)</span> was the right thing to predict</strong> — and neither can, because the quantity actually of interest
+was never measured. You cannot cross-validate against a variable that is not in your data.</p>
+<p>This is what psychometricians call <strong>construct validity</strong>, and it is the part of measurement theory
+that predictive modelling has been slowest to import. The diagnostic that did work is worth
+memorizing, because it generalizes: <strong>audit the model’s output against an independently measured
+proxy for the construct you actually care about, stratified by a group variable the model never
+saw.</strong> Not against its label. Against the thing you meant.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The authors list the same failure mode elsewhere: hospital quality measured by readmission rates
+penalizes hospitals serving poorer populations; credit scores predict outcomes shaped by
+discrimination in employment; predictive policing predicts <em>recorded</em> crime, which reflects where
+police already go; hiring algorithms predict supervisor ratings, which carry the biases of
+supervisors.</p>
+</div>
+</section>
+</section>
+<section id="does-our-model-work-equally-well-for-everyone">
+<h2>Does our model work equally well for everyone?<a class="headerlink" href="#does-our-model-work-equally-well-for-everyone" title="Link to this heading">#</a></h2>
+<p>Back to the brain. The first fairness question — equal performance across groups — is one we can
+actually run.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ridge</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">cross_val_predict</span><span class="p">,</span> <span class="n">KFold</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">mean_absolute_error</span>
+
+<span class="n">DATA_URL</span> <span class="o">=</span> <span class="s2">"https://raw.githubusercontent.com/pni-lab/predmod_lecture/master/ex_data/IXI/ixi.csv"</span>
+
+<span class="n">ixi</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_URL</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">TARGET</span> <span class="o">=</span> <span class="s1">'Age'</span>
+<span class="n">FEATURES</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ixi</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">'_volume'</span><span class="p">)]</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([(</span><span class="s1">'standardize'</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">()),</span> <span class="p">(</span><span class="s1">'regression'</span><span class="p">,</span> <span class="n">Ridge</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mi">100</span><span class="p">))])</span>
+<span class="n">ixi</span><span class="p">[</span><span class="s1">'predicted'</span><span class="p">]</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="n">ixi</span><span class="p">[</span><span class="n">FEATURES</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">ixi</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span> <span class="n">cv</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">ixi</span><span class="p">[</span><span class="s1">'error'</span><span class="p">]</span> <span class="o">=</span> <span class="n">ixi</span><span class="p">[</span><span class="s1">'predicted'</span><span class="p">]</span> <span class="o">-</span> <span class="n">ixi</span><span class="p">[</span><span class="n">TARGET</span><span class="p">]</span>
+
+<span class="c1"># head size is not recorded directly, so we use total cortical volume as a stand-in</span>
+<span class="n">ixi</span><span class="p">[</span><span class="s1">'head_size'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">qcut</span><span class="p">(</span><span class="n">ixi</span><span class="p">[</span><span class="n">FEATURES</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">'small'</span><span class="p">,</span> <span class="s1">'medium'</span><span class="p">,</span> <span class="s1">'large'</span><span class="p">])</span>
+
+<span class="n">by_size</span> <span class="o">=</span> <span class="n">ixi</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'head_size'</span><span class="p">,</span> <span class="n">observed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">g</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span><span class="s1">'n'</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="p">),</span>
+                         <span class="s1">'mean age'</span><span class="p">:</span> <span class="n">g</span><span class="p">[</span><span class="n">TARGET</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+                         <span class="s1">'MAE (years)'</span><span class="p">:</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">TARGET</span><span class="p">],</span> <span class="n">g</span><span class="p">[</span><span class="s1">'predicted'</span><span class="p">]),</span>
+                         <span class="s1">'mean signed error'</span><span class="p">:</span> <span class="n">g</span><span class="p">[</span><span class="s1">'error'</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()}),</span>
+    <span class="n">include_groups</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">by_size</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>n</th>
+      <th>mean age</th>
+      <th>MAE (years)</th>
+      <th>mean signed error</th>
+    </tr>
+    <tr>
+      <th>head_size</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>small</th>
+      <td>213.0</td>
+      <td>60.54</td>
+      <td>9.74</td>
+      <td>-0.17</td>
+    </tr>
+    <tr>
+      <th>medium</th>
+      <td>212.0</td>
+      <td>51.99</td>
+      <td>10.14</td>
+      <td>-0.19</td>
+    </tr>
+    <tr>
+      <th>large</th>
+      <td>213.0</td>
+      <td>39.87</td>
+      <td>9.39</td>
+      <td>0.57</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>The audit comes back largely reassuring: the three groups’ errors span three-quarters of a year
+(9.4 to 10.1), with only a modest over-prediction in the large-volume group (+0.6 years). Report
+that. A null result from a fairness audit is a finding, and a study that ran the analysis and found
+little is more trustworthy than one that did not look.</p>
+<p>But note why the second column has to be there, and then note what it does to the conclusion. The
+groups differ enormously in mean age — 61, 52 and 40 years — because total cortical volume is
+exactly the variable that <a class="reference internal" href="validity.html"><span class="std std-doc">the previous page</span></a> showed to be entangled with both age
+and the model’s output. So this is not a clean test of “does the model work equally well for large
+and small heads”: the grouping variable is confounded with the target by construction, and any
+result would have been hard to attribute. It is a reminder that a subgroup audit is only as
+interpretable as the subgroups are comparable — which is why the variables worth auditing on
+(sex, site, scanner) are the ones chosen at study design, not improvised from the features.</p>
+<p>Our model does, at any rate, treat one group markedly worse than another. Just not this grouping.</p>
+</section>
+<section id="the-disparity-that-is-built-into-the-method">
+<h2>The disparity that is built into the method<a class="headerlink" href="#the-disparity-that-is-built-into-the-method" title="Link to this heading">#</a></h2>
+<p>There is a second, more systematic unfairness in our model, and it afflicts essentially every
+brain-age model ever published.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mf">4.8</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">ixi</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">TARGET</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">'error'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">ixi</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">TARGET</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">'error'</span><span class="p">,</span> <span class="n">scatter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'#d62728'</span><span class="p">,</span> <span class="n">lowess</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'0.4'</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">'--'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">'true age (years)'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">'prediction error (predicted − true, years)'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">young</span> <span class="o">=</span> <span class="n">ixi</span><span class="p">[</span><span class="n">ixi</span><span class="p">[</span><span class="n">TARGET</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">30</span><span class="p">]</span>
+<span class="n">old</span> <span class="o">=</span> <span class="n">ixi</span><span class="p">[</span><span class="n">ixi</span><span class="p">[</span><span class="n">TARGET</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">70</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'participants under 30 (n=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">young</span><span class="p">)</span><span class="si">}</span><span class="s1">): predicted </span><span class="si">{</span><span class="n">young</span><span class="p">[</span><span class="s2">"error"</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">+.1f</span><span class="si">}</span><span class="s1"> years on average'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'participants over 70  (n=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">old</span><span class="p">)</span><span class="si">}</span><span class="s1">): predicted </span><span class="si">{</span><span class="n">old</span><span class="p">[</span><span class="s2">"error"</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">+.1f</span><span class="si">}</span><span class="s1"> years on average'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/3a9f965171a85d33a8d257d79f38ecf72637afe4562b61d60d1ec91c61eefe53.png" src="../_images/3a9f965171a85d33a8d257d79f38ecf72637afe4562b61d60d1ec91c61eefe53.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>participants under 30 (n=104): predicted +10.5 years on average
+participants over 70  (n=90): predicted -13.2 years on average
+</pre></div>
+</div>
+</div>
+</div>
+<p>The young are predicted too old; the old are predicted too young. This is <strong>regression towards the
+mean</strong> — a mathematical consequence of any model that explains less than all of the variance,
+which is to say, of every model. Shrinking predictions towards the training mean is exactly what
+minimizes squared error, so the fitting procedure produces this on purpose.</p>
+<p>It is also a fairness problem with teeth, because brain-age models are used by computing the
+<strong>brain-age gap</strong>: predicted age minus chronological age, interpreted as “this brain looks older
+than it should”. Our model assigns a positive gap to almost everyone under 30 and a negative gap to
+almost everyone over 70 — purely as an artefact of the regression, before any biology. If you then
+correlate that gap with anything that varies with age — and most clinical variables do — you will
+find associations that are entirely manufactured.</p>
+<p>The brain-age literature has developed explicit corrections for this bias. The lesson for this book
+is more general: <strong>a systematic error that depends on the target, or on any variable correlated
+with it, is a bias in every subgroup defined by that variable</strong> — and the overall MAE will never
+show it to you. Plot your errors against everything you have.</p>
+</section>
+<section id="fairness-measures-and-why-you-cannot-have-all-of-them">
+<h2>Fairness measures, and why you cannot have all of them<a class="headerlink" href="#fairness-measures-and-why-you-cannot-have-all-of-them" title="Link to this heading">#</a></h2>
+<p>For classification, several formal criteria compete:</p>
+<ul class="simple">
+<li><p><strong>Demographic parity</strong>: the model flags the same proportion of each group.</p></li>
+<li><p><strong>Equalized odds</strong>: true positive and false positive rates match across groups.</p></li>
+<li><p><strong>Calibration within groups</strong>: among everyone given risk score 0.7, the same fraction in each
+group actually has the outcome.</p></li>
+</ul>
+<p>Each sounds reasonable. They cannot in general be satisfied simultaneously: a well-known
+impossibility result shows that whenever the base rate of the outcome differs between groups,
+calibration and equal error rates are mathematically incompatible except in degenerate cases
+<span class="bibtex-citation" id="id2">[<a class="reference internal" href="../references.html#id72" title="Ninareh Mehrabi, Fred Morstatter, Nripsuta Saxena, Kristina Lerman, and Aram Galstyan. A survey on bias and fairness in machine learning. ACM Computing Surveys (CSUR), 54(6):1–35, 2021.">29</a>]</span>. This is not a gap waiting to be closed by a cleverer
+algorithm. It means that <strong>fairness is a choice among incompatible definitions</strong>, and the choice
+belongs to the people affected and to the people deploying the model, not to whoever writes the
+loss function.</p>
+<p>Notice how the Obermeyer algorithm sits in this frame: it satisfied calibration within groups
+perfectly. That was not enough, and no rebalancing of the criteria would have helped, because the
+problem lived one level up — in the label.</p>
+</section>
+<section id="what-you-can-audit-is-what-you-recorded">
+<h2>What you can audit is what you recorded<a class="headerlink" href="#what-you-can-audit-is-what-you-recorded" title="Link to this heading">#</a></h2>
+<p>Our dataset contains participant ID, age, and 68 volumes. That is all. We could not test the model
+for sex differences even if we wanted to, because sex is not in the file — although the IXI cohort
+does publish it. Nor site, nor scanner, nor education, nor anything else.</p>
+<p>This is the most practical lesson of the chapter, and it is a study-design lesson rather than an
+analysis one:</p>
+<ul class="simple">
+<li><p><strong>Record the variables you will need for the audit</strong>, at collection time. Demographics, site,
+scanner, acquisition date, operator. You cannot add them later.</p></li>
+<li><p><strong>Report subgroup performance</strong>, not just the average — and report the subgroup sizes, because a
+confidence interval around an MAE in a group of 20 is wide.</p></li>
+<li><p><strong>Interrogate the label</strong> before the model. Ask what construct you actually care about, what you
+are able to measure, and by what mechanism the two could come apart for some group of people.
+Write the answer down in the paper.</p></li>
+<li><p><strong>Plot the errors against everything</strong>, including the target.</p></li>
+</ul>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Exercise 6.7</p>
+<p>Download the IXI demographics, merge in sex, and repeat the subgroup analysis. Is the MAE
+comparable for male and female participants? Then run the
+<a class="reference internal" href="validity.html"><span class="std std-doc">partial confounder test</span></a> with sex as the confounder. What is the difference
+between these two analyses — what does each one tell you that the other does not?</p>
+<div class="note dropdown admonition">
+<p class="admonition-title">Solution</p>
+<p>The subgroup analysis asks <em>does the model work equally well for these two groups</em>. The confounder
+test asks <em>does the model’s output depend on sex beyond what the sex–age relationship implies</em>.
+A model can pass one and fail the other in either direction: equally accurate for both groups
+while being partly a sex classifier, or unbiased in the conditional-independence sense while
+performing much worse in the smaller group. They are different questions and you want both answers.</p>
+</div>
+</div>
+<div class="docutils">
+<div class="tip dropdown admonition">
+<p class="admonition-title">Exercise 6.8</p>
+<p>The brain-age gap bias above is usually corrected by regressing the predictions on chronological
+age in a <em>training</em> sample and applying that correction to new data. Implement it inside a
+cross-validation loop, and check what it does to the MAE and to the error-versus-age plot. Why must
+the correction be estimated inside the loop?</p>
+</div>
+</div>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Exercise 6.9</p>
+<p>Take a model from your own field and write down, in one sentence each: the construct you care
+about, the label you can actually measure, and one concrete mechanism by which the two could
+diverge differently for different groups of people. If the third sentence is hard to write, you
+have probably not looked hard enough.</p>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "pni-lab/predmod_lecture",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./6_validity"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="validity.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Validity and Specificity</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../7_model_explanation/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">7. Model Explanation</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-algorithm-that-was-accurate-and-wrong">The algorithm that was accurate and wrong</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-it-happened">Why it happened</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-fix-and-what-it-tells-us">The fix, and what it tells us</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-no-amount-of-methodological-rigour-would-have-caught-this">Why no amount of methodological rigour would have caught this</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#does-our-model-work-equally-well-for-everyone">Does our model work equally well for everyone?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-disparity-that-is-built-into-the-method">The disparity that is built into the method</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fairness-measures-and-why-you-cannot-have-all-of-them">Fairness measures, and why you cannot have all of them</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-you-can-audit-is-what-you-recorded">What you can audit is what you recorded</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Tamas Spisak
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022-2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

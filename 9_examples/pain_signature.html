@@ -1,0 +1,754 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>The Neurologic Pain Signature &#8212; A Gentle Introduction to Predictive Modelling</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-QPT1100TCY"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
+                gtag('js', new Date());
+                gtag('config', 'G-QPT1100TCY');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
+                gtag('js', new Date());
+                gtag('config', 'G-QPT1100TCY');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '9_examples/pain_signature';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="A Pre-registered Model, and the Price of Honesty" href="registered_model.html" />
+    <link rel="prev" title="9. Scientific Examples" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="A Gentle Introduction to Predictive Modelling - Home"/>
+    <img src="../_static/logo.png" class="logo__image only-dark pst-js-only" alt="A Gentle Introduction to Predictive Modelling - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    A Gentle Introduction to Predictive Modelling
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../1_python_basics/index.html">1. Python Basics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../1_python_basics/python_intro.html">Introduction to Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../1_python_basics/data_frames.html">Working with DataFrames</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../2_linear_models/index.html">2. Linear Models and Overfitting</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../2_linear_models/theory_linear_models.html">Linear Models: a Brief Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../2_linear_models/practice_linear_models.html">Linear Models in Action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../2_linear_models/overfitting_ex.html">The First Villain: Overfitting</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../3_cross_validation/index.html">3. Honest Estimates of Predictive Performance</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../3_cross_validation/train_test.html">Training and Test Sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../3_cross_validation/cv.html">Cross-validation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../4_reducing_complexity/index.html">4. Fighting Overfitting: the Advent of Machine Learning</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../4_reducing_complexity/theory_regularization.html">Reducing Complexity: a Brief Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../4_reducing_complexity/practice_regularization.html">Reducing Complexity in Action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../4_reducing_complexity/leakage.html">The Second Villain: Leakage</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../5_hyperparameter_optimization/index.html">5. Hyperparameter Optimization and Nested Cross-validation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../5_hyperparameter_optimization/cross_validation_revisited.html">Cross-validation Revisited</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../5_hyperparameter_optimization/nested_cross_validation.html">Nested Cross-validation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../6_validity/index.html">6. Generalizability, Validity, Fairness</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../6_validity/generalizability.html">Generalizability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../6_validity/validity.html">Validity and Specificity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../6_validity/fairness.html">Fairness</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../7_model_explanation/index.html">7. Model Explanation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../7_model_explanation/classical.html">Explaining “Classical” Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../7_model_explanation/black_box.html">Black Boxes</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../8_complex_models/index.html">8. Complex Models: from Ensembles to Deep Learning</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../8_complex_models/ensembles.html">From Ensembles to Deep Learning</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">9. Scientific Examples</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">The Neurologic Pain Signature</a></li>
+<li class="toctree-l2"><a class="reference internal" href="registered_model.html">A Pre-registered Model, and the Price of Honesty</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wrong_target.html">The Model That Was Accurate and Wrong</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/pni-lab/predmod_lecture" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pni-lab/predmod_lecture/edit/master/contents/9_examples/pain_signature.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pni-lab/predmod_lecture/issues/new?title=Issue%20on%20page%20%2F9_examples/pain_signature.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/9_examples/pain_signature.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>The Neurologic Pain Signature</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-they-did">What they did</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-belongs-in-this-book">Why this belongs in this book</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-lesson-that-generalizes-specificity-has-a-boundary-you-did-not-test">The lesson that generalizes: specificity has a boundary you did not test</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sources">Sources</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="the-neurologic-pain-signature">
+<h1>The Neurologic Pain Signature<a class="headerlink" href="#the-neurologic-pain-signature" title="Link to this heading">#</a></h1>
+<p><strong>What it shows: how far a predictive model can be pushed, and where specificity ends.</strong></p>
+<p>Pain is measured by asking. That is not a failure of imagination — self-report is the appropriate
+standard for a subjective experience — but it leaves obvious gaps: patients who cannot report,
+disputes about whether reported pain is “real”, and no way to separate the components of a pain
+experience. Two decades of fMRI research had produced a well-known set of regions that activate
+during pain, collectively the “pain matrix”, but nothing that could put a number on an individual’s
+pain.</p>
+<p><span class="bibtex-citation" id="id1">Wager <em>et al.</em> [<a class="reference internal" href="../references.html#id42" title="Tor D Wager, Lauren Y Atlas, Martin A Lindquist, Mathieu Roy, Choong-Wan Woo, and Ethan Kross. An fmri-based neurologic signature of physical pain. New England Journal of Medicine, 368(15):1388–1397, 2013.">23</a>]</span> asked the predictive question instead.</p>
+<section id="what-they-did">
+<h2>What they did<a class="headerlink" href="#what-they-did" title="Link to this heading">#</a></h2>
+<p>The target was reported pain intensity from noxious heat; the features were whole-brain voxel-wise
+activity; the model was LASSO-PCR — principal components of the voxel data, followed by an
+L1-penalized regression, with the coefficients mapped back into voxel space. The result is a single
+whole-brain <strong>weight map</strong>, and applying it to a new brain image is a dot product.</p>
+<p>The validation is the part worth studying, because the paper walks the entire ladder of
+<a class="reference internal" href="../3_cross_validation/index.html"><span class="std std-doc">chapters 3 to 6</span></a> in one publication:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>step</p></th>
+<th class="head"><p>what they did</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>cross-validation</p></td>
+<td><p>leave-one-<strong>subject</strong>-out on 20 participants — the correct unit, since trials within a person are not independent</p></td>
+</tr>
+<tr class="row-odd"><td><p>independent test sample</p></td>
+<td><p>33 new participants, <strong>a different scanner</strong> (3T Philips rather than 1.5T GE), weights frozen</p></td>
+</tr>
+<tr class="row-even"><td><p>new population and paradigm</p></td>
+<td><p>40 participants in an emotionally loaded task</p></td>
+</tr>
+<tr class="row-odd"><td><p>discriminant validity</p></td>
+<td><p>the signature tested against things it should <em>not</em> respond to</p></td>
+</tr>
+<tr class="row-even"><td><p>causal manipulation</p></td>
+<td><p>remifentanil, an opioid, in an open/hidden infusion design</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Sensitivity and specificity were 93–95% for distinguishing painful from non-painful heat in both the
+training study and the independent sample, and 100% and 99% for distinguishing pain from
+<em>anticipating</em> pain. The opioid reduced the signature response by 53%, with <strong>no difference between
+open and hidden infusion</strong>, which separates the drug’s pharmacology from the patient’s expectation
+of relief.</p>
+</section>
+<section id="why-this-belongs-in-this-book">
+<h2>Why this belongs in this book<a class="headerlink" href="#why-this-belongs-in-this-book" title="Link to this heading">#</a></h2>
+<p><strong>The weights were published.</strong> That is what turned a paper into a research programme: any lab can
+apply the frozen map to its own data, and many have — including adversarially. Contrast this with the
+usual situation, where a model exists only as a number in an abstract.</p>
+<p><strong>They went looking for the ways it could be wrong.</strong> In the original paper, participants who had
+recently been through an unwanted breakup viewed photographs of the ex-partner. The signature
+distinguished physical pain from that experience well — and could not distinguish the ex-partner from
+a friend at better than chance, which is exactly what it should not be able to do. Later work showed
+that patterns trained on physical pain and on social rejection are essentially uncorrelated and each
+performs at chance on the other’s task, even within the regions claimed to represent both
+<span class="bibtex-citation" id="id2">[<a class="reference internal" href="../references.html#id88" title="Choong-Wan Woo, Leonie Koban, Ethan Kross, Martin A Lindquist, Marie T Banich, Luka Ruzic, Jessica R Andrews-Hanna, and Tor D Wager. Separate neural representations for physical pain and social rejection. Nature Communications, 5:5380, 2014. doi:10.1038/ncomms6380.">24</a>]</span>. The signature does not track observed pain in someone else
+<span class="bibtex-citation" id="id3">[<a class="reference internal" href="../references.html#id89" title="Anjali Krishnan, Choong-Wan Woo, Luke J Chang, Luka Ruzic, Xiaosi Gu, Marina López-Solà, Philip L Jackson, Jesus Pujol, Jin Fan, and Tor D Wager. Somatic and vicarious pain are represented by dissociable multivariate brain patterns. eLife, 5:e15166, 2016. doi:10.7554/eLife.15166.">25</a>]</span>, nor picture-induced negative affect <span class="bibtex-citation" id="id4">[<a class="reference internal" href="../references.html#id90" title="Luke J Chang, Peter J Gianaros, Stephen B Manuck, Anjali Krishnan, and Tor D Wager. A sensitive and specific neural signature for picture-induced negative affect. PLoS Biology, 13(6):e1002180, 2015. doi:10.1371/journal.pbio.1002180.">26</a>]</span>.</p>
+<p><strong>The follow-up literature deflated the overreading, and the original authors led it.</strong> The 2013
+paper was widely read as delivering an objective pain-o-meter. <span class="bibtex-citation" id="id5">Han <em>et al.</em> [<a class="reference internal" href="../references.html#id92" title="Xiaochun Han, Yoni K Ashar, Philip Kragel, Bogdan Petre, Victoria Schelkun, Lauren Y Atlas, Luke J Chang, Marieke Jepma, Leonie Koban, Elizabeth A Reynolds Losin, Mathieu Roy, Choong-Wan Woo, and Tor D Wager. Effect sizes and test-retest reliability of the fmri-based neurologic pain signature. NeuroImage, 247:118844, 2022. doi:10.1016/j.neuroimage.2021.118844.">33</a>]</span> assembled ten
+studies and separated two effects that the original design conflated: <em>within-person</em> prediction
+(does this trial hurt more than that one, in the same person) is very strong, with a mean effect size
+of 1.45 across eight studies; <em>between-person</em> prediction (does this person report more pain than
+that one) is medium at best (mean d = 0.49) and was statistically significant in only one study out
+of eight. The signature is a within-person
+mechanistic measure, not a between-person diagnostic. <span class="bibtex-citation" id="id6">Zunhammer <em>et al.</em> [<a class="reference internal" href="../references.html#id93" title="Matthias Zunhammer, Ulrike Bingel, Tor D Wager, and Placebo Imaging Consortium. Placebo effects on the neurologic pain signature: a meta-analysis of individual participant functional magnetic resonance imaging data. JAMA Neurology, 75(11):1321–1330, 2018. doi:10.1001/jamaneurol.2018.2017.">34</a>]</span> pooled 20
+studies and found that placebo reduced reported pain roughly eight times more than it reduced the
+signature — so a large part of what makes pain better is invisible to it. And as a standalone
+diagnostic for chronic pain it performs poorly: 68% accuracy for fibromyalgia, where a combination of
+patterns reached 93% <span class="bibtex-citation" id="id7">[<a class="reference internal" href="../references.html#id94" title="Marina López-Solà, Choong-Wan Woo, Jesus Pujol, Joan Deus, Ben J Harrison, Jordi Monfort, and Tor D Wager. Towards a neurophysiological signature for fibromyalgia. Pain, 158(1):34–47, 2017. doi:10.1097/j.pain.0000000000000707.">35</a>]</span>.</p>
+<p>None of that is a refutation. It is a decade of people finding out precisely what the model measures
+— which is the process this book is arguing for.</p>
+</section>
+<section id="the-lesson-that-generalizes-specificity-has-a-boundary-you-did-not-test">
+<h2>The lesson that generalizes: specificity has a boundary you did not test<a class="headerlink" href="#the-lesson-that-generalizes-specificity-has-a-boundary-you-did-not-test" title="Link to this heading">#</a></h2>
+<p>In 2021, a study tested the signature against two conditions nobody had tried: breathlessness, and a
+<strong>finger-opposition motor task</strong>. Breathlessness activated it (d = 0.90), and the non-aversive motor
+task activated it more strongly still (d = 1.44) — although that study contained no painful
+condition, so it could make no direct comparison against pain. The authors — including the
+signature’s first author — concluded that global signature activity alone is not specific to pain
+<span class="bibtex-citation" id="id8">[<a class="reference internal" href="../references.html#id91" title="Olivia K Harrison, Anja Hayen, Tor D Wager, and Kyle T S Pattinson. Investigating the specificity of the neurologic pain signature against breathlessness and finger opposition. Pain, 162(12):2933–2944, 2021. doi:10.1097/j.pain.0000000000002327.">27</a>]</span>.</p>
+<p>Look at what had happened. Every specificity test for eight years had compared pain against other
+<em>aversive or emotional</em> states: anticipation, memory, social rejection, vicarious pain, negative
+affect. Within that space the specificity was real and repeatedly confirmed. Nobody had asked whether
+someone simply moving their fingers would set it off.</p>
+<p><strong>A model is never “specific”. It is specific relative to the alternatives you tested against.</strong> When
+you report discriminant validity, report the list of comparisons, so a reader can see what is missing
+from it. And when you read someone else’s specificity claim, the useful question is not whether the
+tests were done well, but which test nobody thought to run.</p>
+</section>
+<section id="sources">
+<h2>Sources<a class="headerlink" href="#sources" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><span class="bibtex-citation" id="id9">Wager <em>et al.</em> [<a class="reference internal" href="../references.html#id42" title="Tor D Wager, Lauren Y Atlas, Martin A Lindquist, Mathieu Roy, Choong-Wan Woo, and Ethan Kross. An fmri-based neurologic signature of physical pain. New England Journal of Medicine, 368(15):1388–1397, 2013.">23</a>]</span> — the original signature, N = 114 across four studies.</p></li>
+<li><p><span class="bibtex-citation" id="id10">Woo <em>et al.</em> [<a class="reference internal" href="../references.html#id88" title="Choong-Wan Woo, Leonie Koban, Ethan Kross, Martin A Lindquist, Marie T Banich, Luka Ruzic, Jessica R Andrews-Hanna, and Tor D Wager. Separate neural representations for physical pain and social rejection. Nature Communications, 5:5380, 2014. doi:10.1038/ncomms6380.">24</a>]</span>, <span class="bibtex-citation" id="id11">Krishnan <em>et al.</em> [<a class="reference internal" href="../references.html#id89" title="Anjali Krishnan, Choong-Wan Woo, Luke J Chang, Luka Ruzic, Xiaosi Gu, Marina López-Solà, Philip L Jackson, Jesus Pujol, Jin Fan, and Tor D Wager. Somatic and vicarious pain are represented by dissociable multivariate brain patterns. eLife, 5:e15166, 2016. doi:10.7554/eLife.15166.">25</a>]</span>, <span class="bibtex-citation" id="id12">Chang <em>et al.</em> [<a class="reference internal" href="../references.html#id90" title="Luke J Chang, Peter J Gianaros, Stephen B Manuck, Anjali Krishnan, and Tor D Wager. A sensitive and specific neural signature for picture-induced negative affect. PLoS Biology, 13(6):e1002180, 2015. doi:10.1371/journal.pbio.1002180.">26</a>]</span> — specificity
+against social rejection, vicarious pain and negative affect.</p></li>
+<li><p><span class="bibtex-citation" id="id13">Harrison <em>et al.</em> [<a class="reference internal" href="../references.html#id91" title="Olivia K Harrison, Anja Hayen, Tor D Wager, and Kyle T S Pattinson. Investigating the specificity of the neurologic pain signature against breathlessness and finger opposition. Pain, 162(12):2933–2944, 2021. doi:10.1097/j.pain.0000000000002327.">27</a>]</span> — the breathlessness and motor-task counterexample.</p></li>
+<li><p><span class="bibtex-citation" id="id14">Han <em>et al.</em> [<a class="reference internal" href="../references.html#id92" title="Xiaochun Han, Yoni K Ashar, Philip Kragel, Bogdan Petre, Victoria Schelkun, Lauren Y Atlas, Luke J Chang, Marieke Jepma, Leonie Koban, Elizabeth A Reynolds Losin, Mathieu Roy, Choong-Wan Woo, and Tor D Wager. Effect sizes and test-retest reliability of the fmri-based neurologic pain signature. NeuroImage, 247:118844, 2022. doi:10.1016/j.neuroimage.2021.118844.">33</a>]</span> — within- versus between-person effect sizes and test-retest reliability.</p></li>
+<li><p><span class="bibtex-citation" id="id15">Zunhammer <em>et al.</em> [<a class="reference internal" href="../references.html#id93" title="Matthias Zunhammer, Ulrike Bingel, Tor D Wager, and Placebo Imaging Consortium. Placebo effects on the neurologic pain signature: a meta-analysis of individual participant functional magnetic resonance imaging data. JAMA Neurology, 75(11):1321–1330, 2018. doi:10.1001/jamaneurol.2018.2017.">34</a>]</span> — placebo analgesia is largely invisible to the signature.</p></li>
+<li><p><span class="bibtex-citation" id="id16">Woo <em>et al.</em> [<a class="reference internal" href="../references.html#id2" title="Choong-Wan Woo, Luke J Chang, Martin A Lindquist, and Tor D Wager. Building better biomarkers: brain models in translational neuroimaging. Nature neuroscience, 20(3):365–377, 2017.">36</a>]</span> — the authors’ own framework for developing brain-based biomarkers.</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "pni-lab/predmod_lecture",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./9_examples"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">9. Scientific Examples</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="registered_model.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">A Pre-registered Model, and the Price of Honesty</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-they-did">What they did</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-belongs-in-this-book">Why this belongs in this book</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-lesson-that-generalizes-specificity-has-a-boundary-you-did-not-test">The lesson that generalizes: specificity has a boundary you did not test</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sources">Sources</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Tamas Spisak
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022-2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
