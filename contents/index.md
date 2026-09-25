@@ -5,7 +5,7 @@
 ```
 
 ```{note}
-*Cover created in 2021 by text2art AI, seeded with the book title. It is a memento of the state-of-the-art of artificial intelligence in 2021, and an artifact of the accelerating development of AI.*
+*Cover created in 2021 by text2art AI, seeded with the book title. It is a memento of the state-of-the-art of artificial intelligence in 2021, and an remains here as a testimony for the accelerating development of AI.*
 ```
 
 # A Gentle Introduction to Predictive Modelling
