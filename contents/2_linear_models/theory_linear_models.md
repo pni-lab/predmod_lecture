@@ -5,10 +5,10 @@
 Linear models and their relatives (t-tests, ANOVA, mixed models) are the workhorses of
 scientific data analysis. You have almost certainly used them.
 
-They are also the ideal starting point for understanding predictive modelling — not because
-predictive modelling is a different kind of mathematics, but because it asks a different
-*question* of the same mathematics. This page refreshes the essentials so that the next page can
-put them to work, and run straight into the first serious problem.
+They are also the ideal starting point for understanding predictive modelling, since predictive
+modelling asks a different *question* of the same mathematics rather than introducing a new kind of
+mathematics. This page refreshes the essentials so that the next page can put them to work, and run
+straight into the first serious problem.
 
 A [linear model](https://en.wikipedia.org/wiki/Linear_model) describes a target variable
 $y = (y_1, \dots, y_n)$, measured on $n$ observations, as a constant $\beta_0$ (the intercept)
@@ -31,13 +31,13 @@ $$
 :name: least-squares
 :width: 90%
 
-Least squares in one picture. (Note the axes: here volume is modelled *from* age, the reverse
-of the prediction task the rest of the book sets itself — it makes the line easier to read.)
-Each vertical grey line is one residual $\varepsilon_i$: the
-distance between an observed value and what the line predicts for it. The fitted line (red) is
-the one line, out of all possible lines, that makes the *sum of the squares* of those distances
-as small as it can be. The panel on the right shows that sum as a function of the slope: it is a
-parabola with a single minimum, which is why the solution is unique and can be computed directly.
+Least squares in one picture. (Note the axes: here volume is modelled *from* age, the reverse of the
+prediction task the rest of the book sets itself, which makes the line easier to read.) Each vertical
+grey line is one residual $\varepsilon_i$, that is, the distance between an observed value and what
+the line predicts for it. The fitted line (red) is the one line, out of all possible lines, that
+makes the *sum of the squares* of those distances as small as it can be. The panel on the right shows
+that sum as a function of the slope: it is a parabola with a single minimum, which is why the
+solution is unique and can be computed directly.
 ```
 
 Linear regression extends without any conceptual change to several predictors at once
@@ -48,11 +48,11 @@ y_{i} = \beta_{0} + \beta_{1} x_{i1} + \cdots + \beta_{p} x_{ip} + \varepsilon_{
 \qquad i = 1, \ldots, n
 $$
 
-The aim and the method are unchanged: we decompose the target variable into a weighted sum — a
-[linear combination](https://en.wikipedia.org/wiki/Linear_combination) — of the predictors, as
-close to the target as possible. Collecting the predictors into an $n \times p$ matrix
-$\boldsymbol{X}$ (one row per observation, one column per predictor, plus a column of ones for the
-intercept) and the coefficients into a vector $\boldsymbol{\beta}$, the quantity to minimize is
+The aim and the method are unchanged: we decompose the target variable into a weighted sum (a
+[linear combination](https://en.wikipedia.org/wiki/Linear_combination)) of the predictors, as close
+to the target as possible. Collecting the predictors into an $n \times p$ matrix $\boldsymbol{X}$
+(one row per observation, one column per predictor, plus a column of ones for the intercept) and the
+coefficients into a vector $\boldsymbol{\beta}$, the quantity to minimize is
 
 $$
 \underset{\boldsymbol{\beta}}{\operatorname{arg\,min}} \; \lVert\, \boldsymbol{y} - \boldsymbol{X}\boldsymbol{\beta} \,\rVert^2
@@ -76,17 +76,17 @@ performance measures simple to read.
 
 ## Two questions, one model
 
-Here is the distinction that the whole book rests on. Given a fitted model, you can ask:
+The distinction the whole book rests on is the following. Given a fitted model, we can ask:
 
 - **an inferential question**: is the association between this predictor and the target larger than
   one would expect by chance? This is answered by a p-value, and it is a statement about a
   *population*, conditional on assumptions about how the data were generated.
-- **a predictive question**: given the predictors of a person I have never seen, how close will my
+- **a predictive question**: given the predictors of a person we have never seen, how close will our
   guess of their target value be? This is answered by a *prediction error*, and it is a statement
   about *individuals*.
 
-They are not the same question, and — as we will see repeatedly — a model can do very well on one
-and disastrously on the other. {cite:t}`shmueli2010explain` is the classic treatment of the
+These are different questions, and, as we will see repeatedly, a model can do very well on one of
+them and disastrously on the other. {cite:t}`shmueli2010explain` is the classic treatment of the
 distinction, and is worth reading alongside this book.
 
 ## Predictions
@@ -107,17 +107,17 @@ $$
 \mathrm{RMSE} = \sqrt{\frac{1}{n}\sum_{i=1}^{n} \big(\, y_i - \hat{y}_i \,\big)^2}
 $$
 
-Both are in the units of the target — years, in our case — which makes them easy to interpret.
-The **mean absolute error (MAE)** is the average size of a miss. The **root mean squared error
-(RMSE)** squares the errors before averaging, so it is dominated by the few worst predictions; it
-is never smaller than the MAE, and the gap between the two tells you how uneven your errors are.
+Both are in the units of the target (years, in our case), which makes them easy to interpret. The
+**mean absolute error (MAE)** is the average size of a miss. The **root mean squared error (RMSE)**
+squares the errors before averaging, so it is dominated by the few worst predictions; it is never
+smaller than the MAE, and the gap between the two indicates how uneven the errors are.
 
 ```{note}
-Reporting a correlation ($R$) or $R^2$ between predicted and observed values is common, but it is
-not a substitute for an error measure: a prediction that is systematically ten years too high can
-still correlate perfectly with the truth. Report both, and be suspicious of papers that report
+Reporting a correlation ($R$) or $R^2$ between predicted and observed values is common, but it is a
+poor substitute for an error measure, since a prediction that is systematically ten years too high
+can still correlate perfectly with the truth. Report both, and be suspicious of papers that report
 only the correlation.
 ```
 
-On [the next page](practice_linear_models.ipynb) we fit these models in python — and discover
-what happens when we get greedy about predictors.
+On [the next page](practice_linear_models.ipynb) we fit these models in python, and find out what
+happens when we get greedy about predictors.
