@@ -11,20 +11,20 @@ Predictive modelling and machine learning have become central to biomedical rese
 real promise for delivering biomarkers that change clinical practice and public health
 {cite:p}`vogt2018machine, kent2018personalized, spisak2020pain, walsh2021dome`.
 
-For many researchers, though, "machine learning" remains a slightly mysterious term — more familiar
-from science fiction than from their own work. This is odd, because the same researchers routinely
-use mixed-effects models, navigate complicated analysis pipelines, and think carefully about
-confounding. The obstacle is not mathematical sophistication. It is that predictive modelling asks a
-different question from the one their training prepared them for.
+For many researchers, though, "machine learning" remains a slightly mysterious term, more familiar
+from science fiction than from their own work. This is somewhat odd, given that the same researchers
+routinely use mixed-effects models, navigate complicated analysis pipelines, and think carefully
+about confounding. The obstacle is rarely mathematical sophistication, but rather that predictive
+modelling asks a different question from the one their training prepared them for.
 
 ## Who this book is for
 
 You, if you are comfortable fitting a linear model and interpreting a p-value, and would like to
 know what changes when the goal becomes prediction rather than inference.
 
-The aim of this book is to demystify predictive modelling by showing that its simplest — and
-already very powerful — forms are as accessible as the tools you use every day. Not by
-simplifying the ideas, but by being concrete about them.
+The aim of the book is to demystify predictive modelling by showing that its simplest (and already
+very powerful) forms are as accessible as the tools you use every day, by being concrete about the
+ideas rather than by simplifying them.
 
 ## How it works
 
@@ -35,9 +35,9 @@ you would like some background anyway, there are
 [resources](https://andysbrainbook.readthedocs.io/en/latest/) available free online.
 
 Practice pages are interactive notebooks. They run on your own machine or, with one click, in the
-cloud — look for the rocket icon at the top of the page. Exercises throughout ask you to modify the
-code, and each has a worked solution folded underneath it. Open the solution *after* you have tried;
-the failures are where the learning is.
+cloud (look for the rocket icon at the top of the page). Exercises throughout ask you to modify the
+code, and each has a worked solution folded underneath it. Open the solution *after* you have tried,
+since most of the learning happens in the failures.
 
 ```{tip}
 The single best way to use this book is to work through it with **your own dataset** alongside the
@@ -46,26 +46,26 @@ example. It is harder, and it is the difference between recognizing these concep
 
 ## What to expect
 
-The book has a plot, and it is not a flattering one. Chapter by chapter, results that look
+The chapters follow a storyline that is not especially flattering to the field: results that look
 impressive turn out to be artefacts, and the methods that fix them introduce subtler problems of
-their own. Two villains recur: **overfitting**, which makes models look good on the data they were
-built from, and **leakage**, which makes them look good even on data they were not.
+their own. Two failure modes recur throughout, namely **overfitting**, which makes models look good
+on the data they were built from, and **leakage**, which makes them look good even on data they were
+not.
 
-This is not pessimism. The point is that predictive modelling comes with a small number of specific
-failure modes, that they are well understood, and that avoiding them is mostly a matter of
-discipline rather than mathematics. By [chapter 5](5_hyperparameter_optimization/index.md) you will
-have a complete recipe for building a model and reporting its performance honestly.
+The intention is reassurance rather than pessimism. Predictive modelling comes with a small number of
+specific failure modes, they are reasonably well understood, and avoiding them is mostly a matter of
+discipline rather than of mathematics. By [chapter 5](5_hyperparameter_optimization/index.md) you
+will have a complete recipe for building a model and reporting its performance honestly.
 
-The book focuses on simple, explainable models. But it also shows how the predictive framework lets
-you use a genuine "black box" without giving up confidence in what it does — because in this
-framework, trust comes from how a model was *validated*, not from whether you can read its
-coefficients.
+The book focuses on simple, explainable models. It also shows, however, how the predictive framework
+lets you use a genuine "black box" without giving up confidence in what it does, since trust here
+comes from the way a model was *validated*.
 
 ## A living document
 
-This is not a conventional textbook. It is a Jupyter Book under continuous development. If something
-is wrong, unclear, or missing, please open an
-[issue](https://github.com/pni-lab/predmod_lecture/issues/new) — that is how it gets better.
+This is a Jupyter Book under continuous development rather than a conventional textbook. If
+something is wrong, unclear, or missing, please open an
+[issue](https://github.com/pni-lab/predmod_lecture/issues/new).
 
 [![GitHub issues](https://img.shields.io/github/issues/pni-lab/predmod_lecture.svg)](https://github.com/pni-lab/predmod_lecture/issues/)
 
